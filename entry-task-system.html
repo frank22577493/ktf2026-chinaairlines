@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>✈️ 入場任務 × 中華航空 2026 高雄旅展</title>
+<style>
+  :root {
+    --red:    #C8102E;
+    --navy:   #003087;
+    --gold:   #B8960C;
+    --purple: #8B3DC8;
+    --pink:   #E8629A;
+    --green:  #1EB870;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+  body {
+    min-height:100vh;
+    background:linear-gradient(160deg,#c8e8ff 0%,#dcc8f5 40%,#f5c8e0 70%,#ffe8c8 100%);
+    font-family:'Helvetica Neue',Arial,'Microsoft JhengHei',sans-serif;
+    overflow-x:hidden;
+  }
+
+  /* ── CLOUDS ── */
+  .cloud{position:fixed;background:rgba(255,255,255,0.65);border-radius:50px;pointer-events:none;z-index:0;}
+  .cloud::before,.cloud::after{content:'';position:absolute;background:rgba(255,255,255,0.65);border-radius:50%;}
+  .c1{width:110px;height:36px;top:5%;left:-140px;animation:cf 22s linear infinite;}
+  .c1::before{width:55px;height:55px;top:-28px;left:12px;}
+  .c1::after{width:38px;height:38px;top:-18px;left:50px;}
+  .c2{width:160px;height:48px;top:30%;left:-200px;animation:cf 30s linear infinite 9s;}
+  .c2::before{width:75px;height:75px;top:-38px;left:18px;}
+  .c2::after{width:50px;height:50px;top:-25px;left:75px;}
+  .c3{width:90px;height:30px;top:68%;left:-120px;animation:cf 19s linear infinite 4s;}
+  .c3::before{width:45px;height:45px;top:-22px;left:8px;}
+  .c3::after{width:30px;height:30px;top:-14px;left:40px;}
+  @keyframes cf{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 280px))}}
+
+  /* ── CONFETTI ── */
+  .cp{position:fixed;border-radius:2px;top:-20px;pointer-events:none;z-index:999;display:none;}
+  @keyframes cfFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(105vh) rotate(600deg);opacity:0}}
+
+  /* ── PAGE ── */
+  .page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding-bottom:48px;}
+
+  /* ── HEADER ── */
+  .header{
+    background:linear-gradient(135deg,var(--navy) 0%,#1a2f72 50%,#3B1C8C 100%);
+    padding:36px 24px 28px; text-align:center;
+    border-radius:0 0 36px 36px;
+    box-shadow:0 8px 36px rgba(0,48,135,0.3);
+    position:relative; overflow:hidden;
+  }
+  .header::after{
+    content:'✈️'; position:absolute; bottom:-24px; right:-16px;
+    font-size:110px; opacity:0.07; transform:rotate(-15deg); pointer-events:none;
+  }
+  .hbrand{font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:4px;text-transform:uppercase;margin-bottom:10px;}
+  .htitle{font-size:30px;font-weight:900;color:#fff;letter-spacing:3px;line-height:1.15;margin-bottom:8px;}
+  .hsub{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.7;margin-bottom:16px;}
+  .hbadge{
+    display:inline-block;
+    background:linear-gradient(135deg,var(--gold),#F0C040);
+    color:#fff;font-size:12px;font-weight:800;letter-spacing:2px;
+    padding:6px 20px;border-radius:20px;
+    box-shadow:0 4px 14px rgba(184,150,12,0.4);
+  }
+
+  /* ── TICKET BAR ── */
+  .ticket-bar{
+    margin:18px 16px 0;
+    background:rgba(255,255,255,0.8);
+    border-radius:20px; padding:14px 20px;
+    display:flex;align-items:center;gap:14px;
+    backdrop-filter:blur(10px);
+    border:2px solid rgba(255,255,255,0.9);
+    box-shadow:0 4px 20px rgba(139,61,200,0.1);
+  }
+  .tb-icon{font-size:28px;flex-shrink:0;}
+  .tb-info{flex:1;}
+  .tb-label{font-size:11px;color:#aaa;letter-spacing:2px;}
+  .tb-count{font-size:22px;font-weight:900;color:var(--purple);line-height:1.1;}
+  .tb-count span{font-size:13px;font-weight:600;color:#888;}
+  .tb-progress{width:100%;height:6px;background:rgba(139,61,200,0.12);border-radius:6px;margin-top:6px;overflow:hidden;}
+  .tb-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:6px;transition:width .5s ease;}
+
+  /* ── SECTION TITLE ── */
+  .section-title{font-size:13px;font-weight:800;color:#777;letter-spacing:3px;text-transform:uppercase;padding:20px 20px 8px;}
+
+  /* ── TASK CARD ── */
+  .task-card{
+    margin:0 16px 14px;
+    background:rgba(255,255,255,0.82);
+    border-radius:24px;
+    border:2px solid rgba(255,255,255,0.9);
+    box-shadow:0 6px 24px rgba(139,61,200,0.08);
+    backdrop-filter:blur(12px); overflow:hidden;
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .task-card:active{transform:scale(0.98);}
+  .task-card.done{
+    border-color:rgba(30,184,112,0.4);
+    background:rgba(240,255,248,0.9);
+    box-shadow:0 4px 16px rgba(30,184,112,0.12);
+  }
+  .task-inner{display:flex;align-items:stretch;}
+  .task-bar{width:6px;flex-shrink:0;}
+  .task-body{padding:18px 18px 18px 16px;flex:1;}
+
+  .task-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
+  .task-icon-wrap{
+    width:48px;height:48px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:24px;flex-shrink:0;
+  }
+  .task-meta{flex:1;}
+  .task-badge{
+    display:inline-block;font-size:10px;font-weight:800;letter-spacing:2px;
+    padding:2px 10px;border-radius:10px;margin-bottom:4px;
+  }
+  .task-name{font-size:16px;font-weight:800;color:#222;line-height:1.2;}
+  .task-reward{
+    display:inline-flex;align-items:center;gap:4px;
+    font-size:11px;font-weight:700;color:#fff;
+    padding:3px 10px;border-radius:10px;margin-top:4px;
+  }
+
+  .task-desc{font-size:12px;color:#888;line-height:1.7;margin-bottom:14px;}
+
+  /* Dual QR */
+  .dual-qr{display:flex;gap:10px;margin-bottom:14px;}
+  .dq-item{flex:1;text-align:center;}
+  .dq-item img{border-radius:10px;display:block;margin:0 auto 4px;}
+  .dq-item span{font-size:10px;color:#999;}
+
+  /* Single QR */
+  .single-qr{display:flex;justify-content:center;margin-bottom:14px;}
+  .single-qr img{border-radius:14px;}
+
+  /* ── ACTION ZONE ── */
+  /* State machine: idle → pending → done */
+  .task-actions{display:flex;gap:8px;flex-direction:column;}
+
+  /* GO button */
+  .btn-go{
+    width:100%;padding:13px;border-radius:50px;
+    font-size:14px;font-weight:800;letter-spacing:1px;
+    border:none;cursor:pointer;color:#fff;
+    transition:all .25s ease;position:relative;overflow:hidden;
+  }
+  .btn-go::before{
+    content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+    animation:shim 2.5s ease infinite;
+  }
+  @keyframes shim{to{left:140%;}}
+  .btn-go:hover{transform:translateY(-2px);filter:brightness(1.08);}
+  .btn-go:active{transform:scale(.97);}
+
+  /* CONFIRM row (shown after go) */
+  .confirm-row{
+    display:none;
+    background:rgba(255,255,255,0.9);
+    border:2px solid rgba(30,184,112,0.3);
+    border-radius:18px;padding:12px 16px;
+    align-items:center;gap:10px;
+  }
+  .confirm-row.show{display:flex;}
+  .confirm-hint{font-size:12px;color:#888;flex:1;line-height:1.5;}
+  .btn-confirm{
+    padding:9px 18px;border-radius:50px;
+    font-size:13px;font-weight:800;letter-spacing:1px;
+    border:none;cursor:pointer;color:#fff;flex-shrink:0;
+    transition:all .25s ease;
+  }
+  .btn-confirm:hover{transform:translateY(-1px);filter:brightness(1.08);}
+
+  /* DONE state */
+  .done-state{
+    display:none;
+    align-items:center;justify-content:center;gap:8px;
+    padding:12px 16px;border-radius:18px;
+    font-size:13px;font-weight:800;
+    color:var(--green);
+    background:rgba(30,184,112,0.08);
+    border:2px solid rgba(30,184,112,0.25);
+  }
+  .done-state.show{display:flex;}
+
+  /* ── EMAIL SECTION ── */
+  .email-section{
+    margin:8px 16px 0;
+    background:rgba(255,255,255,0.85);
+    border-radius:24px;
+    border:2px solid rgba(255,255,255,0.9);
+    box-shadow:0 8px 32px rgba(139,61,200,0.12);
+    backdrop-filter:blur(12px);
+    overflow:hidden;
+    opacity:0; transition:opacity .5s ease;
+    display:none;
+  }
+  .email-section.show{display:block;}
+  .email-section.visible{opacity:1;}
+
+  .email-hd{
+    background:linear-gradient(135deg,var(--purple),var(--pink));
+    padding:20px 24px 16px;text-align:center;
+  }
+  .email-hd-icon{font-size:36px;margin-bottom:6px;}
+  .email-hd-title{font-size:17px;font-weight:900;color:#fff;letter-spacing:2px;margin-bottom:4px;}
+  .email-hd-sub{font-size:12px;color:rgba(255,255,255,0.8);}
+
+  .email-body{padding:20px 24px;}
+
+  .ticket-summary{
+    background:linear-gradient(135deg,#fff8e8,#fff0f8);
+    border:2px solid rgba(184,150,12,0.25);
+    border-radius:16px;padding:14px 18px;
+    display:flex;align-items:center;gap:12px;margin-bottom:16px;
+  }
+  .ts-icon{font-size:32px;flex-shrink:0;}
+  .ts-info{flex:1;}
+  .ts-label{font-size:11px;color:#aaa;letter-spacing:2px;}
+  .ts-count{font-size:28px;font-weight:900;color:var(--red);line-height:1;}
+  .ts-count span{font-size:13px;font-weight:600;color:#888;}
+
+  .form-group{margin-bottom:14px;}
+  .form-label{font-size:12px;font-weight:800;color:#555;margin-bottom:6px;display:block;letter-spacing:1px;}
+  .form-label em{color:var(--red);font-style:normal;}
+  .form-input{
+    width:100%;padding:13px 16px;
+    border:2px solid rgba(139,61,200,0.2);border-radius:14px;
+    font-size:15px;outline:none;transition:all .3s ease;
+    background:rgba(255,255,255,0.9);font-family:inherit;color:#333;
+  }
+  .form-input:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(139,61,200,0.1);}
+  .form-input::placeholder{color:#ccc;}
+
+  .agree-row{
+    display:flex;align-items:flex-start;gap:8px;
+    font-size:12px;color:#999;line-height:1.7;margin-bottom:18px;cursor:pointer;
+  }
+  .agree-row input{margin-top:3px;accent-color:var(--purple);flex-shrink:0;}
+
+  .btn-submit{
+    width:100%;padding:16px;
+    background:linear-gradient(135deg,var(--purple),var(--pink));
+    color:#fff;font-size:16px;font-weight:900;letter-spacing:2px;
+    border:none;border-radius:50px;cursor:pointer;
+    box-shadow:0 8px 28px rgba(139,61,200,0.3);
+    transition:all .3s ease;position:relative;overflow:hidden;
+  }
+  .btn-submit::before{
+    content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+    animation:shim 2s ease infinite;
+  }
+  .btn-submit:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(139,61,200,0.4);}
+  .btn-submit:disabled{background:linear-gradient(135deg,#ccc,#ddd);box-shadow:none;cursor:not-allowed;transform:none;}
+  .btn-submit:disabled::before{display:none;}
+
+  /* ── LOCKED NOTICE ── */
+  .locked-notice{
+    margin:8px 16px 0;
+    background:rgba(255,255,255,0.6);
+    border-radius:18px;padding:14px 18px;
+    font-size:12px;color:#bbb;text-align:center;line-height:1.8;
+    border:2px dashed rgba(139,61,200,0.2);
+  }
+
+  /* ── SUCCESS MODAL ── */
+  .modal-bg{
+    position:fixed;inset:0;background:rgba(0,0,0,0.5);
+    backdrop-filter:blur(6px);z-index:200;
+    display:none;align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-bg.show{display:flex;}
+  .modal{
+    background:linear-gradient(160deg,#fff,#f5eeff,#fff5fb);
+    border-radius:32px;padding:36px 28px;text-align:center;
+    max-width:380px;width:100%;
+    box-shadow:0 24px 80px rgba(0,0,0,0.2);
+    border:3px solid rgba(255,255,255,0.9);
+    animation:modalPop .45s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes modalPop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+  .modal-emoji{font-size:60px;margin-bottom:10px;display:block;}
+  .modal-title{font-size:20px;font-weight:900;color:var(--navy);margin-bottom:6px;}
+  .modal-sub{font-size:13px;color:#888;margin-bottom:18px;line-height:1.8;}
+
+  .e-ticket{
+    background:linear-gradient(135deg,#5B3DC8,#C83D8B);
+    border-radius:18px;padding:18px 20px;color:#fff;
+    margin-bottom:16px;position:relative;overflow:hidden;text-align:left;
+  }
+  .e-ticket::before{content:'✈️';position:absolute;right:-10px;top:-10px;font-size:70px;opacity:.1;}
+  .et-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+  .et-airline{font-size:9px;letter-spacing:3px;opacity:.7;}
+  .et-brand{font-size:17px;font-weight:900;}
+  .et-num-label{font-size:9px;opacity:.7;text-align:right;}
+  .et-num{font-size:20px;font-weight:900;font-family:monospace;letter-spacing:3px;}
+  .et-div{border:none;border-top:2px dashed rgba(255,255,255,0.3);margin:10px 0;}
+  .et-footer{display:flex;justify-content:space-between;align-items:center;}
+  .et-holder{font-size:11px;opacity:.7;}
+  .et-holder strong{font-size:14px;font-weight:800;display:block;}
+  .et-badge{font-size:10px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:10px;letter-spacing:1px;}
+
+  .modal-info{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;}
+  .mi-tag{background:rgba(139,61,200,0.08);border:1px solid rgba(139,61,200,0.2);color:var(--purple);font-size:11px;font-weight:700;padding:5px 12px;border-radius:14px;}
+
+  .btn-modal-close{
+    width:100%;padding:13px;border-radius:50px;
+    background:linear-gradient(135deg,var(--purple),var(--pink));
+    color:#fff;font-size:14px;font-weight:800;letter-spacing:2px;
+    border:none;cursor:pointer;
+    box-shadow:0 6px 20px rgba(139,61,200,0.3);
+    transition:all .3s ease;
+  }
+  .btn-modal-close:hover{transform:translateY(-2px);}
+  .btn-more{
+    width:100%;margin-top:8px;padding:11px;border-radius:50px;
+    background:transparent;color:var(--purple);
+    font-size:13px;font-weight:700;letter-spacing:1px;
+    border:2px solid rgba(139,61,200,0.3);cursor:pointer;
+    transition:all .3s ease;
+  }
+  .btn-more:hover{background:rgba(139,61,200,0.06);}
+
+  .hint{font-size:11px;color:#bbb;text-align:center;padding:14px 20px 4px;line-height:1.9;}
+  .footer{text-align:center;padding:20px 16px 8px;font-size:11px;color:rgba(0,0,0,0.35);letter-spacing:1px;line-height:2;}
+</style>
+</head>
+<body>
+
+<div class="cloud c1"></div>
+<div class="cloud c2"></div>
+<div class="cloud c3"></div>
+<div id="confetti-container"></div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <span class="modal-emoji">🎉</span>
+    <div class="modal-title">抽獎券已送出！</div>
+    <div class="modal-sub" id="modalSub">電子抽獎券已寄送到您的信箱</div>
+    <div class="e-ticket">
+      <div class="et-top">
+        <div>
+          <div class="et-airline">CHINA AIRLINES</div>
+          <div class="et-brand">中華航空</div>
+        </div>
+        <div>
+          <div class="et-num-label">抽獎券號碼</div>
+          <div class="et-num" id="modalTicketNum">KTF-XXXXXX</div>
+        </div>
+      </div>
+      <hr class="et-div">
+      <div class="et-footer">
+        <div class="et-holder">持票人<strong id="modalName">旅客</strong></div>
+        <div class="et-badge" id="modalBadge">入場任務</div>
+      </div>
+    </div>
+    <div class="modal-info">
+      <div class="mi-tag">🗓️ 2026/05/15–18</div>
+      <div class="mi-tag">📍 高雄展覽館</div>
+      <div class="mi-tag">🕒 抽獎 15:30</div>
+    </div>
+    <button class="btn-modal-close" onclick="closeModal()">✅ 知道了，繼續！</button>
+    <button class="btn-more" onclick="closeModal()">繼續完成其他任務 +更多抽獎券</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="hbrand">CHINA AIRLINES × KTF 2026 · 入場任務</div>
+    <div class="htitle">飛行任務啟動！✈️</div>
+    <div class="hsub">完成任務獲得電子抽獎券<br>任務越多，中獎機率越高！</div>
+    <div class="hbadge">🎫 每完成一項任務即可領抽獎券</div>
+  </div>
+
+  <!-- Ticket bar -->
+  <div class="ticket-bar">
+    <div class="tb-icon">🎫</div>
+    <div class="tb-info">
+      <div class="tb-label">已獲得抽獎券</div>
+      <div class="tb-count"><span id="ticketCount">0</span> <span>張</span></div>
+      <div class="tb-progress"><div class="tb-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <div style="font-size:28px;" id="progressEmoji">🌟</div>
+  </div>
+
+  <div class="section-title">📋 選擇任務完成</div>
+
+  <!-- ── TASK A: 華夏會員 ── -->
+  <div class="task-card" id="cardA">
+    <div class="task-inner">
+      <div class="task-bar" style="background:linear-gradient(180deg,var(--gold),#F0C040);"></div>
+      <div class="task-body">
+        <div class="task-top">
+          <div class="task-icon-wrap" style="background:linear-gradient(135deg,#fff8e8,#fff0c8);">✈️</div>
+          <div class="task-meta">
+            <div class="task-badge" style="background:linear-gradient(135deg,var(--gold),#F0C040);color:#fff;">⭐ 主推任務</div>
+            <div class="task-name">華夏會員 註冊</div>
+            <div class="task-reward" style="background:linear-gradient(135deg,var(--red),#E83060);">🎫 +2 張抽獎券</div>
+          </div>
+        </div>
+        <div class="task-desc">
+          加入中華航空華夏常客飛行計劃，累積里程兌換機票！<br>掃描 QR Code 或點擊按鈕前往註冊
+        </div>
+        <div class="single-qr">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fdynasty-flyer.china-airlines.com%2Fmember%2Fregister&color=003087&bgcolor=ffffff&margin=8" width="140" height="140" alt="華夏會員">
+        </div>
+        <div class="task-actions">
+          <a class="btn-go" id="btnGoA"
+            href="https://dynasty-flyer.china-airlines.com/member/register"
+            style="background:linear-gradient(135deg,#C87000,var(--gold));box-shadow:0 6px 20px rgba(184,150,12,0.35);display:block;text-decoration:none;text-align:center;"
+            onclick="setPending('A')">
+            🚀 前往註冊華夏會員
+          </a>
+          <div class="confirm-row" id="confirmRowA">
+            <div class="confirm-hint">👆 已完成註冊了嗎？<br>回來點右邊按鈕確認！</div>
+            <button class="btn-confirm"
+              style="background:linear-gradient(135deg,var(--green),#16A060);"
+              onclick="confirmTask('A',2,'華夏會員 Dynasty Flyer')">
+              ✓ 完成了！
+            </button>
+          </div>
+          <div class="done-state" id="doneA">✅ 完成！已獲得 2 張抽獎券</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TASK B: APP ── -->
+  <div class="task-card" id="cardB">
+    <div class="task-inner">
+      <div class="task-bar" style="background:linear-gradient(180deg,var(--navy),#5B7FD4);"></div>
+      <div class="task-body">
+        <div class="task-top">
+          <div class="task-icon-wrap" style="background:linear-gradient(135deg,#e8eeff,#d0daff);">📱</div>
+          <div class="task-meta">
+            <div class="task-badge" style="background:linear-gradient(135deg,var(--navy),#5B7FD4);color:#fff;">✈️ 任務 B</div>
+            <div class="task-name">下載 華航 APP</div>
+            <div class="task-reward" style="background:linear-gradient(135deg,var(--navy),#5B7FD4);">🎫 +2 張抽獎券</div>
+          </div>
+        </div>
+        <div class="task-desc">
+          下載中華航空 APP，隨時查詢航班、辦理報到、累積里程！
+        </div>
+        <div class="dual-qr">
+          <div class="dq-item">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fapps.apple.com%2Ftw%2Fapp%2Fid1093021450&color=003087&bgcolor=f0f4ff&margin=6" width="120" height="120" alt="iOS">
+            <span>🍎 App Store</span>
+          </div>
+          <div class="dq-item">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.chinaairlines.mobile30&color=003087&bgcolor=f0f4ff&margin=6" width="120" height="120" alt="Android">
+            <span>🤖 Google Play</span>
+          </div>
+        </div>
+        <div class="task-actions">
+          <div style="display:flex;gap:8px;">
+            <a class="btn-go" id="btnGoB"
+              href="https://apps.apple.com/tw/app/id1093021450"
+              style="background:linear-gradient(135deg,var(--navy),#5B7FD4);box-shadow:0 6px 20px rgba(0,48,135,0.3);flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none;"
+              onclick="setPending('B')">
+              🍎 iOS
+            </a>
+            <a class="btn-go"
+              href="https://play.google.com/store/apps/details?id=com.chinaairlines.mobile30"
+              style="background:linear-gradient(135deg,#3B6FD0,#5B9FE4);box-shadow:0 6px 20px rgba(0,48,135,0.2);flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none;"
+              onclick="setPending('B')">
+              🤖 Android
+            </a>
+          </div>
+          <div class="confirm-row" id="confirmRowB">
+            <div class="confirm-hint">👆 APP 下載完成了嗎？<br>點右邊確認領取獎勵！</div>
+            <button class="btn-confirm"
+              style="background:linear-gradient(135deg,var(--green),#16A060);"
+              onclick="confirmTask('B',2,'下載華航 APP')">
+              ✓ 完成了！
+            </button>
+          </div>
+          <div class="done-state" id="doneB">✅ 完成！已獲得 2 張抽獎券</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TASK C: LINE ── -->
+  <div class="task-card" id="cardC">
+    <div class="task-inner">
+      <div class="task-bar" style="background:linear-gradient(180deg,#06C755,#04A044);"></div>
+      <div class="task-body">
+        <div class="task-top">
+          <div class="task-icon-wrap" style="background:linear-gradient(135deg,#e8fff0,#c8ffd8);">💬</div>
+          <div class="task-meta">
+            <div class="task-badge" style="background:linear-gradient(135deg,#06C755,#04A044);color:#fff;">🟢 任務 C</div>
+            <div class="task-name">加入 LINE 好友</div>
+            <div class="task-reward" style="background:linear-gradient(135deg,#06C755,#04A044);">🎫 +1 張抽獎券</div>
+          </div>
+        </div>
+        <div class="task-desc">
+          加入中華航空官方 LINE，搶先獲得航班優惠與最新活動資訊！
+        </div>
+        <div class="single-qr">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fpage.line.me%2F207oojco&color=06C755&bgcolor=ffffff&margin=8" width="140" height="140" alt="LINE">
+        </div>
+        <div class="task-actions">
+          <a class="btn-go" id="btnGoC"
+            href="https://page.line.me/207oojco"
+            style="background:linear-gradient(135deg,#06C755,#04A044);box-shadow:0 6px 20px rgba(6,199,85,0.3);display:block;text-decoration:none;text-align:center;"
+            onclick="setPending('C')">
+            💬 加入 LINE 好友
+          </a>
+          <div class="confirm-row" id="confirmRowC">
+            <div class="confirm-hint">👆 已加入好友了嗎？<br>點右邊確認領取獎勵！</div>
+            <button class="btn-confirm"
+              style="background:linear-gradient(135deg,var(--green),#16A060);"
+              onclick="confirmTask('C',1,'加入 LINE 好友')">
+              ✓ 完成了！
+            </button>
+          </div>
+          <div class="done-state" id="doneC">✅ 完成！已獲得 1 張抽獎券</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TASK D: YouTube ── -->
+  <div class="task-card" id="cardD">
+    <div class="task-inner">
+      <div class="task-bar" style="background:linear-gradient(180deg,var(--red),#E03060);"></div>
+      <div class="task-body">
+        <div class="task-top">
+          <div class="task-icon-wrap" style="background:linear-gradient(135deg,#ffe8e8,#ffd0d0);">▶️</div>
+          <div class="task-meta">
+            <div class="task-badge" style="background:linear-gradient(135deg,var(--red),#E03060);color:#fff;">🔴 任務 D</div>
+            <div class="task-name">訂閱 YouTube 頻道</div>
+            <div class="task-reward" style="background:linear-gradient(135deg,var(--red),#E03060);">🎫 +1 張抽獎券</div>
+          </div>
+        </div>
+        <div class="task-desc">
+          訂閱中華航空官方 YouTube，觀看最新航線影片與機上體驗分享！
+        </div>
+        <div class="single-qr">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fwww.youtube.com%2F%40TheCHINAAIRLINES&color=C8102E&bgcolor=ffffff&margin=8" width="140" height="140" alt="YouTube">
+        </div>
+        <div class="task-actions">
+          <a class="btn-go" id="btnGoD"
+            href="https://www.youtube.com/@TheCHINAAIRLINES"
+            style="background:linear-gradient(135deg,var(--red),#E03060);box-shadow:0 6px 20px rgba(200,16,46,0.3);display:block;text-decoration:none;text-align:center;"
+            onclick="setPending('D')">
+            ▶️ 前往訂閱頻道
+          </a>
+          <div class="confirm-row" id="confirmRowD">
+            <div class="confirm-hint">👆 已訂閱頻道了嗎？<br>點右邊確認領取獎勵！</div>
+            <button class="btn-confirm"
+              style="background:linear-gradient(135deg,var(--green),#16A060);"
+              onclick="confirmTask('D',1,'訂閱 YouTube 頻道')">
+              ✓ 完成了！
+            </button>
+          </div>
+          <div class="done-state" id="doneD">✅ 完成！已獲得 1 張抽獎券</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Locked notice -->
+  <div class="locked-notice" id="lockedNotice">
+    ⬆️ 請先完成上方至少一項任務<br>再填寫 Email 領取電子抽獎券
+  </div>
+
+  <!-- Email section (hidden until first task done) -->
+  <div class="email-section" id="emailSection">
+    <div class="email-hd">
+      <div class="email-hd-icon">📬</div>
+      <div class="email-hd-title">填寫 Email 領取抽獎券</div>
+      <div class="email-hd-sub">電子抽獎券將寄送到您填寫的信箱</div>
+    </div>
+    <div class="email-body">
+      <div class="ticket-summary">
+        <div class="ts-icon">🎫</div>
+        <div class="ts-info">
+          <div class="ts-label">本次可領取</div>
+          <div class="ts-count" id="pendingCount">0 <span>張抽獎券</span></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">電子信箱 <em>*</em></label>
+        <input type="email" class="form-input" id="emailInput" placeholder="your@email.com" oninput="checkSubmit()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">確認電子信箱 <em>*</em></label>
+        <input type="email" class="form-input" id="emailConfirm" placeholder="再次輸入信箱" oninput="checkSubmit()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">姓名（選填）</label>
+        <input type="text" class="form-input" id="nameInput" placeholder="您的稱呼">
+      </div>
+      <label class="agree-row">
+        <input type="checkbox" id="agreeBox" onchange="checkSubmit()">
+        我同意中華航空依隱私權政策收集及使用本人資料，並同意接收相關行銷資訊。
+      </label>
+      <button class="btn-submit" id="submitBtn" onclick="submitEmail()" disabled>
+        🎫 送出並領取 <span id="submitNum">0</span> 張抽獎券
+      </button>
+      <p class="hint">完成更多任務後可再次填寫領取 🎉</p>
+    </div>
+  </div>
+
+  <div class="hint">
+    📍 高雄展覽館 中華航空攤位 · 展期 2026.05.15–05.18<br>
+    🕒 每日 <strong>15:30</strong> 現場抽獎，歡迎準時蒞臨！
+  </div>
+  <div class="footer">中華航空 × 2026 高雄旅行公會旅展 KTF</div>
+
+</div>
+
+<script>
+// ── STATE ──
+const tasks = {
+  A: { done:false, tickets:2, label:'華夏會員 Dynasty Flyer', pending:false },
+  B: { done:false, tickets:2, label:'下載華航 APP',          pending:false },
+  C: { done:false, tickets:1, label:'加入 LINE 好友',         pending:false },
+  D: { done:false, tickets:1, label:'訂閱 YouTube 頻道',      pending:false },
+};
+let totalTickets  = 0;  // cumulative
+let pendingTickets = 0; // waiting to be claimed via email
+
+// ── STEP 1: SET PENDING ──
+// Shows confirm row immediately + saves state so back-button restores it
+function setPending(id) {
+  const t = tasks[id];
+  if (t.done) return;
+  t.pending = true;
+  saveState();
+  showPendingUI(id);
+  // Return true so <a href> navigation proceeds normally
+  return true;
+}
+
+function showPendingUI(id) {
+  const btn = document.getElementById('btnGo' + id);
+  if (btn) {
+    btn.textContent = '↩️ 完成後回來點這裡';
+    btn.style.opacity = '0.6';
+  }
+  document.getElementById('confirmRow' + id).classList.add('show');
+}
+
+// ── localStorage: SAVE / RESTORE state across page navigation ──
+function saveState() {
+  try {
+    const state = {};
+    Object.keys(tasks).forEach(id => {
+      state[id] = { done: tasks[id].done, pending: tasks[id].pending };
+    });
+    state._tickets = totalTickets;
+    state._pending = pendingTickets;
+    localStorage.setItem('ktf2026', JSON.stringify(state));
+  } catch(e) {}
+}
+
+function restoreState() {
+  try {
+    const raw = localStorage.getItem('ktf2026');
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    totalTickets  = state._tickets || 0;
+    pendingTickets = state._pending || 0;
+    Object.keys(tasks).forEach(id => {
+      if (!state[id]) return;
+      if (state[id].done) {
+        tasks[id].done = true;
+        tasks[id].pending = false;
+        document.getElementById('card' + id).classList.add('done');
+        const btn = document.getElementById('btnGo' + id);
+        if (btn) btn.style.display = 'none';
+        document.getElementById('confirmRow' + id).classList.remove('show');
+        document.getElementById('done' + id).classList.add('show');
+      } else if (state[id].pending) {
+        tasks[id].pending = true;
+        showPendingUI(id);
+      }
+    });
+    if (totalTickets > 0) {
+      updateTicketBar();
+      updateEmailSection();
+      document.getElementById('lockedNotice').style.display = 'none';
+      const es = document.getElementById('emailSection');
+      es.classList.add('show');
+      es.classList.add('visible');
+    }
+  } catch(e) {}
+}
+
+// ── STEP 2: CONFIRM ──
+function confirmTask(id, tickets, label) {
+  const t = tasks[id];
+  if (t.done) return;
+  t.done = true;
+  t.pending = false;
+
+  // UI: mark card done
+  document.getElementById('card' + id).classList.add('done');
+  const confirmRow = document.getElementById('confirmRow' + id);
+  confirmRow.classList.remove('show');
+  const goBtn = document.getElementById('btnGo' + id);
+  if (goBtn) goBtn.style.display = 'none';
+  document.getElementById('done' + id).classList.add('show');
+
+  // Counters
+  totalTickets  += tickets;
+  pendingTickets += tickets;
+  saveState();
+  updateTicketBar();
+  updateEmailSection();
+
+  // Show email section on first task
+  if (Object.values(tasks).filter(t => t.done).length === 1) {
+    const notice = document.getElementById('lockedNotice');
+    notice.style.display = 'none';
+    const es = document.getElementById('emailSection');
+    es.classList.add('show');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        es.classList.add('visible');
+        setTimeout(() => es.scrollIntoView({ behavior:'smooth', block:'nearest' }), 200);
+      });
+    });
+  }
+}
+
+// ── TICKET BAR ──
+function updateTicketBar() {
+  document.getElementById('ticketCount').textContent = totalTickets;
+  const pct = Math.min((totalTickets / 6) * 100, 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  const emojis = ['🌟','⭐','🌠','🎖️','🏅','🏆','🎊'];
+  document.getElementById('progressEmoji').textContent = emojis[Math.min(totalTickets, 6)];
+}
+
+// ── EMAIL SECTION ──
+function updateEmailSection() {
+  document.getElementById('pendingCount').innerHTML = `${pendingTickets} <span>張抽獎券</span>`;
+  document.getElementById('submitNum').textContent = pendingTickets;
+  checkSubmit();
+}
+
+function checkSubmit() {
+  const email   = document.getElementById('emailInput').value.trim();
+  const confirm = document.getElementById('emailConfirm').value.trim();
+  const agree   = document.getElementById('agreeBox').checked;
+  const valid   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email === confirm && agree && pendingTickets > 0;
+  document.getElementById('submitBtn').disabled = !valid;
+}
+
+// ── SUBMIT ──
+function submitEmail() {
+  const email = document.getElementById('emailInput').value.trim();
+  const name  = document.getElementById('nameInput').value.trim() || '旅客';
+  const ticketNum = genTicketNum();
+  const doneTasks = Object.values(tasks).filter(t => t.done).length;
+
+  // Modal
+  document.getElementById('modalSub').innerHTML =
+    `電子抽獎券已寄送到<br><strong style="color:var(--purple);">${email}</strong><br>共 <strong style="color:var(--red);">${pendingTickets} 張</strong>，記得 15:30 現場對獎！`;
+  document.getElementById('modalTicketNum').textContent = ticketNum;
+  document.getElementById('modalName').textContent = name;
+  document.getElementById('modalBadge').textContent = `完成 ${doneTasks} 項任務`;
+  document.getElementById('modalBg').classList.add('show');
+
+  // Reset pending
+  pendingTickets = 0;
+  saveState();
+  updateEmailSection();
+
+  // Clear form
+  document.getElementById('emailInput').value = '';
+  document.getElementById('emailConfirm').value = '';
+  document.getElementById('nameInput').value = '';
+  document.getElementById('agreeBox').checked = false;
+  checkSubmit();
+
+  fireConfetti();
+
+  // Production: POST to Google Apps Script
+  // fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+  //   method: 'POST',
+  //   body: JSON.stringify({ email, name, tickets: pendingTickets })
+  // });
+}
+
+function genTicketNum() {
+  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let n = 'KTF-';
+  for (let i=0; i<6; i++) n += c[Math.floor(Math.random()*c.length)];
+  return n;
+}
+
+function closeModal() {
+  document.getElementById('modalBg').classList.remove('show');
+}
+
+// ── CONFETTI ──
+function fireConfetti() {
+  const container = document.getElementById('confetti-container');
+  container.innerHTML = '';
+  const colors = ['#C8102E','#8B3DC8','#F0A020','#3BA8E8','#E8629A','#20C8A0','#B8960C'];
+  for (let i=0; i<45; i++) {
+    const p = document.createElement('div');
+    p.className = 'cp';
+    p.style.cssText = `
+      left:${Math.random()*100}vw;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      width:${7+Math.random()*7}px;height:${10+Math.random()*9}px;
+      border-radius:${Math.random()>.5?'50%':'2px'};
+      animation:cfFall ${1.4+Math.random()*2}s linear ${Math.random()*.5}s forwards;
+      display:block;transform:rotate(${Math.random()*360}deg);
+    `;
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 3500);
+  }
+}
+
+// ── INIT: restore state on page load ──
+restoreState();
+</script>
+</body>
+</html>

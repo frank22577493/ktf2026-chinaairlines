@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📸 拍照打卡任務 × 中華航空 2026 高雄旅展</title>
+<style>
+  :root {
+    --red: #C8102E; --navy: #003087; --gold: #B8960C;
+    --purple: #8B3DC8; --pink: #E8629A; --sky: #87CEEB;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #c8e8ff 0%, #dcc8f5 40%, #f5c8e0 70%, #ffe8c8 100%);
+    font-family: 'Helvetica Neue', Arial, 'Microsoft JhengHei', sans-serif;
+    position: relative; overflow-x: hidden;
+  }
+
+  /* Clouds */
+  .cloud { position: fixed; background: rgba(255,255,255,0.65); border-radius: 50px; pointer-events: none; z-index: 0; }
+  .cloud::before, .cloud::after { content: ''; position: absolute; background: rgba(255,255,255,0.65); border-radius: 50%; }
+  .cloud-1 { width: 110px; height: 36px; top: 6%; left: -140px; animation: cf 22s linear infinite; }
+  .cloud-1::before { width: 55px; height: 55px; top: -28px; left: 12px; }
+  .cloud-1::after  { width: 38px; height: 38px; top: -18px; left: 50px; }
+  .cloud-2 { width: 160px; height: 48px; top: 25%; left: -200px; animation: cf 30s linear infinite 8s; }
+  .cloud-2::before { width: 75px; height: 75px; top: -38px; left: 18px; }
+  .cloud-2::after  { width: 50px; height: 50px; top: -25px; left: 75px; }
+  .cloud-3 { width: 90px; height: 30px; top: 70%; left: -120px; animation: cf 18s linear infinite 3s; }
+  .cloud-3::before { width: 45px; height: 45px; top: -22px; left: 8px; }
+  .cloud-3::after  { width: 30px; height: 30px; top: -14px; left: 40px; }
+  @keyframes cf { from { transform: translateX(0); } to { transform: translateX(calc(100vw + 280px)); } }
+
+  /* Confetti */
+  .confetti-piece { position: fixed; border-radius: 2px; top: -20px; pointer-events: none; z-index: 999; display: none; }
+  @keyframes cfFall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(105vh) rotate(600deg); opacity: 0; } }
+
+  /* Page */
+  .page { position: relative; z-index: 1; max-width: 480px; margin: 0 auto; padding: 0 0 40px; }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--navy), #5B3DC8);
+    padding: 32px 24px 24px;
+    text-align: center;
+    border-radius: 0 0 32px 32px;
+    box-shadow: 0 8px 32px rgba(0,48,135,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '📸';
+    position: absolute; top: -20px; right: -20px;
+    font-size: 100px; opacity: 0.08;
+  }
+  .header-logo { font-size: 12px; color: rgba(255,255,255,0.7); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+  .header-title { font-size: 28px; font-weight: 900; color: #fff; letter-spacing: 3px; line-height: 1.2; margin-bottom: 8px; }
+  .header-sub { font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 12px; }
+  .header-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold), #F0C040);
+    color: #fff;
+    font-size: 12px; font-weight: 800;
+    padding: 5px 16px; border-radius: 20px;
+    letter-spacing: 2px;
+  }
+
+  /* Steps */
+  .steps-bar {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 20px 24px 10px;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .step-circle {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    border: 2px solid rgba(139,61,200,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #aaa;
+    transition: all 0.4s ease;
+    flex-shrink: 0;
+  }
+  .step-circle.active { background: linear-gradient(135deg, var(--purple), var(--pink)); border-color: transparent; color: #fff; box-shadow: 0 4px 12px rgba(139,61,200,0.4); }
+  .step-circle.done { background: linear-gradient(135deg, #20C880, #3BA8E8); border-color: transparent; color: #fff; }
+  .step-line { width: 28px; height: 2px; background: rgba(139,61,200,0.2); transition: all 0.4s ease; }
+  .step-line.done { background: linear-gradient(90deg, #20C880, #3BA8E8); }
+
+  /* Cards */
+  .card {
+    background: rgba(255,255,255,0.8);
+    border-radius: 24px;
+    margin: 16px 16px 0;
+    padding: 24px;
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow: 0 8px 32px rgba(139,61,200,0.08);
+    display: none;
+  }
+  .card.active-card { display: block; }
+  .card-icon { font-size: 40px; text-align: center; margin-bottom: 10px; }
+  .card-title { font-size: 18px; font-weight: 800; color: var(--navy); text-align: center; margin-bottom: 6px; letter-spacing: 1px; }
+  .card-desc { font-size: 13px; color: #777; text-align: center; line-height: 1.8; margin-bottom: 20px; }
+
+  /* Upload area */
+  .upload-area {
+    border: 2.5px dashed rgba(139,61,200,0.4);
+    border-radius: 20px;
+    padding: 32px 20px;
+    text-align: center;
+    background: linear-gradient(135deg, #f8f0ff, #f0f8ff);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .upload-area:hover { border-color: var(--purple); background: linear-gradient(135deg, #f0e8ff, #e8f0ff); }
+  .upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .upload-icon { font-size: 48px; margin-bottom: 10px; }
+  .upload-text { font-size: 14px; font-weight: 700; color: var(--purple); margin-bottom: 4px; }
+  .upload-hint { font-size: 12px; color: #aaa; }
+  .upload-preview { max-width: 100%; border-radius: 16px; margin-top: 16px; display: none; }
+
+  /* Questionnaire */
+  .q-group { margin-bottom: 18px; }
+  .q-label { font-size: 13px; font-weight: 700; color: #444; margin-bottom: 8px; display: block; }
+  .q-label span { color: var(--red); }
+  .q-options { display: flex; flex-wrap: wrap; gap: 8px; }
+  .q-option {
+    background: rgba(255,255,255,0.8);
+    border: 2px solid rgba(139,61,200,0.2);
+    border-radius: 20px;
+    padding: 7px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    user-select: none;
+  }
+  .q-option.selected { background: linear-gradient(135deg, var(--purple), var(--pink)); color: #fff; border-color: transparent; }
+  .q-option:hover:not(.selected) { border-color: var(--purple); color: var(--purple); }
+
+  /* Form fields */
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 13px; font-weight: 700; color: #444; margin-bottom: 6px; display: block; }
+  .form-label span { color: var(--red); }
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid rgba(139,61,200,0.2);
+    border-radius: 14px;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.9);
+    font-family: inherit;
+  }
+  .form-input:focus { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(139,61,200,0.1); }
+  .form-input::placeholder { color: #ccc; }
+
+  /* Ticket reward pill */
+  .ticket-reward {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #fff8e8, #fff0f8);
+    border: 2px solid rgba(184,150,12,0.3);
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+  }
+  .ticket-icon { font-size: 28px; }
+  .ticket-info { flex: 1; }
+  .ticket-title { font-size: 13px; font-weight: 800; color: var(--gold); }
+  .ticket-desc { font-size: 11px; color: #999; margin-top: 2px; }
+  .ticket-count { font-size: 24px; font-weight: 900; color: var(--red); }
+
+  /* Primary button */
+  .btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 50px;
+    padding: 16px;
+    cursor: pointer;
+    box-shadow: 0 8px 28px rgba(139,61,200,0.3);
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    animation: shimmer 2s ease infinite;
+  }
+  @keyframes shimmer { to { left: 140%; } }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(139,61,200,0.4); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { background: linear-gradient(135deg, #ccc, #ddd); box-shadow: none; cursor: not-allowed; transform: none; }
+  .btn-primary:disabled::before { display: none; }
+
+  /* Tip block */
+  .tip { font-size: 12px; color: #aaa; text-align: center; margin-top: 10px; line-height: 1.8; }
+
+  /* Success card */
+  .success-card { display: none; }
+  .success-card.show { display: block; }
+  .success-inner {
+    text-align: center;
+    padding: 8px 0 0;
+  }
+  .success-emoji { font-size: 64px; margin-bottom: 12px; display: block; animation: bounce 0.6s ease; }
+  @keyframes bounce { 0%,100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+  .success-title { font-size: 22px; font-weight: 900; color: var(--navy); margin-bottom: 8px; }
+  .success-sub { font-size: 13px; color: #888; margin-bottom: 20px; line-height: 1.8; }
+
+  /* E-Ticket */
+  .e-ticket {
+    background: linear-gradient(135deg, #5B3DC8, #C83D8B);
+    border-radius: 20px;
+    padding: 20px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .e-ticket::before {
+    content: '✈️';
+    position: absolute; top: -12px; right: -12px;
+    font-size: 80px; opacity: 0.12;
+  }
+  .ticket-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .ticket-airline { font-size: 10px; letter-spacing: 3px; opacity: 0.7; }
+  .ticket-num-label { font-size: 10px; opacity: 0.7; text-align: right; }
+  .ticket-number { font-size: 26px; font-weight: 900; letter-spacing: 4px; font-family: monospace; }
+  .ticket-divider {
+    border: none;
+    border-top: 2px dashed rgba(255,255,255,0.3);
+    margin: 12px 0;
+    position: relative;
+  }
+  .ticket-divider::before { content: '○'; position: absolute; left: -28px; top: -12px; font-size: 20px; color: rgba(255,255,255,0.15); }
+  .ticket-divider::after  { content: '○'; position: absolute; right: -28px; top: -12px; font-size: 20px; color: rgba(255,255,255,0.15); }
+  .ticket-footer { display: flex; justify-content: space-between; align-items: center; }
+  .ticket-holder { font-size: 12px; opacity: 0.8; }
+  .ticket-holder strong { font-size: 15px; display: block; font-weight: 800; }
+  .ticket-type { font-size: 10px; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 10px; letter-spacing: 1px; }
+
+  /* Info row */
+  .info-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
+  .info-tag { background: rgba(255,255,255,0.7); border: 1.5px solid rgba(139,61,200,0.2); border-radius: 20px; padding: 6px 14px; font-size: 12px; color: #666; }
+
+  /* Again button */
+  .btn-ghost {
+    width: 100%;
+    background: transparent;
+    color: var(--purple);
+    font-size: 14px;
+    font-weight: 700;
+    border: 2px solid rgba(139,61,200,0.3);
+    border-radius: 50px;
+    padding: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+  }
+  .btn-ghost:hover { background: rgba(139,61,200,0.08); }
+
+  /* Footer */
+  .page-footer { text-align: center; padding: 24px 16px 8px; font-size: 11px; color: rgba(0,0,0,0.35); letter-spacing: 1px; line-height: 2; }
+</style>
+</head>
+<body>
+
+<div class="cloud cloud-1"></div>
+<div class="cloud cloud-2"></div>
+<div class="cloud cloud-3"></div>
+<div id="confetti-container"></div>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-logo">CHINA AIRLINES × KTF 2026</div>
+    <div class="header-title">📸 拍照打卡任務</div>
+    <div class="header-sub">在中華航空攤位拍照打卡，加碼獲得抽獎機會！</div>
+    <div class="header-badge">🎫 完成 +1 張電子抽獎券</div>
+  </div>
+
+  <!-- Step indicator -->
+  <div class="steps-bar">
+    <div class="step">
+      <div class="step-circle active" id="s1">1</div>
+    </div>
+    <div class="step-line" id="l1"></div>
+    <div class="step">
+      <div class="step-circle" id="s2">2</div>
+    </div>
+    <div class="step-line" id="l2"></div>
+    <div class="step">
+      <div class="step-circle" id="s3">3</div>
+    </div>
+    <div class="step-line" id="l3"></div>
+    <div class="step">
+      <div class="step-circle" id="s4">🎫</div>
+    </div>
+  </div>
+
+  <!-- STEP 1: Upload photo -->
+  <div class="card active-card" id="step1">
+    <div class="card-icon">📷</div>
+    <div class="card-title">上傳打卡照片</div>
+    <div class="card-desc">請在中華航空攤位拍照後上傳<br>可以拍攝攤位、飛機模型、空服員裝扮等 ✨</div>
+
+    <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+      <input type="file" id="fileInput" accept="image/*" capture="environment" onchange="handleUpload(event)">
+      <div id="uploadPlaceholder">
+        <div class="upload-icon">📸</div>
+        <div class="upload-text">點擊拍照 / 選擇相片</div>
+        <div class="upload-hint">支援 JPG、PNG，建議橫向拍攝</div>
+      </div>
+      <img id="uploadPreview" class="upload-preview" alt="打卡照預覽">
+    </div>
+
+    <div style="height:20px;"></div>
+    <button class="btn-primary" id="step1Btn" onclick="goStep2()" disabled>下一步 →</button>
+    <p class="tip">📍 攤位位置：高雄展覽館 中華航空展區<br>展期 2026/5/15 – 5/18</p>
+  </div>
+
+  <!-- STEP 2: Questionnaire -->
+  <div class="card" id="step2">
+    <div class="card-icon">📝</div>
+    <div class="card-title">快速問卷</div>
+    <div class="card-desc">3 個小問題，讓我們更了解您！<br>（約 30 秒完成）</div>
+
+    <div class="q-group">
+      <label class="q-label">Q1. 您今天是怎麼來到高雄旅展的？<span>*</span></label>
+      <div class="q-options" id="q1">
+        <div class="q-option" onclick="selectOpt(this,'q1')">🚗 自行開車</div>
+        <div class="q-option" onclick="selectOpt(this,'q1')">🚇 大眾運輸</div>
+        <div class="q-option" onclick="selectOpt(this,'q1')">🚶 步行</div>
+        <div class="q-option" onclick="selectOpt(this,'q1')">🏨 飯店住宿</div>
+      </div>
+    </div>
+
+    <div class="q-group">
+      <label class="q-label">Q2. 您最想飛去哪裡旅行？<span>*</span></label>
+      <div class="q-options" id="q2">
+        <div class="q-option" onclick="selectOpt(this,'q2')">🗼 日本</div>
+        <div class="q-option" onclick="selectOpt(this,'q2')">🇰🇷 韓國</div>
+        <div class="q-option" onclick="selectOpt(this,'q2')">🌴 東南亞</div>
+        <div class="q-option" onclick="selectOpt(this,'q2')">🗽 歐美</div>
+      </div>
+    </div>
+
+    <div class="q-group">
+      <label class="q-label">Q3. 您是否為華夏會員？<span>*</span></label>
+      <div class="q-options" id="q3">
+        <div class="q-option" onclick="selectOpt(this,'q3')">✅ 是，已是會員</div>
+        <div class="q-option" onclick="selectOpt(this,'q3')">🔜 今天準備加入</div>
+        <div class="q-option" onclick="selectOpt(this,'q3')">❓ 還不是</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="step2Btn" onclick="goStep3()" disabled>下一步 →</button>
+  </div>
+
+  <!-- STEP 3: Email -->
+  <div class="card" id="step3">
+    <div class="card-icon">✉️</div>
+    <div class="card-title">填寫 Email 領取抽獎券</div>
+    <div class="card-desc">電子抽獎券將寄送到您填寫的信箱<br>請確認 Email 正確，勿錯過中獎通知 📬</div>
+
+    <div class="ticket-reward">
+      <div class="ticket-icon">🎫</div>
+      <div class="ticket-info">
+        <div class="ticket-title">拍照打卡獎勵</div>
+        <div class="ticket-desc">完成打卡任務即可獲得</div>
+      </div>
+      <div class="ticket-count">+1</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">電子信箱 <span>*</span></label>
+      <input type="email" class="form-input" id="emailInput" placeholder="your@email.com" oninput="checkEmail()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">確認電子信箱 <span>*</span></label>
+      <input type="email" class="form-input" id="emailConfirm" placeholder="再次輸入信箱" oninput="checkEmail()">
+    </div>
+    <div class="form-group">
+      <label class="form-label">姓名（可選填）</label>
+      <input type="text" class="form-input" id="nameInput" placeholder="您的稱呼">
+    </div>
+
+    <div style="padding:10px 0 16px;">
+      <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px;color:#888;line-height:1.6;">
+        <input type="checkbox" id="agreeCheck" onchange="checkEmail()" style="margin-top:2px;accent-color:var(--purple);">
+        我同意中華航空依隱私權政策收集及使用本人資料，並同意接收相關行銷資訊。
+      </label>
+    </div>
+
+    <button class="btn-primary" id="step3Btn" onclick="submitForm()" disabled>🎫 送出並領取抽獎券</button>
+    <p class="tip">抽獎券將在 1 分鐘內寄出<br>如未收到請檢查垃圾郵件匣</p>
+  </div>
+
+  <!-- STEP 4: Success -->
+  <div class="card success-card" id="step4">
+    <div class="success-inner">
+      <span class="success-emoji">🎉</span>
+      <div class="success-title">打卡成功！</div>
+      <div class="success-sub" id="successSub">電子抽獎券已寄送到您的信箱<br>請注意查收，記得參加 15:30 的現場抽獎！</div>
+
+      <!-- E-Ticket Demo -->
+      <div class="e-ticket">
+        <div class="ticket-header">
+          <div>
+            <div class="ticket-airline">CHINA AIRLINES</div>
+            <div style="font-size:18px;font-weight:900;letter-spacing:2px;">中華航空</div>
+          </div>
+          <div>
+            <div class="ticket-num-label">抽獎券號碼</div>
+            <div class="ticket-number" id="ticketNum">------ </div>
+          </div>
+        </div>
+        <hr class="ticket-divider">
+        <div class="ticket-footer">
+          <div class="ticket-holder">
+            持票人<strong id="ticketHolder">旅客</strong>
+          </div>
+          <div class="ticket-type">📸 拍照打卡</div>
+        </div>
+      </div>
+
+      <div class="info-row">
+        <div class="info-tag">🗓️ 2026/05/15–18</div>
+        <div class="info-tag">📍 高雄展覽館</div>
+        <div class="info-tag">🕒 抽獎 15:30</div>
+      </div>
+
+      <!-- More tasks hint -->
+      <div style="background:linear-gradient(135deg,#f0e8ff,#ffe8f5);border-radius:16px;padding:16px;margin-top:8px;text-align:left;">
+        <div style="font-size:13px;font-weight:800;color:var(--purple);margin-bottom:8px;">🎫 還可以獲得更多抽獎券！</div>
+        <div style="font-size:12px;color:#777;line-height:2.2;">
+          ✈️ 華夏會員註冊 → <strong style="color:var(--red);">+2 張</strong><br>
+          📱 下載華航 APP → <strong style="color:var(--red);">+2 張</strong><br>
+          💬 加入 LINE 好友 → <strong style="color:var(--red);">+1 張</strong><br>
+          ▶️ 訂閱 YouTube → <strong style="color:var(--red);">+1 張</strong>
+        </div>
+      </div>
+
+      <button class="btn-primary" style="margin-top:16px;" onclick="goToTasks()">前往入場任務頁面 →</button>
+      <button class="btn-ghost" onclick="resetForm()">🔄 再次打卡（不同照片）</button>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    中華航空 × 2026 高雄旅行公會旅展<br>
+    活動期間如有疑問，請洽攤位服務人員
+  </div>
+
+</div>
+
+<script>
+  let uploadedPhoto = false;
+  const qAnswers = { q1: null, q2: null, q3: null };
+
+  // ===== UPLOAD =====
+  function handleUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const preview = document.getElementById('uploadPreview');
+      preview.src = ev.target.result;
+      preview.style.display = 'block';
+      document.getElementById('uploadPlaceholder').style.display = 'none';
+      uploadedPhoto = true;
+      document.getElementById('step1Btn').disabled = false;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // ===== QUESTIONNAIRE =====
+  function selectOpt(el, group) {
+    document.querySelectorAll(`#${group} .q-option`).forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    qAnswers[group] = el.textContent.trim();
+    checkQComplete();
+  }
+  function checkQComplete() {
+    const allDone = qAnswers.q1 && qAnswers.q2 && qAnswers.q3;
+    document.getElementById('step2Btn').disabled = !allDone;
+  }
+
+  // ===== EMAIL =====
+  function checkEmail() {
+    const email = document.getElementById('emailInput').value.trim();
+    const confirm = document.getElementById('emailConfirm').value.trim();
+    const agree = document.getElementById('agreeCheck').checked;
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email === confirm && agree;
+    document.getElementById('step3Btn').disabled = !valid;
+  }
+
+  // ===== STEP NAV =====
+  function goStep2() {
+    showStep(2);
+    setStepDone(1);
+  }
+  function goStep3() {
+    showStep(3);
+    setStepDone(2);
+  }
+
+  function showStep(n) {
+    [1,2,3].forEach(i => {
+      document.getElementById(`step${i}`).classList.remove('active-card');
+    });
+    document.getElementById(`step${n}`).classList.add('active-card');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function setStepDone(n) {
+    document.getElementById(`s${n}`).classList.remove('active');
+    document.getElementById(`s${n}`).classList.add('done');
+    document.getElementById(`s${n}`).textContent = '✓';
+    if (document.getElementById(`l${n}`)) document.getElementById(`l${n}`).classList.add('done');
+    document.getElementById(`s${n+1}`).classList.add('active');
+  }
+
+  // ===== SUBMIT =====
+  function submitForm() {
+    const email = document.getElementById('emailInput').value.trim();
+    const name  = document.getElementById('nameInput').value.trim() || '旅客';
+    const ticketNum = generateTicketNum();
+
+    // Mark step 3 done
+    document.getElementById('s3').classList.remove('active');
+    document.getElementById('s3').classList.add('done');
+    document.getElementById('s3').textContent = '✓';
+    document.getElementById('l3').classList.add('done');
+    document.getElementById('s4').classList.add('active');
+
+    // Fill success card
+    document.getElementById('ticketNum').textContent = ticketNum;
+    document.getElementById('ticketHolder').textContent = name;
+    document.getElementById('successSub').innerHTML =
+      `電子抽獎券已寄送到<br><strong style="color:var(--purple);">${email}</strong><br>記得參加 15:30 的現場抽獎！`;
+
+    // Show success
+    document.getElementById('step3').classList.remove('active-card');
+    const s4 = document.getElementById('step4');
+    s4.classList.add('active-card', 'show');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    fireConfetti();
+
+    // In production: POST to Google Apps Script web app
+    // fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ email, name, ticketNum, type: 'photo-checkin', q1: qAnswers.q1, q2: qAnswers.q2, q3: qAnswers.q3 })
+    // });
+  }
+
+  function generateTicketNum() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let num = 'P-';
+    for (let i = 0; i < 6; i++) num += chars[Math.floor(Math.random() * chars.length)];
+    return num;
+  }
+
+  function goToTasks() {
+    window.location.href = 'entry-task-system.html';
+  }
+
+  function resetForm() {
+    uploadedPhoto = false;
+    qAnswers.q1 = qAnswers.q2 = qAnswers.q3 = null;
+    document.getElementById('emailInput').value = '';
+    document.getElementById('emailConfirm').value = '';
+    document.getElementById('nameInput').value = '';
+    document.getElementById('agreeCheck').checked = false;
+    document.getElementById('uploadPreview').style.display = 'none';
+    document.getElementById('uploadPlaceholder').style.display = 'block';
+    document.getElementById('fileInput').value = '';
+
+    [1,2,3,4].forEach(i => {
+      const s = document.getElementById(`s${i}`);
+      s.classList.remove('done','active');
+      s.textContent = i === 4 ? '🎫' : i;
+    });
+    document.getElementById('s1').classList.add('active');
+    [1,2,3].forEach(i => { const l = document.getElementById(`l${i}`); if(l) l.classList.remove('done'); });
+
+    document.querySelectorAll('.q-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('step4').classList.remove('active-card','show');
+    document.getElementById('step1').classList.add('active-card');
+    document.getElementById('step1Btn').disabled = true;
+    document.getElementById('step2Btn').disabled = true;
+    document.getElementById('step3Btn').disabled = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ===== CONFETTI =====
+  function fireConfetti() {
+    const c = document.getElementById('confetti-container');
+    c.innerHTML = '';
+    const colors = ['#C8102E','#8B3DC8','#F0A020','#3BA8E8','#E8629A','#20C8A0','#B8960C'];
+    for (let i = 0; i < 50; i++) {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.cssText = `
+        left:${Math.random()*100}vw;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        width:${7+Math.random()*7}px;height:${10+Math.random()*9}px;
+        border-radius:${Math.random()>.5?'50%':'2px'};
+        animation:cfFall ${1.4+Math.random()*2}s linear ${Math.random()*.5}s forwards;
+        display:block;transform:rotate(${Math.random()*360}deg);
+      `;
+      c.appendChild(p);
+      setTimeout(() => p.remove(), 3500);
+    }
+  }
+</script>
+</body>
+</html>

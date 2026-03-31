@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中華航空 × 2026 高雄旅展｜現場抽獎系統</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #87CEEB 0%, #a8d4f0 20%, #c8b8f0 55%, #f0b8d8 80%, #ffd8e8 100%);
+    font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
+    color: #fff;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  /* ===== 雲朵背景動畫 ===== */
+  .cloud {
+    position: fixed;
+    background: rgba(255,255,255,0.85);
+    border-radius: 50px;
+    animation: floatCloud linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: rgba(255,255,255,0.85);
+    border-radius: 50%;
+  }
+  .cloud-1 { width:160px;height:50px;top:8%;left:-200px;animation-duration:30s;animation-delay:0s; }
+  .cloud-1::before { width:80px;height:70px;top:-35px;left:20px; }
+  .cloud-1::after { width:60px;height:55px;top:-25px;left:80px; }
+  .cloud-2 { width:120px;height:38px;top:20%;left:-200px;animation-duration:38s;animation-delay:-12s; }
+  .cloud-2::before { width:60px;height:55px;top:-28px;left:15px; }
+  .cloud-2::after { width:45px;height:40px;top:-18px;left:65px; }
+  .cloud-3 { width:200px;height:60px;top:60%;left:-200px;animation-duration:45s;animation-delay:-20s; }
+  .cloud-3::before { width:100px;height:85px;top:-42px;left:25px; }
+  .cloud-3::after { width:75px;height:65px;top:-30px;left:105px; }
+  .cloud-4 { width:100px;height:32px;top:75%;left:-200px;animation-duration:33s;animation-delay:-5s; }
+  .cloud-4::before { width:50px;height:46px;top:-23px;left:12px; }
+  .cloud-4::after { width:38px;height:34px;top:-16px;left:55px; }
+
+  @keyframes floatCloud {
+    from { left: -250px; }
+    to { left: 110%; }
+  }
+
+  /* 彩帶粒子 */
+  .ribbon {
+    position: fixed;
+    width: 8px; height: 20px;
+    border-radius: 2px;
+    animation: fallRibbon linear infinite;
+    opacity: 0.7;
+  }
+  @keyframes fallRibbon {
+    0% { transform: translateY(-40px) rotate(0deg); opacity:0.7; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity:0; }
+  }
+
+  /* ===== 頂部品牌列 ===== */
+  .header {
+    position: relative; z-index: 20;
+    background: linear-gradient(90deg, rgba(139,61,200,0.85), rgba(91,127,212,0.85), rgba(59,168,232,0.85));
+    backdrop-filter: blur(10px);
+    padding: 14px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+    box-shadow: 0 4px 20px rgba(139,61,200,0.3);
+  }
+  .header-left { display:flex;align-items:center;gap:16px; }
+  .header-icon { font-size:32px; }
+  .header-title { font-size:20px; font-weight:900; letter-spacing:2px; text-shadow:0 2px 8px rgba(0,0,0,0.2); }
+  .header-sub { font-size:12px; opacity:0.85; letter-spacing:2px; margin-top:2px; }
+  .header-right { text-align:right; font-size:13px; opacity:0.9; line-height:1.8; }
+
+  /* ===== 主內容 ===== */
+  .main {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: calc(100vh - 62px);
+    padding: 16px;
+    gap: 16px;
+  }
+
+  /* 獎項選擇 */
+  .prize-panel {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  }
+  .prize-btn {
+    padding: 8px 22px;
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 30px;
+    background: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.85);
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    font-family: inherit; backdrop-filter: blur(8px);
+  }
+  .prize-btn:hover { background: rgba(255,255,255,0.35); color:#fff; transform:translateY(-2px); }
+  .prize-btn.active {
+    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3));
+    color: #8B3DC8; border-color: #fff;
+    box-shadow: 0 6px 20px rgba(255,255,255,0.3);
+    font-weight: 800;
+  }
+
+  /* 當前獎項徽章 */
+  .prize-badge {
+    background: linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.2));
+    border: 2px solid rgba(255,255,255,0.6);
+    border-radius: 50px;
+    padding: 12px 48px;
+    font-size: 20px; font-weight: 800; letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(139,61,200,0.4);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 30px rgba(255,255,255,0.2);
+  }
+
+  /* 主號碼顯示 */
+  .number-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.25));
+    border: 3px solid rgba(255,255,255,0.7);
+    border-radius: 32px;
+    padding: 44px 100px;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 60px rgba(139,61,200,0.2), inset 0 2px 0 rgba(255,255,255,0.5);
+    min-width: 640px;
+  }
+  .number-label {
+    font-size: 15px; letter-spacing: 4px; color: rgba(255,255,255,0.8);
+    margin-bottom: 20px; font-weight: 600;
+  }
+  .number-value {
+    font-size: 110px; font-weight: 900;
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 4px 12px rgba(139,61,200,0.5));
+    letter-spacing: 10px; line-height: 1;
+    min-height: 120px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.1s;
+  }
+  .number-value.rolling {
+    animation: numRoll 0.07s infinite;
+  }
+  @keyframes numRoll {
+    0% { transform: scale(1.02); }
+    50% { transform: scale(0.98); }
+    100% { transform: scale(1.02); }
+  }
+  .number-value.winner {
+    animation: winnerGlow 0.6s ease-in-out infinite alternate;
+    background: linear-gradient(135deg, #FFD700, #FFA040, #FFD700);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(255,200,0,0.8));
+  }
+  @keyframes winnerGlow {
+    from { transform: scale(1); filter: drop-shadow(0 0 20px rgba(255,200,0,0.6)); }
+    to { transform: scale(1.06); filter: drop-shadow(0 0 40px rgba(255,200,0,1)); }
+  }
+
+  /* 得獎訊息 */
+  .winner-msg {
+    display: none; text-align: center;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .winner-msg.show { display: block; }
+  .winner-title {
+    font-size: 40px; font-weight: 900; letter-spacing: 3px;
+    background: linear-gradient(90deg, #FFD700, #FFA040, #FFD700);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 8px rgba(255,200,0,0.5));
+    margin-bottom: 8px;
+  }
+  .winner-prize-text { font-size: 22px; color: #fff; opacity:0.95; letter-spacing:2px; }
+  @keyframes popIn {
+    from { opacity:0; transform:scale(0.5); }
+    to { opacity:1; transform:scale(1); }
+  }
+
+  /* 控制按鈕 */
+  .controls { display:flex; gap:14px; align-items:center; flex-wrap:wrap; justify-content:center; }
+  .btn {
+    padding: 16px 44px;
+    font-size: 18px; font-weight: 800; letter-spacing: 2px;
+    border: none; border-radius: 50px;
+    cursor: pointer; transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-draw {
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+    color: #8B3DC8;
+    box-shadow: 0 8px 30px rgba(255,255,255,0.4), 0 4px 10px rgba(0,0,0,0.1);
+    min-width: 200px;
+  }
+  .btn-draw:hover { transform:translateY(-4px); box-shadow:0 14px 40px rgba(255,255,255,0.5); }
+  .btn-draw:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+  .btn-stop {
+    background: linear-gradient(135deg, #FFD700, #FFA040);
+    color: #5B2D00;
+    box-shadow: 0 8px 30px rgba(255,200,0,0.5);
+    min-width: 160px;
+    display: none;
+  }
+  .btn-stop:hover { transform:translateY(-4px); }
+  .btn-stop.show { display:inline-flex;align-items:center;justify-content:center; }
+
+  .btn-reset {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+    border: 2px solid rgba(255,255,255,0.5);
+    font-size:14px; padding:12px 28px;
+    display: none;
+  }
+  .btn-reset.show { display:block; }
+  .btn-reset:hover { background:rgba(255,255,255,0.35); }
+
+  /* 歷史紀錄 */
+  .history {
+    position: fixed; right:24px; top:80px;
+    width: 210px; z-index:20;
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 16px; padding:16px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 30px rgba(139,61,200,0.15);
+  }
+  .history h3 { font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.7);margin-bottom:12px;text-transform:uppercase; }
+  .history-item { display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.15);font-size:13px; }
+  .h-num { color:#FFD700;font-weight:800;font-family:'Courier New',monospace; }
+  .h-prize { color:rgba(255,255,255,0.65);font-size:11px; }
+
+  /* 底部統計 */
+  .stats-bar {
+    position:fixed;bottom:0;left:0;right:0;
+    background:rgba(255,255,255,0.2);
+    border-top:2px solid rgba(255,255,255,0.3);
+    padding:10px 40px;
+    display:flex;justify-content:center;gap:70px;
+    backdrop-filter:blur(16px);z-index:20;
+  }
+  .stat-item { text-align:center; }
+  .stat-num { font-size:22px;font-weight:900;color:#fff;text-shadow:0 2px 8px rgba(139,61,200,0.4); }
+  .stat-label { font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:1px; }
+
+  /* 管理員 */
+  .admin-toggle {
+    position:fixed;bottom:58px;right:20px;
+    background:rgba(255,255,255,0.3);border:2px solid rgba(255,255,255,0.5);
+    border-radius:50%;width:44px;height:44px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;font-size:18px;z-index:30;backdrop-filter:blur(10px);
+  }
+  .admin-panel {
+    position:fixed;bottom:115px;right:20px;
+    background:rgba(255,255,255,0.9);
+    border:2px solid rgba(139,61,200,0.3);
+    border-radius:16px;padding:20px;width:280px;
+    z-index:30;display:none;backdrop-filter:blur(20px);color:#333;
+  }
+  .admin-panel.show { display:block; }
+  .admin-panel h4 { font-size:13px;color:#8B3DC8;letter-spacing:1px;margin-bottom:14px;font-weight:800; }
+  .admin-panel input, .admin-panel textarea {
+    width:100%;background:#f0e8ff;border:1px solid #c8a8e8;
+    border-radius:10px;padding:10px 12px;color:#333;font-size:13px;margin-bottom:10px;
+    font-family:inherit;
+  }
+  .admin-panel textarea { height:80px;resize:vertical; }
+  .admin-panel label { font-size:12px;color:#888;display:block;margin-bottom:4px; }
+  .btn-admin {
+    background:linear-gradient(135deg,#8B3DC8,#5B7FD4);color:#fff;
+    border:none;width:100%;padding:10px;border-radius:10px;
+    font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;
+  }
+
+  /* 彩花爆炸 */
+  .confetti-piece {
+    position:fixed;pointer-events:none;z-index:100;
+    width:8px;height:8px;border-radius:2px;
+    animation:confettiFall 1.5s ease-out forwards;
+  }
+  @keyframes confettiFall {
+    0% { opacity:1;transform:translate(0,0) rotate(0deg) scale(1); }
+    100% { opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--tr)) scale(0.3); }
+  }
+</style>
+</head>
+<body>
+
+<!-- 雲朵 -->
+<div class="cloud cloud-1"></div>
+<div class="cloud cloud-2"></div>
+<div class="cloud cloud-3"></div>
+<div class="cloud cloud-4"></div>
+
+<!-- 彩帶（由 JS 生成） -->
+<div id="ribbons"></div>
+
+<!-- 頂部 -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">🎡</div>
+    <div>
+      <div class="header-title">中華航空 × 2026 高雄旅展</div>
+      <div class="header-sub">✈️ KTF 現場抽獎系統 · 每日 13:30</div>
+    </div>
+  </div>
+  <div class="header-right">
+    🗓️ 2026 / 05 / 15–18<br>
+    📍 高雄展覽館 中華航空攤位
+  </div>
+</div>
+
+<!-- 主內容 -->
+<div class="main">
+
+  <!-- 獎項選擇 -->
+  <div class="prize-panel" id="prizePanel">
+    <button class="prize-btn active" onclick="selectPrize(this,'✈️ 頭獎｜國際線來回機票兌換券')">✈️ 頭獎｜機票</button>
+    <button class="prize-btn" onclick="selectPrize(this,'🏨 貳獎｜飯店折扣券 / NT$1,500 折價券')">🏨 貳獎｜NT$1,500</button>
+    <button class="prize-btn" onclick="selectPrize(this,'🎁 參獎｜機票折價券 NT$1,000')">🎁 參獎｜NT$1,000</button>
+    <button class="prize-btn" onclick="selectPrize(this,'🛩️ 肆獎｜華航模型飛機 / NT$500 折價券')">🛩️ 肆獎｜模型飛機</button>
+    <button class="prize-btn" onclick="selectPrize(this,'🛋️ 人氣獎｜華航聯名抱枕 / 聯名禮品')">🛋️ 人氣獎｜抱枕</button>
+  </div>
+
+  <!-- 當前獎項 -->
+  <div class="prize-badge" id="prizeBadge">✈️ 頭獎｜國際線來回機票兌換券</div>
+
+  <!-- 號碼顯示卡 -->
+  <div class="number-card">
+    <div class="number-label">🎫 幸運抽獎號碼 LUCKY NUMBER</div>
+    <div class="number-value" id="numberDisplay">？？？？？</div>
+  </div>
+
+  <!-- 得獎訊息 -->
+  <div class="winner-msg" id="winnerMsg">
+    <div class="winner-title">🎉 恭喜得獎！CONGRATULATIONS！🎉</div>
+    <div class="winner-prize-text" id="winnerPrize"></div>
+  </div>
+
+  <!-- 控制按鈕 -->
+  <div class="controls">
+    <button class="btn btn-draw" id="btnDraw" onclick="startDraw()">🎰 開始抽獎</button>
+    <button class="btn btn-stop" id="btnStop" onclick="stopDraw()">⚡ 停止抽獎</button>
+    <button class="btn btn-reset" id="btnReset" onclick="resetDraw()">🔄 再抽一次</button>
+  </div>
+
+  <div style="font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:2px;">按空白鍵 開始 / 停止 · Enter 重置</div>
+
+</div>
+
+<!-- 歷史紀錄 -->
+<div class="history">
+  <h3>🏆 今日得獎紀錄</h3>
+  <div id="historyList"><div style="font-size:12px;color:rgba(255,255,255,0.4);text-align:center;padding:10px 0;">尚未開獎</div></div>
+</div>
+
+<!-- 底部統計 -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-num" id="totalCount">0</div><div class="stat-label">號碼總數</div></div>
+  <div class="stat-item"><div class="stat-num" id="drawCount">0</div><div class="stat-label">已抽次數</div></div>
+  <div class="stat-item"><div class="stat-num" id="todayDate">--</div><div class="stat-label">今日</div></div>
+</div>
+
+<!-- 管理員 -->
+<div class="admin-toggle" onclick="toggleAdmin()" title="管理員設定">⚙️</div>
+<div class="admin-panel" id="adminPanel">
+  <h4>⚙️ 管理員設定</h4>
+  <label>號碼範圍（起始）</label>
+  <input type="number" id="rangeStart" value="1">
+  <label>號碼範圍（結束）</label>
+  <input type="number" id="rangeEnd" value="9999">
+  <label>或手動輸入號碼池（每行一個）</label>
+  <textarea id="manualNumbers" placeholder="00001&#10;00342&#10;00567&#10;..."></textarea>
+  <button class="btn-admin" onclick="applySettings()">✅ 套用設定</button>
+</div>
+
+<script>
+let isRolling = false, rollInterval = null;
+let currentPrize = '✈️ 頭獎｜國際線來回機票兌換券';
+let numberPool = [], drawnNumbers = [], drawCount = 0;
+
+function generatePool(s, e) {
+  let p = [];
+  for (let i = s; i <= e; i++) p.push(String(i).padStart(5,'0'));
+  return p;
+}
+
+function init() {
+  numberPool = generatePool(1, 9999);
+  updateStats();
+  generateRibbons();
+  const now = new Date();
+  document.getElementById('todayDate').textContent = `${now.getMonth()+1}/${now.getDate()}`;
+}
+
+function generateRibbons() {
+  const colors = ['#C8A8F0','#F0C8E0','#A8D4F0','#F0E0A8','#C8F0C8','#F0A8C8'];
+  const container = document.getElementById('ribbons');
+  for (let i = 0; i < 20; i++) {
+    const r = document.createElement('div');
+    r.className = 'ribbon';
+    r.style.cssText = `left:${Math.random()*100}%;background:${colors[i%colors.length]};
+      animation-duration:${5+Math.random()*8}s;animation-delay:${-Math.random()*8}s;
+      transform:rotate(${Math.random()*360}deg);`;
+    container.appendChild(r);
+  }
+}
+
+function selectPrize(btn, prize) {
+  document.querySelectorAll('.prize-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentPrize = prize;
+  document.getElementById('prizeBadge').textContent = prize;
+}
+
+function startDraw() {
+  if (isRolling) return;
+  isRolling = true;
+  document.getElementById('winnerMsg').classList.remove('show');
+  document.getElementById('numberDisplay').classList.remove('winner');
+  document.getElementById('numberDisplay').classList.add('rolling');
+  document.getElementById('btnDraw').disabled = true;
+  document.getElementById('btnStop').classList.add('show');
+  document.getElementById('btnReset').classList.remove('show');
+  rollInterval = setInterval(() => {
+    const n = Math.floor(Math.random()*99999)+1;
+    document.getElementById('numberDisplay').textContent = '#' + String(n).padStart(5,'0');
+  }, 55);
+}
+
+function stopDraw() {
+  if (!isRolling) return;
+  isRolling = false;
+  clearInterval(rollInterval);
+  const available = numberPool.filter(n => !drawnNumbers.includes(n));
+  const final = available.length > 0
+    ? available[Math.floor(Math.random()*available.length)]
+    : String(Math.floor(Math.random()*99999)+1).padStart(5,'0');
+  drawnNumbers.push(final);
+  drawCount++;
+  const disp = document.getElementById('numberDisplay');
+  disp.textContent = '#' + final;
+  disp.classList.remove('rolling');
+  disp.classList.add('winner');
+  document.getElementById('winnerMsg').classList.add('show');
+  document.getElementById('winnerPrize').textContent = '恭喜獲得：' + currentPrize;
+  document.getElementById('btnStop').classList.remove('show');
+  document.getElementById('btnDraw').disabled = false;
+  document.getElementById('btnReset').classList.add('show');
+  addHistory(final, currentPrize);
+  updateStats();
+  launchConfetti();
+}
+
+function resetDraw() {
+  document.getElementById('numberDisplay').textContent = '？？？？？';
+  document.getElementById('numberDisplay').classList.remove('winner','rolling');
+  document.getElementById('winnerMsg').classList.remove('show');
+  document.getElementById('btnReset').classList.remove('show');
+}
+
+function addHistory(number, prize) {
+  const list = document.getElementById('historyList');
+  if (list.querySelector('div[style]')) list.innerHTML = '';
+  const short = (prize.split('｜')[1] || prize).substring(0,10);
+  const item = document.createElement('div');
+  item.className = 'history-item';
+  item.innerHTML = `<span class="h-num">#${number}</span><span class="h-prize">${short}</span>`;
+  list.insertBefore(item, list.firstChild);
+}
+
+function updateStats() {
+  document.getElementById('totalCount').textContent = numberPool.length.toLocaleString();
+  document.getElementById('drawCount').textContent = drawCount;
+}
+
+function launchConfetti() {
+  const colors = ['#FFD700','#FF69B4','#87CEEB','#C8A8F0','#98FB98','#FFA040','#FF6B9D'];
+  for (let i = 0; i < 80; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = (20 + Math.random() * 60) + '%';
+    piece.style.top = (20 + Math.random() * 40) + '%';
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 80 + Math.random() * 180;
+    piece.style.setProperty('--tx', Math.cos(angle)*dist + 'px');
+    piece.style.setProperty('--ty', Math.sin(angle)*dist + 'px');
+    piece.style.setProperty('--tr', (Math.random()*720-360) + 'deg');
+    piece.style.animationDelay = (Math.random()*0.4) + 's';
+    piece.style.animationDuration = (1+Math.random()*0.8) + 's';
+    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    document.body.appendChild(piece);
+    setTimeout(() => piece.remove(), 2500);
+  }
+}
+
+function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('show'); }
+
+function applySettings() {
+  const manual = document.getElementById('manualNumbers').value.trim();
+  if (manual) {
+    numberPool = manual.split('\n').map(n=>n.trim()).filter(n=>n);
+  } else {
+    const s = parseInt(document.getElementById('rangeStart').value);
+    const e = parseInt(document.getElementById('rangeEnd').value);
+    if (s>0 && e>=s) numberPool = generatePool(s, e);
+  }
+  drawnNumbers = []; drawCount = 0;
+  updateStats(); toggleAdmin(); resetDraw();
+  alert(`✅ 已載入 ${numberPool.length} 個號碼！`);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); isRolling ? stopDraw() : startDraw(); }
+  if (e.code === 'Enter' && !isRolling) resetDraw();
+});
+
+init();
+</script>
+</body>
+</html>

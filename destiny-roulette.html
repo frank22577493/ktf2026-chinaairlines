@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>命定航點大轉盤 ✈️ 中華航空 × 2026 高雄旅展</title>
+<style>
+  :root {
+    --red: #C8102E;
+    --navy: #003087;
+    --gold: #B8960C;
+    --sky: #87CEEB;
+    --pink: #F0A8C8;
+    --purple: #8B3DC8;
+    --mint: #A8E8D0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #c8e8ff 0%, #dcc8f5 40%, #f5c8e0 70%, #ffe8c8 100%);
+    font-family: 'Helvetica Neue', Arial, 'Microsoft JhengHei', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ===== FLOATING CLOUDS ===== */
+  .cloud {
+    position: fixed;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: rgba(255,255,255,0.7);
+    border-radius: 50%;
+  }
+  .cloud-1 { width: 120px; height: 40px; top: 8%; left: -150px; animation: cloudFloat 20s linear infinite; }
+  .cloud-1::before { width: 60px; height: 60px; top: -30px; left: 15px; }
+  .cloud-1::after  { width: 40px; height: 40px; top: -20px; left: 55px; }
+  .cloud-2 { width: 180px; height: 50px; top: 20%; left: -220px; animation: cloudFloat 28s linear infinite 5s; }
+  .cloud-2::before { width: 80px; height: 80px; top: -40px; left: 20px; }
+  .cloud-2::after  { width: 55px; height: 55px; top: -28px; left: 80px; }
+  .cloud-3 { width: 100px; height: 35px; top: 60%; left: -130px; animation: cloudFloat 22s linear infinite 12s; }
+  .cloud-3::before { width: 50px; height: 50px; top: -25px; left: 10px; }
+  .cloud-3::after  { width: 35px; height: 35px; top: -15px; left: 45px; }
+  .cloud-4 { width: 140px; height: 45px; top: 80%; left: -170px; animation: cloudFloat 35s linear infinite 8s; }
+  .cloud-4::before { width: 70px; height: 70px; top: -35px; left: 18px; }
+  .cloud-4::after  { width: 45px; height: 45px; top: -22px; left: 70px; }
+  @keyframes cloudFloat {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(100vw + 300px)); }
+  }
+
+  /* ===== CONFETTI ===== */
+  .confetti-piece {
+    position: fixed;
+    width: 10px; height: 14px;
+    top: -20px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+    pointer-events: none;
+    z-index: 999;
+    display: none;
+  }
+  @keyframes confettiFall {
+    0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+    80%  { opacity: 1; }
+    100% { transform: translateY(105vh) rotate(720deg) scale(0.5); opacity: 0; }
+  }
+
+  /* ===== LAYOUT ===== */
+  .page-wrapper {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    width: 100%;
+    text-align: center;
+    padding: 28px 20px 16px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.6) 0%, transparent 100%);
+  }
+  .header-brand {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: var(--navy);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    opacity: 0.7;
+  }
+  .header-title {
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #5B3DC8, #C83D8B, #C8102E);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 4px;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .header-sub {
+    font-size: 14px;
+    color: #6655AA;
+    letter-spacing: 2px;
+  }
+  .header-deco {
+    font-size: 22px;
+    margin-top: 8px;
+  }
+
+  /* ===== PLAYER BOARD ===== */
+  .player-board {
+    display: flex;
+    gap: 12px;
+    margin: 10px 20px 0;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .player-slot {
+    background: rgba(255,255,255,0.65);
+    border: 2px solid rgba(255,255,255,0.9);
+    border-radius: 16px;
+    padding: 10px 20px;
+    text-align: center;
+    min-width: 120px;
+    backdrop-filter: blur(8px);
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 16px rgba(139,61,200,0.1);
+  }
+  .player-slot.active {
+    background: linear-gradient(135deg, rgba(139,61,200,0.2), rgba(91,127,212,0.2));
+    border-color: var(--purple);
+    box-shadow: 0 4px 20px rgba(139,61,200,0.3);
+    transform: translateY(-2px);
+  }
+  .player-slot.revealed {
+    background: linear-gradient(135deg, rgba(200,16,46,0.15), rgba(184,150,12,0.15));
+    border-color: var(--gold);
+  }
+  .player-label { font-size: 10px; color: #999; letter-spacing: 2px; text-transform: uppercase; }
+  .player-name { font-size: 14px; font-weight: 800; color: #333; margin-top: 2px; }
+  .player-dest { font-size: 11px; color: var(--purple); margin-top: 2px; font-weight: 700; min-height: 16px; }
+
+  /* ===== MAIN GAME AREA ===== */
+  .game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    gap: 24px;
+  }
+
+  /* ===== WHEEL CONTAINER ===== */
+  .wheel-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Pointer arrow */
+  .wheel-pointer {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+  }
+  .wheel-pointer svg { display: block; }
+
+  /* Outer glow ring */
+  .wheel-glow {
+    position: absolute;
+    width: calc(100% + 24px);
+    height: calc(100% + 24px);
+    border-radius: 50%;
+    background: conic-gradient(
+      rgba(255,255,255,0.4) 0deg,
+      rgba(200,16,46,0.3) 60deg,
+      rgba(255,255,255,0.4) 120deg,
+      rgba(184,150,12,0.3) 180deg,
+      rgba(255,255,255,0.4) 240deg,
+      rgba(139,61,200,0.3) 300deg,
+      rgba(255,255,255,0.4) 360deg
+    );
+    animation: glowSpin 4s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes glowSpin { to { transform: rotate(360deg); } }
+
+  canvas#wheel {
+    border-radius: 50%;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.2), 0 0 0 6px rgba(255,255,255,0.8), 0 0 0 8px rgba(139,61,200,0.3);
+    display: block;
+    cursor: pointer;
+  }
+
+  /* Center hub */
+  .wheel-hub {
+    position: absolute;
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffffff, #f0e8ff);
+    border: 4px solid rgba(255,255,255,0.9);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    z-index: 5;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  .wheel-hub:hover { transform: scale(1.1); }
+  .wheel-hub:active { transform: scale(0.95); }
+
+  /* ===== SPIN BUTTON ===== */
+  .spin-btn {
+    background: linear-gradient(135deg, #C8102E, #8B3DC8);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 56px;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(200,16,46,0.35), 0 2px 0 rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .spin-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%; width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s ease infinite;
+  }
+  @keyframes shimmer { to { left: 140%; } }
+  .spin-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(200,16,46,0.45); }
+  .spin-btn:active { transform: translateY(0); }
+  .spin-btn:disabled { background: linear-gradient(135deg, #ccc, #aaa); box-shadow: none; cursor: not-allowed; transform: none; }
+
+  .btn-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; }
+
+  .next-btn {
+    background: linear-gradient(135deg, var(--navy), #5B7FD4);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 28px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,48,135,0.3);
+    transition: all 0.3s ease;
+    display: none;
+  }
+  .next-btn:hover { transform: translateY(-2px); }
+  .next-btn.show { display: inline-flex; align-items: center; gap: 6px; }
+
+  .reset-btn {
+    background: rgba(255,255,255,0.7);
+    color: #666;
+    font-size: 13px;
+    font-weight: 600;
+    border: 2px solid rgba(0,0,0,0.1);
+    border-radius: 50px;
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .reset-btn:hover { background: rgba(255,255,255,0.95); color: var(--navy); }
+
+  /* ===== STATUS TEXT ===== */
+  .spin-status {
+    font-size: 18px;
+    font-weight: 700;
+    color: #5B3DC8;
+    letter-spacing: 2px;
+    min-height: 28px;
+    text-align: center;
+    animation: pulse 1.5s ease infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+  .spin-status.static { animation: none; opacity: 1; }
+
+  /* ===== RESULT OVERLAY ===== */
+  .result-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+  .result-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .result-card {
+    background: linear-gradient(160deg, #ffffff, #f5eeff, #fff5fb);
+    border-radius: 32px;
+    padding: 40px 48px;
+    text-align: center;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+    border: 3px solid rgba(255,255,255,0.9);
+    transform: scale(0.8);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .result-overlay.show .result-card { transform: scale(1); }
+  .result-card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(139,61,200,0.06);
+    pointer-events: none;
+  }
+
+  .result-emoji { font-size: 64px; margin-bottom: 12px; display: block; }
+  .result-title {
+    font-size: 14px;
+    color: #aaa;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .result-player {
+    font-size: 20px;
+    font-weight: 800;
+    color: #333;
+    margin-bottom: 16px;
+  }
+  .result-dest-wrap {
+    background: linear-gradient(135deg, #5B3DC8, #C83D8B);
+    border-radius: 20px;
+    padding: 20px 24px;
+    margin: 0 0 16px;
+    color: #fff;
+  }
+  .result-dest-en { font-size: 11px; letter-spacing: 3px; opacity: 0.8; margin-bottom: 4px; }
+  .result-dest-zh { font-size: 42px; font-weight: 900; letter-spacing: 4px; line-height: 1.1; }
+  .result-dest-code { font-size: 24px; font-weight: 700; opacity: 0.8; margin-top: 4px; letter-spacing: 4px; }
+  .result-route {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+  }
+  .result-info {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .result-tag {
+    background: linear-gradient(135deg, #f0e8ff, #ffe8f5);
+    color: var(--purple);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(139,61,200,0.2);
+  }
+  .result-close-btn {
+    background: linear-gradient(135deg, #C8102E, #8B3DC8);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 36px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(139,61,200,0.3);
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+  .result-close-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(139,61,200,0.4); }
+
+  /* ===== QR CODE SECTION ===== */
+  .qr-section {
+    display: none;
+    width: 100%;
+    max-width: 640px;
+    background: rgba(255,255,255,0.75);
+    border-radius: 28px;
+    padding: 32px;
+    backdrop-filter: blur(12px);
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow: 0 12px 48px rgba(139,61,200,0.12);
+    text-align: center;
+    margin: 0 20px 32px;
+  }
+  .qr-section.show { display: block; }
+  .qr-section-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--navy);
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+  }
+  .qr-section-sub {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 24px;
+  }
+  .qr-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .qr-item {
+    background: linear-gradient(135deg, #f8f0ff, #f0f8ff);
+    border-radius: 20px;
+    padding: 20px 16px;
+    border: 2px solid rgba(139,61,200,0.2);
+  }
+  .qr-item img { border-radius: 12px; display: block; margin: 0 auto 12px; }
+  .qr-item-label {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--purple);
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+  .qr-item-desc { font-size: 11px; color: #888; line-height: 1.6; }
+
+  /* ===== ROUND INDICATOR ===== */
+  .round-indicator {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 4px;
+  }
+  .round-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .round-dot.done { background: var(--purple); }
+  .round-dot.current { background: var(--red); transform: scale(1.3); box-shadow: 0 0 8px rgba(200,16,46,0.5); }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 11px;
+    color: rgba(0,0,0,0.35);
+    letter-spacing: 1px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    canvas#wheel { width: 280px !important; height: 280px !important; }
+    .result-card { padding: 28px 24px; }
+    .result-dest-zh { font-size: 32px; }
+    .qr-grid { grid-template-columns: 1fr; }
+    .wheel-hub { width: 52px; height: 52px; font-size: 22px; }
+  }
+
+  /* ===== STAGE NUMBER ===== */
+  .stage-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba(200,16,46,0.12), rgba(139,61,200,0.12));
+    border: 1.5px solid rgba(139,61,200,0.3);
+    border-radius: 50px;
+    padding: 6px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--purple);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  /* ===== FIREWORKS ===== */
+  @keyframes burst {
+    0%   { transform: scale(0) rotate(0deg); opacity: 1; }
+    100% { transform: scale(2.5) rotate(90deg); opacity: 0; }
+  }
+  .firework {
+    position: fixed;
+    font-size: 40px;
+    animation: burst 1s ease-out forwards;
+    pointer-events: none;
+    z-index: 200;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating Clouds -->
+<div class="cloud cloud-1"></div>
+<div class="cloud cloud-2"></div>
+<div class="cloud cloud-3"></div>
+<div class="cloud cloud-4"></div>
+
+<!-- Confetti pieces (generated by JS) -->
+<div id="confetti-container"></div>
+
+<!-- ===== RESULT OVERLAY ===== -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card">
+    <span class="result-emoji" id="resultEmoji">✈️</span>
+    <div class="result-title">🎯 命定航點揭曉</div>
+    <div class="result-player" id="resultPlayer">玩家1</div>
+    <div class="result-dest-wrap">
+      <div class="result-dest-en" id="resultDestEn">DESTINATION</div>
+      <div class="result-dest-zh" id="resultDestZh">東京</div>
+      <div class="result-dest-code" id="resultDestCode">NRT</div>
+    </div>
+    <div class="result-route" id="resultRoute">🛫 高雄 (KHH) → 東京成田 (NRT)</div>
+    <div class="result-info" id="resultInfo"></div>
+    <button class="result-close-btn" onclick="closeResult()">✅ 確認，繼續下一位！</button>
+  </div>
+</div>
+
+<!-- ===== FIREWORKS ===== -->
+<div id="firework1" class="firework" style="top:20%;left:20%;">🎆</div>
+<div id="firework2" class="firework" style="top:15%;right:20%;">🎇</div>
+<div id="firework3" class="firework" style="top:30%;left:45%;">✨</div>
+
+<!-- ===== MAIN PAGE ===== -->
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-brand">CHINA AIRLINES × KTF 2026 · 舞台遊戲</div>
+    <div class="header-title">命定航點大轉盤</div>
+    <div class="header-sub">✈️ 轉動命運，飛向夢想！ ✈️</div>
+    <div class="header-deco">🎡 🎠 ☁️ 🎪 ☁️ 🎠 🎡</div>
+  </div>
+
+  <!-- Stage badge -->
+  <div style="text-align:center;margin-top:8px;">
+    <div class="stage-badge" id="stageBadge">🎙️ 舞台遊戲第 1 回合</div>
+  </div>
+
+  <!-- Player Board -->
+  <div class="player-board" id="playerBoard">
+    <div class="player-slot active" id="slot-0">
+      <div class="player-label">玩家 1</div>
+      <div class="player-name" id="name-0">等待上台 👋</div>
+      <div class="player-dest" id="dest-0"></div>
+    </div>
+    <div class="player-slot" id="slot-1">
+      <div class="player-label">玩家 2</div>
+      <div class="player-name" id="name-1">等待上台 👋</div>
+      <div class="player-dest" id="dest-1"></div>
+    </div>
+    <div class="player-slot" id="slot-2">
+      <div class="player-label">玩家 3</div>
+      <div class="player-name" id="name-2">等待上台 👋</div>
+      <div class="player-dest" id="dest-2"></div>
+    </div>
+  </div>
+
+  <!-- Round dots -->
+  <div class="round-indicator" style="margin-top:12px;">
+    <div class="round-dot current" id="dot-0"></div>
+    <div class="round-dot" id="dot-1"></div>
+    <div class="round-dot" id="dot-2"></div>
+  </div>
+
+  <!-- Game Area -->
+  <div class="game-area">
+
+    <!-- Wheel -->
+    <div class="wheel-container" id="wheelContainer">
+      <div class="wheel-glow"></div>
+      <!-- Pointer -->
+      <div class="wheel-pointer">
+        <svg width="28" height="36" viewBox="0 0 28 36">
+          <polygon points="14,36 0,0 28,0" fill="url(#ptr)" />
+          <defs>
+            <linearGradient id="ptr" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#C8102E"/>
+              <stop offset="100%" stop-color="#8B3DC8"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <canvas id="wheel" width="380" height="380"></canvas>
+      <div class="wheel-hub" onclick="handleSpin()">✈️</div>
+    </div>
+
+    <!-- Status -->
+    <div class="spin-status" id="spinStatus">點擊轉盤或按下方按鈕開始旋轉！</div>
+
+    <!-- Buttons -->
+    <div class="btn-row">
+      <button class="spin-btn" id="spinBtn" onclick="handleSpin()">🎲 旋轉命運！</button>
+      <button class="next-btn" id="nextBtn" onclick="nextPlayer()">下一位玩家 →</button>
+      <button class="reset-btn" onclick="resetGame()">🔄 重新開始</button>
+    </div>
+
+  </div>
+
+  <!-- QR Code Section (shows after all 3 rounds) -->
+  <div class="qr-section" id="qrSection">
+    <div class="qr-section-title">🎉 三位玩家的命定航點全部揭曉！</div>
+    <div class="qr-section-sub">歡迎現場觀眾掃描 QR Code 參與活動 ✨</div>
+    <div class="qr-grid">
+      <div class="qr-item">
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https%3A%2F%2Fyour-domain.com%2Fentry-task&color=003087&bgcolor=ffffff&margin=8"
+          width="160" height="160" alt="入場任務 QR">
+        <div class="qr-item-label">🎫 入場任務</div>
+        <div class="qr-item-desc">完成任務<br>領取電子抽獎券</div>
+      </div>
+      <div class="qr-item">
+        <img
+          src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https%3A%2F%2Fyour-domain.com%2Fphoto-checkin&color=8B3DC8&bgcolor=ffffff&margin=8"
+          width="160" height="160" alt="拍照打卡 QR">
+        <div class="qr-item-label">📸 拍照打卡</div>
+        <div class="qr-item-desc">打卡中華航空攤位<br>加碼獲得抽獎券</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;padding:14px;background:linear-gradient(135deg,#fff0e8,#ffe8f5);border-radius:14px;font-size:13px;color:#666;line-height:2;">
+      🕐 每日 <strong style="color:var(--red);">15:30</strong> 準時舞台現場抽獎&emsp;
+      📍 高雄展覽館 中華航空攤位<br>
+      🗓️ 展期 2026.05.15 — 05.18
+    </div>
+  </div>
+
+  <div class="footer">中華航空 × 2026 高雄旅行公會旅展 KTF &nbsp;|&nbsp; 舞台遊戲互動系統</div>
+
+</div>
+
+<script>
+// ===== DESTINATIONS DATA =====
+const destinations = [
+  {
+    zh: '東京成田',
+    en: 'TOKYO NARITA',
+    code: 'NRT',
+    emoji: '🗼',
+    route: '高雄 (KHH) → 東京成田 (NRT)',
+    tags: ['✈️ 直飛 3.5hr', '🌸 賞櫻聖地', '🍜 美食天堂'],
+    color: ['#E8629A', '#F0A020']
+  },
+  {
+    zh: '大阪關西',
+    en: 'OSAKA KANSAI',
+    code: 'KIX',
+    emoji: '🏯',
+    route: '高雄 (KHH) → 大阪關西 (KIX)',
+    tags: ['✈️ 直飛 3hr', '🦌 古都文化', '🍡 道頓堀美食'],
+    color: ['#F0A020', '#E87020']
+  },
+  {
+    zh: '東京羽田',
+    en: 'TOKYO HANEDA',
+    code: 'HND',
+    emoji: '⛩️',
+    route: '高雄 (KHH) → 東京羽田 (HND)',
+    tags: ['✈️ 直飛 3.5hr', '🌃 夜景絕美', '🛍️ 購物天堂'],
+    color: ['#5B7FD4', '#8B3DC8']
+  },
+  {
+    zh: '首爾仁川',
+    en: 'SEOUL INCHEON',
+    code: 'ICN',
+    emoji: '🇰🇷',
+    route: '高雄 (KHH) → 首爾仁川 (ICN)',
+    tags: ['✈️ 直飛 2.5hr', '💄 美妝購物', '🍗 炸雞啤酒'],
+    color: ['#3BA8E8', '#5B7FD4']
+  },
+  {
+    zh: '曼谷',
+    en: 'BANGKOK BKK',
+    code: 'BKK',
+    emoji: '🛕',
+    route: '高雄 (KHH) → 曼谷素萬那普 (BKK)',
+    tags: ['✈️ 直飛 3hr', '🌺 熱帶風情', '🍜 道地美食'],
+    color: ['#D4A020', '#E8629A']
+  },
+  {
+    zh: '新加坡',
+    en: 'SINGAPORE',
+    code: 'SIN',
+    emoji: '🦁',
+    route: '高雄 (KHH) → 新加坡樟宜 (SIN)',
+    tags: ['✈️ 直飛 4hr', '🌿 花園城市', '🦀 螃蟹米粉'],
+    color: ['#E8629A', '#5B3DC8']
+  },
+  {
+    zh: '峇里島',
+    en: 'BALI DENPASAR',
+    code: 'DPS',
+    emoji: '🌴',
+    route: '高雄 (KHH) → 峇里島 (DPS)',
+    tags: ['✈️ 直飛 5hr', '🏖️ 海島度假', '🌅 夕陽美景'],
+    color: ['#20C8A0', '#3BA8E8']
+  },
+  {
+    zh: '福岡',
+    en: 'FUKUOKA',
+    code: 'FUK',
+    emoji: '🍜',
+    route: '高雄 (KHH) → 福岡 (FUK)',
+    tags: ['✈️ 直飛 2.5hr', '🍣 博多拉麵', '♨️ 別府溫泉'],
+    color: ['#8B3DC8', '#E8629A']
+  },
+  {
+    zh: '札幌千歲',
+    en: 'SAPPORO CHITOSE',
+    code: 'CTS',
+    emoji: '⛷️',
+    route: '高雄 (KHH) → 札幌千歲 (CTS)',
+    tags: ['✈️ 直飛 4hr', '❄️ 北海道雪景', '🦀 新鮮海鮮'],
+    color: ['#3BA8E8', '#87CEEB']
+  },
+  {
+    zh: '胡志明市',
+    en: 'HO CHI MINH',
+    code: 'SGN',
+    emoji: '🏙️',
+    route: '高雄 (KHH) → 胡志明市 (SGN)',
+    tags: ['✈️ 直飛 3hr', '🛵 城市活力', '☕ 越南咖啡'],
+    color: ['#D4A020', '#20C880']
+  },
+  {
+    zh: '名古屋',
+    en: 'NAGOYA NGO',
+    code: 'NGO',
+    emoji: '🏰',
+    route: '高雄 (KHH) → 名古屋 (NGO)',
+    tags: ['✈️ 直飛 3hr', '🏯 名古屋城', '🍱 名物美食'],
+    color: ['#C8102E', '#F0A020']
+  },
+  {
+    zh: '沖繩',
+    en: 'OKINAWA NAHA',
+    code: 'OKA',
+    emoji: '🪸',
+    route: '高雄 (KHH) → 沖繩那霸 (OKA)',
+    tags: ['✈️ 直飛 1.5hr', '🐠 珊瑚潛水', '🍹 泡盛美酒'],
+    color: ['#20C8C8', '#3BA8E8']
+  },
+];
+
+// ===== GAME STATE =====
+let currentPlayer = 0;
+const totalPlayers = 3;
+let playerResults = [null, null, null];
+let isSpinning = false;
+let currentAngle = 0;
+let animFrame = null;
+let targetAngle = 0;
+let spinSpeed = 0;
+let phase = 'idle'; // idle | spinning | result
+
+const SLICE_COUNT = destinations.length;
+const SLICE_ANGLE = (2 * Math.PI) / SLICE_COUNT;
+
+// ===== WHEEL COLORS =====
+const wheelColors = [
+  ['#C8102E','#e8304e'], ['#5B7FD4','#7b9ff4'], ['#D4A020','#f4c040'],
+  ['#8B3DC8','#ab5de8'], ['#3BA8E8','#5bc8ff'], ['#E8629A','#ff82ba'],
+  ['#20C8A0','#40e8c0'], ['#003087','#2050a7'], ['#E87020','#ff9040'],
+  ['#20A850','#40c870'], ['#9840C8','#b860e8'], ['#C88820','#e8a840'],
+];
+
+// ===== CANVAS WHEEL =====
+const canvas = document.getElementById('wheel');
+const ctx = canvas.getContext('2d');
+
+function drawWheel(angle) {
+  const cx = canvas.width / 2;
+  const cy = canvas.height / 2;
+  const r = Math.min(cx, cy) - 8;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw slices
+  for (let i = 0; i < SLICE_COUNT; i++) {
+    const startAngle = angle + i * SLICE_ANGLE;
+    const endAngle   = startAngle + SLICE_ANGLE;
+    const [c1, c2]   = wheelColors[i % wheelColors.length];
+
+    // Slice fill
+    const grad = ctx.createRadialGradient(cx, cy, r * 0.2, cx, cy, r);
+    grad.addColorStop(0, c1);
+    grad.addColorStop(1, c2);
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, startAngle, endAngle);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Slice border
+    ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Text
+    const midAngle = startAngle + SLICE_ANGLE / 2;
+    const textR = r * 0.62;
+    const tx = cx + textR * Math.cos(midAngle);
+    const ty = cy + textR * Math.sin(midAngle);
+
+    ctx.save();
+    ctx.translate(tx, ty);
+    ctx.rotate(midAngle + Math.PI / 2);
+
+    // Emoji
+    ctx.font = `${Math.min(22, r * 0.07)}px serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(destinations[i].emoji, 0, -14);
+
+    // Chinese name
+    ctx.font = `bold ${Math.min(14, r * 0.048)}px "Microsoft JhengHei", Arial`;
+    ctx.fillStyle = '#fff';
+    ctx.shadowColor = 'rgba(0,0,0,0.4)';
+    ctx.shadowBlur = 3;
+    ctx.fillText(destinations[i].zh, 0, 2);
+
+    // IATA code
+    ctx.font = `bold ${Math.min(11, r * 0.036)}px monospace`;
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.fillText(destinations[i].code, 0, 16);
+
+    ctx.restore();
+  }
+
+  // Center circle
+  const hubGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 36);
+  hubGrad.addColorStop(0, '#ffffff');
+  hubGrad.addColorStop(1, '#f0e8ff');
+  ctx.beginPath();
+  ctx.arc(cx, cy, 36, 0, 2 * Math.PI);
+  ctx.fillStyle = hubGrad;
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(139,61,200,0.3)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+}
+
+// ===== SPIN LOGIC =====
+function handleSpin() {
+  if (isSpinning || currentPlayer >= totalPlayers) return;
+  if (phase === 'result') return;
+  startSpin();
+}
+
+function startSpin() {
+  isSpinning = true;
+  phase = 'spinning';
+  document.getElementById('spinBtn').disabled = true;
+  document.getElementById('nextBtn').classList.remove('show');
+  document.getElementById('spinStatus').textContent = '🌀 命運轉動中……';
+  document.getElementById('spinStatus').classList.remove('static');
+
+  // Pick random target
+  const extraSpins = 5 + Math.random() * 5; // 5–10 full rotations
+  const targetSlice = Math.floor(Math.random() * SLICE_COUNT);
+  const targetOffset = SLICE_ANGLE * targetSlice + SLICE_ANGLE / 2;
+  targetAngle = currentAngle + extraSpins * 2 * Math.PI + targetOffset;
+
+  spinSpeed = 0.35; // initial speed (rad/frame)
+  animateSpin(targetAngle);
+}
+
+function animateSpin(target) {
+  const remaining = target - currentAngle;
+  const slowdownStart = 4 * Math.PI;
+
+  if (remaining <= 0) {
+    currentAngle = target;
+    drawWheel(-currentAngle - Math.PI / 2);
+    isSpinning = false;
+    phase = 'result';
+    revealResult();
+    return;
+  }
+
+  // Ease out
+  if (remaining < slowdownStart) {
+    spinSpeed = 0.02 + 0.28 * (remaining / slowdownStart);
+    spinSpeed = Math.max(spinSpeed, 0.012);
+  }
+
+  currentAngle += spinSpeed;
+  drawWheel(-currentAngle - Math.PI / 2);
+  animFrame = requestAnimationFrame(() => animateSpin(target));
+}
+
+function revealResult() {
+  // Determine which slice is at top (pointing arrow at 270° = -Math.PI/2)
+  const normalized = (currentAngle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+  const sliceIndex = Math.floor(((2 * Math.PI - normalized) % (2 * Math.PI)) / SLICE_ANGLE) % SLICE_COUNT;
+  const dest = destinations[sliceIndex];
+
+  // Update player board
+  playerResults[currentPlayer] = dest;
+  document.getElementById(`dest-${currentPlayer}`).textContent = `✈️ ${dest.zh}`;
+  document.getElementById(`slot-${currentPlayer}`).classList.add('revealed');
+
+  // Show result overlay
+  document.getElementById('resultEmoji').textContent = dest.emoji;
+  document.getElementById('resultPlayer').textContent = `玩家 ${currentPlayer + 1} 的命定航點`;
+  document.getElementById('resultDestEn').textContent = dest.en;
+  document.getElementById('resultDestZh').textContent = dest.zh;
+  document.getElementById('resultDestCode').textContent = dest.code;
+  document.getElementById('resultRoute').textContent = `🛫 ${dest.route}`;
+
+  const infoDiv = document.getElementById('resultInfo');
+  infoDiv.innerHTML = dest.tags.map(t => `<span class="result-tag">${t}</span>`).join('');
+
+  // Fire confetti + fireworks
+  fireConfetti();
+  fireFireworks();
+
+  setTimeout(() => {
+    document.getElementById('resultOverlay').classList.add('show');
+    document.getElementById('spinStatus').textContent = `🎯 ${dest.zh} — 這就是命中注定！`;
+    document.getElementById('spinStatus').classList.add('static');
+  }, 400);
+}
+
+function closeResult() {
+  document.getElementById('resultOverlay').classList.remove('show');
+
+  if (currentPlayer < totalPlayers - 1) {
+    document.getElementById('nextBtn').classList.add('show');
+  } else {
+    // All done
+    document.getElementById('spinStatus').textContent = '🎊 三位玩家的命定航點全部揭曉！';
+    document.getElementById('spinStatus').classList.add('static');
+    document.getElementById('spinBtn').textContent = '✅ 遊戲完成';
+    document.getElementById('qrSection').classList.add('show');
+    // Scroll to QR section
+    setTimeout(() => document.getElementById('qrSection').scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+  }
+}
+
+function nextPlayer() {
+  currentPlayer++;
+  phase = 'idle';
+
+  // Update dots
+  document.getElementById(`dot-${currentPlayer - 1}`).classList.remove('current');
+  document.getElementById(`dot-${currentPlayer - 1}`).classList.add('done');
+  document.getElementById(`dot-${currentPlayer}`).classList.add('current');
+
+  // Update slots
+  document.getElementById(`slot-${currentPlayer - 1}`).classList.remove('active');
+  document.getElementById(`slot-${currentPlayer}`).classList.add('active');
+
+  // Update name placeholder
+  document.getElementById(`name-${currentPlayer - 1}`).textContent =
+    playerResults[currentPlayer - 1]?.zh ? `已抽出：${playerResults[currentPlayer - 1].zh}` : '完成 ✅';
+
+  document.getElementById('stageBadge').textContent = `🎙️ 舞台遊戲第 ${currentPlayer + 1} 回合`;
+  document.getElementById('spinStatus').textContent = '點擊轉盤或按下方按鈕開始旋轉！';
+  document.getElementById('spinStatus').classList.remove('static');
+  document.getElementById('spinBtn').disabled = false;
+  document.getElementById('spinBtn').textContent = '🎲 旋轉命運！';
+  document.getElementById('nextBtn').classList.remove('show');
+}
+
+function resetGame() {
+  currentPlayer = 0;
+  playerResults = [null, null, null];
+  isSpinning = false;
+  currentAngle = 0;
+  phase = 'idle';
+  if (animFrame) cancelAnimationFrame(animFrame);
+
+  document.getElementById('spinBtn').disabled = false;
+  document.getElementById('spinBtn').textContent = '🎲 旋轉命運！';
+  document.getElementById('nextBtn').classList.remove('show');
+  document.getElementById('spinStatus').textContent = '點擊轉盤或按下方按鈕開始旋轉！';
+  document.getElementById('spinStatus').classList.remove('static');
+  document.getElementById('stageBadge').textContent = '🎙️ 舞台遊戲第 1 回合';
+  document.getElementById('resultOverlay').classList.remove('show');
+  document.getElementById('qrSection').classList.remove('show');
+
+  for (let i = 0; i < 3; i++) {
+    document.getElementById(`slot-${i}`).className = 'player-slot' + (i === 0 ? ' active' : '');
+    document.getElementById(`name-${i}`).textContent = '等待上台 👋';
+    document.getElementById(`dest-${i}`).textContent = '';
+    document.getElementById(`dot-${i}`).className = 'round-dot' + (i === 0 ? ' current' : '');
+  }
+
+  drawWheel(-currentAngle - Math.PI / 2);
+}
+
+// ===== CONFETTI =====
+function fireConfetti() {
+  const container = document.getElementById('confetti-container');
+  container.innerHTML = '';
+  const colors = ['#C8102E','#8B3DC8','#F0A020','#3BA8E8','#E8629A','#20C8A0','#B8960C'];
+  for (let i = 0; i < 60; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.width  = (8 + Math.random() * 8) + 'px';
+    p.style.height = (12 + Math.random() * 10) + 'px';
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    p.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+    p.style.animationDelay = (Math.random() * 0.6) + 's';
+    p.style.display = 'block';
+    p.style.transform = `rotate(${Math.random() * 360}deg)`;
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 3500);
+  }
+}
+
+function fireFireworks() {
+  ['firework1','firework2','firework3'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.style.display = 'block';
+    el.style.animation = 'none';
+    el.offsetHeight; // reflow
+    el.style.animation = `burst 1s ease-out forwards`;
+    el.style.animationDelay = `${i * 0.15}s`;
+    setTimeout(() => el.style.display = 'none', 1500);
+  });
+}
+
+// ===== KEYBOARD =====
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); handleSpin(); }
+  if (e.code === 'Enter') {
+    if (phase === 'result') closeResult();
+    else if (document.getElementById('nextBtn').classList.contains('show')) nextPlayer();
+  }
+  if (e.code === 'KeyR') resetGame();
+});
+
+// ===== INIT =====
+drawWheel(-currentAngle - Math.PI / 2);
+</script>
+</body>
+</html>

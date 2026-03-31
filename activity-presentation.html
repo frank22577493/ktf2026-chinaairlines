@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 高雄旅展 × 中華航空｜行銷活動提案</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --red:#C8102E; --red-dark:#9B0E24;
+  --navy:#003087; --navy-dark:#00205B;
+  --gold:#B8960C; --gold-light:#F5D87A;
+  --sky:#87CEEB; --pink:#F0B8D8; --purple:#8B3DC8;
+  --white:#fff; --off-white:#F8F9FC;
+  --text:#1A1A2E; --text-sub:#5A5A7A;
+}
+html,body { height:100%; overflow:hidden; }
+body { font-family:-apple-system,'Microsoft JhengHei','PingFang TC',sans-serif; background:var(--navy-dark); color:var(--text); }
+
+/* ===== NAVIGATION ===== */
+.nav-dots {
+  position:fixed; right:24px; top:50%; transform:translateY(-50%);
+  display:flex; flex-direction:column; gap:10px; z-index:1000;
+}
+.dot {
+  width:10px; height:10px; border-radius:50%;
+  background:rgba(255,255,255,0.3); cursor:pointer;
+  transition:all 0.3s; border:2px solid transparent;
+}
+.dot.active { background:white; transform:scale(1.3); }
+.dot:hover { background:rgba(255,255,255,0.7); }
+
+/* NAV ARROWS */
+.nav-btn {
+  position:fixed; z-index:999; cursor:pointer;
+  background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3);
+  backdrop-filter:blur(10px); border-radius:50%;
+  width:48px; height:48px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; color:white; transition:all 0.2s; user-select:none;
+}
+.nav-btn:hover { background:rgba(255,255,255,0.25); transform:scale(1.1); }
+.nav-prev { bottom:30px; left:50%; transform:translateX(calc(-50% - 36px)); }
+.nav-next { bottom:30px; left:50%; transform:translateX(calc(-50% + 36px)); }
+.slide-counter {
+  position:fixed; bottom:38px; left:50%; transform:translateX(-50%);
+  color:rgba(255,255,255,0.5); font-size:12px; letter-spacing:2px; z-index:999;
+}
+
+/* ===== SLIDES ===== */
+.slides-wrap { width:100%; height:100%; position:relative; }
+.slide {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transform:translateY(30px);
+  transition:all 0.5s cubic-bezier(0.4,0,0.2,1);
+  pointer-events:none; overflow:hidden;
+}
+.slide.active { opacity:1; transform:translateY(0); pointer-events:all; }
+.slide.prev { opacity:0; transform:translateY(-30px); }
+
+/* ===== SLIDE CONTENTS ===== */
+
+/* -- S1: COVER -- */
+.s1 {
+  background:linear-gradient(160deg, var(--navy-dark) 0%, var(--navy) 50%, #1a0030 100%);
+}
+.s1-clouds { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+.s1-cloud { position:absolute; background:rgba(255,255,255,0.04); border-radius:50%; }
+.s1-content { position:relative; z-index:2; text-align:center; padding:40px; max-width:900px; }
+.s1-eyebrow {
+  display:inline-block;
+  background:rgba(200,16,46,0.2); border:1px solid rgba(200,16,46,0.5);
+  color:#FF8899; font-size:12px; letter-spacing:3px;
+  padding:5px 20px; border-radius:20px; margin-bottom:24px;
+}
+.s1-title {
+  font-size:clamp(36px,5vw,64px); font-weight:900; color:white; line-height:1.2;
+  margin-bottom:16px; letter-spacing:2px;
+}
+.s1-title span { color:var(--gold-light); }
+.s1-sub { font-size:16px; color:rgba(255,255,255,0.65); line-height:1.8; margin-bottom:36px; }
+.s1-meta {
+  display:flex; gap:24px; justify-content:center; flex-wrap:wrap;
+}
+.s1-meta-item {
+  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+  border-radius:14px; padding:14px 24px; text-align:center;
+  backdrop-filter:blur(10px);
+}
+.s1-meta-item .m-val { font-size:20px; font-weight:800; color:var(--gold-light); }
+.s1-meta-item .m-key { font-size:11px; color:rgba(255,255,255,0.5); margin-top:4px; letter-spacing:1px; }
+.s1-hint { position:absolute; bottom:100px; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.3); font-size:12px; letter-spacing:2px; animation:bounce 2s infinite; }
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-6px)} }
+
+/* -- S2: OVERVIEW -- */
+.s2 { background:var(--off-white); }
+.slide-inner { width:100%; max-width:1100px; padding:48px 40px 80px; }
+.slide-heading {
+  text-align:center; margin-bottom:32px;
+}
+.slide-heading .eyebrow { font-size:11px; letter-spacing:3px; color:var(--red); font-weight:700; text-transform:uppercase; margin-bottom:8px; }
+.slide-heading h2 { font-size:clamp(24px,3vw,40px); font-weight:900; color:var(--navy-dark); }
+.slide-heading p { font-size:14px; color:var(--text-sub); margin-top:8px; }
+
+/* Overview 流程圖 */
+.overview-grid {
+  display:grid; grid-template-columns:1fr auto 1fr auto 1fr;
+  gap:0; align-items:stretch;
+}
+.ov-col { display:flex; flex-direction:column; gap:12px; }
+.ov-arrow { display:flex; align-items:center; color:var(--navy); font-size:28px; padding:0 8px; opacity:0.4; }
+.ov-title { text-align:center; font-size:12px; font-weight:800; letter-spacing:2px; color:var(--text-sub); text-transform:uppercase; margin-bottom:4px; }
+.ov-card {
+  background:white; border-radius:14px; padding:14px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+  border-left:4px solid transparent;
+  transition:transform 0.2s;
+}
+.ov-card:hover { transform:translateY(-3px); }
+.ov-card.red { border-left-color:var(--red); }
+.ov-card.navy { border-left-color:var(--navy); }
+.ov-card.gold { border-left-color:var(--gold); }
+.ov-card.green { border-left-color:#22C55E; }
+.ov-card .card-icon { font-size:22px; margin-bottom:6px; }
+.ov-card .card-title { font-size:13px; font-weight:800; color:var(--text); }
+.ov-card .card-desc { font-size:11px; color:var(--text-sub); margin-top:4px; line-height:1.5; }
+.ov-card .card-reward { display:inline-block; margin-top:8px; background:rgba(200,16,46,0.08); border:1px dashed rgba(200,16,46,0.3); color:var(--red); font-size:11px; font-weight:700; padding:3px 8px; border-radius:6px; }
+
+/* -- S3: 入場任務詳解 -- */
+.s3 { background:linear-gradient(135deg,#F0F4FF 0%,#FFF0F5 100%); }
+
+.task-flow {
+  display:flex; gap:0; align-items:flex-start;
+  overflow-x:auto; padding-bottom:16px;
+}
+.tf-step {
+  min-width:180px; flex:1;
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center;
+  position:relative;
+}
+.tf-step:not(:last-child)::after {
+  content:'→';
+  position:absolute; right:-16px; top:30px;
+  font-size:24px; color:rgba(0,48,135,0.3);
+}
+.tf-circle {
+  width:60px; height:60px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px; margin-bottom:10px;
+  box-shadow:0 4px 14px rgba(0,0,0,0.12);
+}
+.tf-label { font-size:13px; font-weight:800; color:var(--text); margin-bottom:4px; }
+.tf-sub { font-size:11px; color:var(--text-sub); line-height:1.5; }
+.tf-badge { display:inline-block; margin-top:6px; padding:3px 10px; border-radius:10px; font-size:11px; font-weight:700; }
+
+/* 任務卡 grid */
+.task-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+.tg-card {
+  background:white; border-radius:14px; padding:14px 16px;
+  display:flex; align-items:flex-start; gap:12px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.06);
+  transition:transform 0.2s;
+}
+.tg-card:hover { transform:translateY(-2px); }
+.tg-card.highlight { border:2px solid var(--gold); background:linear-gradient(135deg,#FFFBF0,#FFF8E0); }
+.tg-icon { font-size:28px; flex-shrink:0; }
+.tg-info { flex:1; }
+.tg-tag { display:inline-block; font-size:10px; font-weight:800; padding:2px 8px; border-radius:6px; margin-bottom:4px; letter-spacing:1px; }
+.tag-gold { background:rgba(184,150,12,0.12); color:var(--gold); }
+.tag-navy { background:rgba(0,48,135,0.08); color:var(--navy); }
+.tag-green { background:rgba(34,197,94,0.1); color:#15803D; }
+.tag-red-soft { background:rgba(200,16,46,0.08); color:var(--red); }
+.tg-name { font-size:14px; font-weight:800; color:var(--text); }
+.tg-desc { font-size:11px; color:var(--text-sub); margin-top:3px; line-height:1.5; }
+.tg-reward { font-size:12px; color:var(--red); font-weight:700; margin-top:6px; }
+
+/* -- S4: 舞台時程 -- */
+.s4 { background:var(--navy-dark); }
+.timeline {
+  display:flex; gap:20px; align-items:stretch;
+  padding:4px;
+}
+.tl-item {
+  flex:1; background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px; padding:24px 20px;
+  display:flex; flex-direction:column; gap:14px;
+  transition:all 0.3s; cursor:default;
+}
+.tl-item:hover { background:rgba(255,255,255,0.1); transform:translateY(-4px); }
+.tl-num { font-size:11px; letter-spacing:2px; color:rgba(255,255,255,0.4); text-transform:uppercase; }
+.tl-time {
+  display:inline-block;
+  background:linear-gradient(135deg,var(--red),var(--red-dark));
+  color:white; font-size:20px; font-weight:900;
+  padding:8px 18px; border-radius:10px;
+  letter-spacing:1px; width:fit-content;
+  box-shadow:0 4px 14px rgba(200,16,46,0.4);
+}
+.tl-icon { font-size:36px; }
+.tl-title { font-size:18px; font-weight:900; color:white; line-height:1.3; }
+.tl-desc { font-size:13px; color:rgba(255,255,255,0.65); line-height:1.8; }
+.tl-points { display:flex; flex-direction:column; gap:8px; }
+.tl-point {
+  display:flex; align-items:flex-start; gap:8px;
+  background:rgba(255,255,255,0.05); border-radius:10px; padding:10px 12px;
+}
+.tl-point-icon { font-size:14px; flex-shrink:0; margin-top:1px; }
+.tl-point-text { font-size:12px; color:rgba(255,255,255,0.75); line-height:1.5; }
+.tl-kpi { display:flex; gap:8px; flex-wrap:wrap; }
+.kpi-chip { background:rgba(255,215,0,0.1); border:1px solid rgba(255,215,0,0.3); color:var(--gold-light); font-size:11px; font-weight:700; padding:4px 12px; border-radius:20px; }
+
+/* -- S5: Kahoot 詳細 -- */
+.s5 { background:linear-gradient(135deg,#4B0082,#003087,#1A0830); }
+.kahoot-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+}
+.kq-card {
+  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);
+  border-radius:14px; padding:14px 16px;
+  transition:all 0.2s;
+}
+.kq-card:hover { background:rgba(255,255,255,0.13); }
+.kq-num { font-size:10px; color:rgba(255,255,255,0.4); letter-spacing:2px; margin-bottom:6px; }
+.kq-question { font-size:13px; font-weight:800; color:white; line-height:1.4; margin-bottom:8px; }
+.kq-options { display:flex; flex-wrap:wrap; gap:4px; }
+.kq-opt {
+  font-size:11px; padding:3px 10px; border-radius:8px;
+  background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.7);
+}
+.kq-opt.correct { background:rgba(34,197,94,0.25); color:#86EFAC; border:1px solid rgba(34,197,94,0.4); font-weight:700; }
+.kahoot-prizes { display:flex; gap:10px; margin-top:14px; }
+.kp-item { flex:1; background:rgba(255,255,255,0.07); border-radius:12px; padding:12px; text-align:center; }
+.kp-medal { font-size:24px; }
+.kp-rank { font-size:11px; color:rgba(255,255,255,0.5); margin-top:4px; }
+.kp-prize { font-size:12px; color:var(--gold-light); font-weight:700; margin-top:3px; }
+
+/* -- S6: 命定航點大轉盤 -- */
+.s6 { background:linear-gradient(160deg,#87CEEB,#C8A8F0,#F0B8D8); }
+.roulette-preview {
+  display:flex; gap:24px; align-items:center;
+}
+.roulette-wheel-demo {
+  width:240px; height:240px; border-radius:50%; flex-shrink:0;
+  background:conic-gradient(
+    #C8102E 0deg 51.43deg,
+    #003087 51.43deg 102.86deg,
+    #F5D87A 102.86deg 154.29deg,
+    #22C55E 154.29deg 205.71deg,
+    #8B3DC8 205.71deg 257.14deg,
+    #F0A020 257.14deg 308.57deg,
+    #FF6B9D 308.57deg 360deg
+  );
+  box-shadow:0 8px 30px rgba(0,0,0,0.2);
+  position:relative;
+  border:6px solid white;
+  animation:slowSpin 20s linear infinite;
+}
+.roulette-wheel-demo::after {
+  content:'▼';
+  position:absolute; top:-20px; left:50%; transform:translateX(-50%);
+  font-size:28px; color:var(--text);
+}
+@keyframes slowSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.roulette-info { flex:1; }
+.route-chips { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+.route-chip {
+  padding:5px 14px; border-radius:20px; font-size:12px; font-weight:700;
+  background:rgba(255,255,255,0.6); color:var(--navy-dark);
+  backdrop-filter:blur(8px);
+}
+.qr-pair { display:flex; gap:12px; margin-top:12px; }
+.qr-box {
+  background:rgba(255,255,255,0.8); border-radius:14px; padding:12px; text-align:center;
+  flex:1; backdrop-filter:blur(8px);
+}
+.qr-box img { width:80px; height:80px; border-radius:8px; }
+.qr-box p { font-size:10px; color:var(--text-sub); margin-top:6px; font-weight:700; }
+
+/* -- S7: 每日抽獎 -- */
+.s7 { background:linear-gradient(135deg,#1a0020,#00205B,#1a0020); }
+.prize-table { width:100%; border-collapse:separate; border-spacing:0 8px; }
+.prize-table th { font-size:11px; letter-spacing:2px; color:rgba(255,255,255,0.4); padding:8px 16px; text-transform:uppercase; }
+.prize-table td { padding:12px 16px; font-size:14px; }
+.prize-table tr.prize-row td:first-child { border-radius:12px 0 0 12px; }
+.prize-table tr.prize-row td:last-child { border-radius:0 12px 12px 0; }
+.prize-row td { background:rgba(255,255,255,0.07); }
+.prize-row:hover td { background:rgba(255,255,255,0.11); }
+.prize-icon { font-size:24px; }
+.prize-name { color:white; font-weight:800; }
+.prize-qty { color:rgba(255,255,255,0.6); text-align:center; }
+.prize-value { color:var(--gold-light); font-weight:700; text-align:right; }
+
+/* -- S8: 電子抽獎券 -- */
+.s8 { background:linear-gradient(160deg,#F0F4FF,#FFF0F5,#F0F8FF); }
+.email-flow { display:flex; gap:0; align-items:center; }
+.ef-step { flex:1; text-align:center; padding:0 8px; }
+.ef-step:not(:last-child) { border-right:2px dashed rgba(0,48,135,0.15); }
+.ef-icon { font-size:36px; margin-bottom:10px; }
+.ef-title { font-size:14px; font-weight:800; color:var(--navy-dark); }
+.ef-desc { font-size:11px; color:var(--text-sub); margin-top:6px; line-height:1.6; }
+.ticket-demo {
+  background:linear-gradient(135deg,#f0e8ff,#e8f4ff);
+  border:2px dashed #C8A8E8; border-radius:14px;
+  padding:16px; text-align:center; margin-top:14px;
+}
+.ticket-demo-num { font-size:32px; font-weight:900; font-family:'Courier New',monospace; background:linear-gradient(135deg,#8B3DC8,#5B7FD4); -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; letter-spacing:6px; }
+
+/* -- S9: KPI 分析 -- */
+.s9 { background:var(--off-white); }
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+.kpi-card {
+  background:white; border-radius:16px; padding:20px;
+  text-align:center; box-shadow:0 4px 16px rgba(0,0,0,0.06);
+  position:relative; overflow:hidden;
+}
+.kpi-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; }
+.kpi-card.red::after { background:var(--red); }
+.kpi-card.navy::after { background:var(--navy); }
+.kpi-card.gold::after { background:var(--gold); }
+.kpi-card.green::after { background:#22C55E; }
+.kpi-icon { font-size:28px; margin-bottom:8px; }
+.kpi-val { font-size:32px; font-weight:900; }
+.kpi-card.red .kpi-val { color:var(--red); }
+.kpi-card.navy .kpi-val { color:var(--navy); }
+.kpi-card.gold .kpi-val { color:var(--gold); }
+.kpi-card.green .kpi-val { color:#22C55E; }
+.kpi-label { font-size:11px; color:var(--text-sub); margin-top:4px; letter-spacing:1px; }
+.kpi-sub { font-size:10px; color:rgba(0,0,0,0.3); margin-top:2px; }
+
+.funnel {
+  display:flex; gap:0; align-items:stretch;
+  background:white; border-radius:16px; overflow:hidden;
+  box-shadow:0 4px 16px rgba(0,0,0,0.06);
+}
+.funnel-step { flex:1; padding:16px 12px; text-align:center; position:relative; }
+.funnel-step:not(:last-child)::after { content:'→'; position:absolute; right:-10px; top:50%; transform:translateY(-50%); font-size:18px; color:rgba(0,0,0,0.2); z-index:1; }
+.fs-num { font-size:24px; font-weight:900; }
+.fs-label { font-size:11px; color:var(--text-sub); margin-top:4px; }
+.fs-rate { font-size:11px; font-weight:700; margin-top:4px; }
+.funnel-step:nth-child(1) .fs-num { color:#888; }
+.funnel-step:nth-child(2) .fs-num { color:var(--navy); }
+.funnel-step:nth-child(3) .fs-num { color:var(--purple); }
+.funnel-step:nth-child(4) .fs-num { color:var(--gold); }
+.funnel-step:nth-child(5) .fs-num { color:var(--red); }
+.bar-chart { display:flex; flex-direction:column; gap:8px; margin-top:16px; }
+.bar-row { display:flex; align-items:center; gap:10px; }
+.bar-key { font-size:12px; color:var(--text); width:100px; text-align:right; flex-shrink:0; }
+.bar-track { flex:1; background:var(--off-white); border-radius:4px; height:20px; overflow:hidden; }
+.bar-fill { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:8px; font-size:11px; font-weight:700; color:white; transition:width 1s ease; }
+.bar-val { font-size:12px; color:var(--text-sub); width:50px; }
+
+/* -- S10: Summary -- */
+.s10 { background:linear-gradient(160deg,var(--navy-dark),#1a0030,var(--navy-dark)); }
+.summary-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+.sum-card {
+  background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12);
+  border-radius:18px; padding:24px 20px;
+  transition:all 0.3s;
+}
+.sum-card:hover { background:rgba(255,255,255,0.12); transform:translateY(-4px); }
+.sum-icon { font-size:32px; margin-bottom:12px; }
+.sum-title { font-size:16px; font-weight:800; color:white; margin-bottom:8px; }
+.sum-points { display:flex; flex-direction:column; gap:6px; }
+.sum-point { display:flex; align-items:flex-start; gap:8px; font-size:13px; color:rgba(255,255,255,0.75); line-height:1.5; }
+.sum-point::before { content:'✓'; color:var(--gold-light); flex-shrink:0; font-weight:700; }
+.sum-cta {
+  margin-top:28px; text-align:center;
+  background:linear-gradient(135deg,rgba(200,16,46,0.2),rgba(0,48,135,0.2));
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:16px; padding:20px 32px;
+}
+.sum-cta h3 { font-size:18px; font-weight:900; color:white; margin-bottom:8px; }
+.sum-cta p { font-size:14px; color:rgba(255,255,255,0.65); }
+
+/* ===== UTILS ===== */
+.text-red { color:var(--red); }
+.text-navy { color:var(--navy); }
+.text-gold { color:var(--gold); }
+.text-white { color:white; }
+.font-bold { font-weight:800; }
+.chip { display:inline-block; padding:3px 12px; border-radius:10px; font-size:11px; font-weight:700; }
+.chip-red { background:rgba(200,16,46,0.1); color:var(--red); border:1px solid rgba(200,16,46,0.25); }
+.chip-navy { background:rgba(0,48,135,0.08); color:var(--navy); border:1px solid rgba(0,48,135,0.2); }
+.chip-gold { background:rgba(184,150,12,0.1); color:var(--gold); border:1px solid rgba(184,150,12,0.25); }
+</style>
+</head>
+<body>
+
+<!-- 導航點 -->
+<div class="nav-dots" id="navDots"></div>
+
+<!-- 前後按鈕 -->
+<button class="nav-btn nav-prev" onclick="changeSlide(-1)">←</button>
+<div class="slide-counter" id="slideCounter">1 / 10</div>
+<button class="nav-btn nav-next" onclick="changeSlide(1)">→</button>
+
+<div class="slides-wrap" id="slidesWrap">
+
+<!-- ============================
+     S1: 封面
+============================= -->
+<div class="slide s1 active" data-slide="0">
+  <div class="s1-clouds">
+    <div class="s1-cloud" style="width:300px;height:300px;top:-100px;left:-80px;"></div>
+    <div class="s1-cloud" style="width:200px;height:200px;bottom:50px;right:-60px;"></div>
+    <div class="s1-cloud" style="width:150px;height:150px;top:40%;right:20%;"></div>
+  </div>
+  <div class="s1-content">
+    <div class="s1-eyebrow">📋 行銷活動企劃提案</div>
+    <div class="s1-title">2026 高雄旅展<br><span>中華航空</span><br>行銷活動規劃</div>
+    <div class="s1-sub">整合入場任務系統 × 舞台活動 × 電子抽獎<br>打造高轉換率的展場行銷體驗</div>
+    <div class="s1-meta">
+      <div class="s1-meta-item">
+        <div class="m-val">4天</div>
+        <div class="m-key">展期 5/15–18</div>
+      </div>
+      <div class="s1-meta-item">
+        <div class="m-val">NT$750K</div>
+        <div class="m-key">總預算（未稅）</div>
+      </div>
+      <div class="s1-meta-item">
+        <div class="m-val">8格</div>
+        <div class="m-key">攤位規模</div>
+      </div>
+      <div class="s1-meta-item">
+        <div class="m-val">4項</div>
+        <div class="m-key">核心 KPI</div>
+      </div>
+    </div>
+  </div>
+  <div class="s1-hint">↓ 向下滑動或按箭頭</div>
+</div>
+
+<!-- ============================
+     S2: 活動總覽
+============================= -->
+<div class="slide s2" data-slide="1">
+  <div class="slide-inner">
+    <div class="slide-heading">
+      <div class="eyebrow">OVERVIEW</div>
+      <h2>活動整體架構</h2>
+      <p>從進場到離場，完整覆蓋顧客每個接觸點</p>
+    </div>
+    <div class="overview-grid">
+      <!-- 全天活動 -->
+      <div class="ov-col">
+        <div class="ov-title">🔁 全天持續</div>
+        <div class="ov-card red">
+          <div class="card-icon">📱</div>
+          <div class="card-title">入場任務系統</div>
+          <div class="card-desc">顧客掃碼進入任務網頁，完成 4 項任務收集抽獎券</div>
+          <div class="card-reward">最多 +5 張</div>
+        </div>
+        <div class="ov-card green">
+          <div class="card-icon">📸</div>
+          <div class="card-title">拍照打卡任務</div>
+          <div class="card-desc">在打卡區拍照，掃碼填 Email 再獲得一次抽獎資格</div>
+          <div class="card-reward">+1 張</div>
+        </div>
+        <div class="ov-card navy">
+          <div class="card-icon">🎫</div>
+          <div class="card-title">開票諮詢</div>
+          <div class="card-desc">8 台電腦開票，現場購票轉換</div>
+        </div>
+      </div>
+
+      <div class="ov-arrow">→</div>
+
+      <!-- 舞台活動 -->
+      <div class="ov-col">
+        <div class="ov-title">🎪 舞台三場</div>
+        <div class="ov-card navy">
+          <div class="card-icon">🗺️</div>
+          <div class="card-title">10:30｜航點介紹 + Kahoot</div>
+          <div class="card-desc">主持人介紹南部航線，接著 Kahoot 互動競賽，前三名送禮</div>
+        </div>
+        <div class="ov-card gold">
+          <div class="card-icon">🎡</div>
+          <div class="card-title">13:30｜命定航點大轉盤</div>
+          <div class="card-desc">邀請 3 位觀眾上台，轉盤決定命定航點，結尾發放 QR Code</div>
+        </div>
+        <div class="ov-card red">
+          <div class="card-icon">🎰</div>
+          <div class="card-title">15:30｜每日機票大抽獎</div>
+          <div class="card-desc">大螢幕滾動號碼，現場對獎，頭獎為國際線來回機票</div>
+        </div>
+      </div>
+
+      <div class="ov-arrow">→</div>
+
+      <!-- 成效目標 -->
+      <div class="ov-col">
+        <div class="ov-title">📊 核心 KPI</div>
+        <div class="ov-card gold">
+          <div class="card-icon">⭐</div>
+          <div class="card-title">華夏會員新增（主推）</div>
+          <div class="card-desc">目標：4 天累計新增 300+ 位</div>
+        </div>
+        <div class="ov-card navy">
+          <div class="card-icon">📲</div>
+          <div class="card-title">APP 下載 / LINE / YT</div>
+          <div class="card-desc">APP 200+｜LINE 400+｜YT 150+</div>
+        </div>
+        <div class="ov-card red">
+          <div class="card-icon">📧</div>
+          <div class="card-title">Email 名單收集</div>
+          <div class="card-desc">目標累積 1,000+ 筆，供後續行銷使用</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     S3: 入場任務詳解
+============================= -->
+<div class="slide s3" data-slide="2">
+  <div class="slide-inner">
+    <div class="slide-heading">
+      <div class="eyebrow">ENTRY TASKS</div>
+      <h2>入場任務系統</h2>
+      <p>進攤即掃碼，完成任務領抽獎券，Email 為唯一發券管道</p>
+    </div>
+    <!-- 流程 -->
+    <div class="task-flow" style="margin-bottom:20px;">
+      <div class="tf-step">
+        <div class="tf-circle" style="background:linear-gradient(135deg,#003087,#00205B);">📲</div>
+        <div class="tf-label">掃碼進入</div>
+        <div class="tf-sub">工作人員引導掃攤位 QR Code 進入任務網頁</div>
+      </div>
+      <div class="tf-step">
+        <div class="tf-circle" style="background:linear-gradient(135deg,#B8960C,#D4A800);">✅</div>
+        <div class="tf-label">完成任務</div>
+        <div class="tf-sub">選擇完成 A/B/C/D 其中一項或全部</div>
+      </div>
+      <div class="tf-step">
+        <div class="tf-circle" style="background:linear-gradient(135deg,#C8102E,#9B0E24);">📧</div>
+        <div class="tf-label">填寫 Email</div>
+        <div class="tf-sub">輸入 Email 即可送出，問卷可選填或略過</div>
+      </div>
+      <div class="tf-step">
+        <div class="tf-circle" style="background:linear-gradient(135deg,#8B3DC8,#5B7FD4);">🎫</div>
+        <div class="tf-label">收到電子票</div>
+        <div class="tf-sub">信箱自動收到精美 HTML 電子抽獎券</div>
+      </div>
+      <div class="tf-step">
+        <div class="tf-circle" style="background:linear-gradient(135deg,#22C55E,#16A34A);">🏆</div>
+        <div class="tf-label">等待對獎</div>
+        <div class="tf-sub">每日 15:30 舞台大螢幕現場公開抽獎</div>
+      </div>
+    </div>
+    <!-- 四項任務 -->
+    <div class="task-grid">
+      <div class="tg-card highlight">
+        <div class="tg-icon">⭐</div>
+        <div class="tg-info">
+          <div class="tg-tag tag-gold">A｜主推</div>
+          <div class="tg-name">加入華夏會員</div>
+          <div class="tg-desc">掃 QR Code 直接前往註冊頁，立即開始累積哩程</div>
+          <div class="tg-reward">🎫 完成 → +2 張抽獎券</div>
+        </div>
+      </div>
+      <div class="tg-card">
+        <div class="tg-icon">📱</div>
+        <div class="tg-info">
+          <div class="tg-tag tag-navy">B</div>
+          <div class="tg-name">下載華航 APP</div>
+          <div class="tg-desc">iOS / Android 雙 QR Code，下載後截圖上傳驗證</div>
+          <div class="tg-reward">🎫 完成 → +2 張抽獎券</div>
+        </div>
+      </div>
+      <div class="tg-card">
+        <div class="tg-icon">💬</div>
+        <div class="tg-info">
+          <div class="tg-tag tag-green">C</div>
+          <div class="tg-name">加入 LINE 好友</div>
+          <div class="tg-desc">掃碼加入官方 LINE，已加入者直接按「完成」</div>
+          <div class="tg-reward">🎫 完成 → +1 張抽獎券</div>
+        </div>
+      </div>
+      <div class="tg-card">
+        <div class="tg-icon">▶️</div>
+        <div class="tg-info">
+          <div class="tg-tag tag-red-soft">D</div>
+          <div class="tg-name">訂閱 YouTube 頻道</div>
+          <div class="tg-desc">掃碼前往官方 YouTube 頻道點擊訂閱</div>
+          <div class="tg-reward">🎫 完成 → +1 張抽獎券</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--text-sub);">
+      ⭐ 全部完成最多獲得 <strong style="color:var(--red);font-size:16px;">6 張</strong>抽獎券（4任務+拍照打卡）｜
+      長輩可領取<strong>實體備用票根</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     S4: 舞台活動時程
+============================= -->
+<div class="slide s4" data-slide="3">
+  <div class="slide-inner">
+    <div class="slide-heading" style="color:white;">
+      <div class="eyebrow" style="color:var(--gold-light);">STAGE SCHEDULE</div>
+      <h2 style="color:white;">每日舞台活動 × 三場</h2>
+      <p style="color:rgba(255,255,255,0.6);">四天展期每天完整執行，主持人固定帶場</p>
+    </div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-num">第一場 STAGE 1</div>
+        <div class="tl-time">10:30</div>
+        <div class="tl-icon">🗺️</div>
+        <div class="tl-title">航點介紹<br>+ Kahoot 競賽</div>
+        <div class="tl-desc">時長約 25 分鐘</div>
+        <div class="tl-points">
+          <div class="tl-point"><div class="tl-point-icon">📍</div><div class="tl-point-text">主持人介紹高雄出發各航點（東北亞、東南亞、港澳中）</div></div>
+          <div class="tl-point"><div class="tl-point-icon">🎮</div><div class="tl-point-text">Kahoot 10 題華夏會員知識競賽，手機掃碼即可加入</div></div>
+          <div class="tl-point"><div class="tl-point-icon">🏆</div><div class="tl-point-text">前三名得禮品 + 額外 2 張抽獎券（現場填 Email 發送）</div></div>
+        </div>
+        <div class="tl-kpi">
+          <div class="kpi-chip">聚集人氣</div>
+          <div class="kpi-chip">傳達航線資訊</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-num">第二場 STAGE 2</div>
+        <div class="tl-time">13:30</div>
+        <div class="tl-icon">🎡</div>
+        <div class="tl-title">命定航點<br>大轉盤</div>
+        <div class="tl-desc">時長約 20 分鐘</div>
+        <div class="tl-points">
+          <div class="tl-point"><div class="tl-point-icon">👥</div><div class="tl-point-text">現場邀請 3 位民眾上台，根據旅遊偏好轉動航點轉盤</div></div>
+          <div class="tl-point"><div class="tl-point-icon">✈️</div><div class="tl-point-text">轉盤停止後主持人介紹命定航點的旅遊亮點與優惠</div></div>
+          <div class="tl-point"><div class="tl-point-icon">📲</div><div class="tl-point-text">結尾大螢幕顯示雙 QR Code：① 入場任務 ② 拍照打卡</div></div>
+        </div>
+        <div class="tl-kpi">
+          <div class="kpi-chip">高峰留客</div>
+          <div class="kpi-chip">引導掃碼</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-num">第三場 STAGE 3</div>
+        <div class="tl-time">15:30</div>
+        <div class="tl-icon">🎰</div>
+        <div class="tl-title">每日機票<br>大抽獎</div>
+        <div class="tl-desc">時長約 25 分鐘</div>
+        <div class="tl-points">
+          <div class="tl-point"><div class="tl-point-icon">📱</div><div class="tl-point-text">提醒觀眾打開 Email 確認抽獎號碼，製造期待感</div></div>
+          <div class="tl-point"><div class="tl-point-icon">🖥️</div><div class="tl-point-text">大螢幕系統滾動號碼，全場倒數「3、2、1」停止</div></div>
+          <div class="tl-point"><div class="tl-point-icon">🎁</div><div class="tl-point-text">逐一抽出頭獎→貳獎→參獎→肆獎→人氣獎，頭獎收尾</div></div>
+        </div>
+        <div class="tl-kpi">
+          <div class="kpi-chip">留住觀眾</div>
+          <div class="kpi-chip">活動高潮</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     S5: Kahoot 題庫
+============================= -->
+<div class="slide s5" data-slide="4">
+  <div class="slide-inner">
+    <div class="slide-heading" style="color:white;">
+      <div class="eyebrow" style="color:#C8A8F0;">KAHOOT Q&A</div>
+      <h2 style="color:white;">華夏會員知識競賽 × 10 題</h2>
+      <p style="color:rgba(255,255,255,0.6);">手機掃碼加入 Kahoot，搶答排名前三名送獎</p>
+    </div>
+    <div class="kahoot-grid">
+      <div class="kq-card">
+        <div class="kq-num">Q01</div>
+        <div class="kq-question">華夏飛行常客計畫的英文名稱是？</div>
+        <div class="kq-options">
+          <div class="kq-opt">Sky Miles</div>
+          <div class="kq-opt correct">Dynasty Flyer ✓</div>
+          <div class="kq-opt">Air Miles</div>
+          <div class="kq-opt">Frequent Flyer</div>
+        </div>
+      </div>
+      <div class="kq-card">
+        <div class="kq-num">Q02</div>
+        <div class="kq-question">加入華夏會員，累積的哩程主要可以用來換什麼？</div>
+        <div class="kq-options">
+          <div class="kq-opt">免費機票</div>
+          <div class="kq-opt">艙等升等</div>
+          <div class="kq-opt">飯店住宿</div>
+          <div class="kq-opt correct">以上皆可 ✓</div>
+        </div>
+      </div>
+      <div class="kq-card">
+        <div class="kq-num">Q03</div>
+        <div class="kq-question">華夏會員的哩程有效期限一般是多久？</div>
+        <div class="kq-options">
+          <div class="kq-opt">1 年</div>
+          <div class="kq-opt correct">3 年 ✓</div>
+          <div class="kq-opt">永不過期</div>
+          <div class="kq-opt">5 年</div>
+        </div>
+      </div>
+      <div class="kq-card">
+        <div class="kq-num">Q04</div>
+        <div class="kq-question">以下哪個行為可以累積華夏哩程？</div>
+        <div class="kq-options">
+          <div class="kq-opt">搭乘華航</div>
+          <div class="kq-opt">使用合作信用卡</div>
+          <div class="kq-opt">入住合作飯店</div>
+          <div class="kq-opt correct">以上皆是 ✓</div>
+        </div>
+      </div>
+      <div class="kq-card">
+        <div class="kq-num">Q05</div>
+        <div class="kq-question">華夏會員的最高等級叫做？</div>
+        <div class="kq-options">
+          <div class="kq-opt">金卡</div>
+          <div class="kq-opt">黑金卡</div>
+          <div class="kq-opt correct">翡翠卡（Emerald）✓</div>
+          <div class="kq-opt">白金卡</div>
+        </div>
+      </div>
+      <div class="kq-card">
+        <div class="kq-num">Q06</div>
+        <div class="kq-question">高等級華夏會員在機場可享有哪些特權？</div>
+        <div class="kq-options">
+          <div class="kq-opt">優先登機</div>
+          <div class="kq-opt">額外行李</div>
+          <div class="kq-opt">貴賓室</div>
+          <div class="kq-opt correct">以上皆有（視等級）✓</div>
+        </div>
+      </div>
+      <div class="kq-card">
+        <div class="kq-num">Q07</div>
+        <div class="kq-question">今天在旅展現場加入華夏會員，可以立即累積哩程嗎？</div>
+        <div class="kq-options">
+          <div class="kq-opt correct">可以，立即生效 ✓</div>
+          <div class="kq-opt">要等審核</div>
+          <div class="kq-opt">要等 1 個月</div>
+          <div class="kq-opt">不行</div>
+        </div>
+      </div>
+      <div class="kq-card">
+        <div class="kq-num">Q08</div>
+        <div class="kq-question">華夏會員生日當月可以享有什麼優惠？</div>
+        <div class="kq-options">
+          <div class="kq-opt correct">生日專屬禮遇 ✓</div>
+          <div class="kq-opt">免費機票一張</div>
+          <div class="kq-opt">雙倍哩程</div>
+          <div class="kq-opt">冤費升等</div>
+        </div>
+      </div>
+      <div class="kq-card">
+        <div class="kq-num">Q09</div>
+        <div class="kq-question">華航 APP 可以幫你做哪些事？</div>
+        <div class="kq-options">
+          <div class="kq-opt">訂票選位</div>
+          <div class="kq-opt">查詢哩程</div>
+          <div class="kq-opt">線上辦理登機</div>
+          <div class="kq-opt correct">以上皆可 ✓</div>
+        </div>
+      </div>
+      <div class="kq-card">
+        <div class="kq-num">Q10</div>
+        <div class="kq-question">今天在旅展現場加入華夏會員，除了累積哩程，還可以？</div>
+        <div class="kq-options">
+          <div class="kq-opt">立即獲得抽獎券</div>
+          <div class="kq-opt">現場抽機票</div>
+          <div class="kq-opt">享旅展限定優惠</div>
+          <div class="kq-opt correct">以上全部 ✓</div>
+        </div>
+      </div>
+    </div>
+    <div class="kahoot-prizes">
+      <div class="kp-item"><div class="kp-medal">🥇</div><div class="kp-rank">第 1 名</div><div class="kp-prize">精美禮品 + 抽獎券 ×2</div></div>
+      <div class="kp-item"><div class="kp-medal">🥈</div><div class="kp-rank">第 2 名</div><div class="kp-prize">華航周邊 + 抽獎券 ×1</div></div>
+      <div class="kp-item"><div class="kp-medal">🥉</div><div class="kp-rank">第 3 名</div><div class="kp-prize">華航周邊 + 抽獎券 ×1</div></div>
+      <div class="kp-item" style="background:rgba(255,255,255,0.05);"><div class="kp-medal">🎮</div><div class="kp-rank">全員</div><div class="kp-prize">參與即可現場加入華夏</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     S6: 命定航點大轉盤
+============================= -->
+<div class="slide s6" data-slide="5">
+  <div class="slide-inner">
+    <div class="slide-heading">
+      <div class="eyebrow" style="color:var(--purple);">ROULETTE GAME</div>
+      <h2>舞台遊戲：命定航點大轉盤</h2>
+      <p>現場邀請 3 位民眾，轉盤決定命定航點</p>
+    </div>
+    <div class="roulette-preview">
+      <div class="roulette-wheel-demo"></div>
+      <div class="roulette-info">
+        <div style="font-size:15px;font-weight:800;color:var(--navy-dark);margin-bottom:8px;">🎯 轉盤航點設計</div>
+        <div class="route-chips">
+          <div class="route-chip">🇯🇵 大阪</div>
+          <div class="route-chip">🇯🇵 東京</div>
+          <div class="route-chip">🇯🇵 沖繩</div>
+          <div class="route-chip">🇰🇷 首爾</div>
+          <div class="route-chip">🇹🇭 曼谷</div>
+          <div class="route-chip">🇸🇬 新加坡</div>
+          <div class="route-chip">🇭🇰 香港</div>
+        </div>
+        <div style="font-size:13px;color:var(--text-sub);margin:10px 0;line-height:1.8;">
+          ① 主持人邀請 3 位觀眾上台<br>
+          ② 每人說出旅遊偏好（美食/親子/冒險/放鬆）<br>
+          ③ 轉動航點大轉盤，對應呈現命定航點<br>
+          ④ 主持人介紹該航點特色與優惠<br>
+          ⑤ 結尾顯示雙 QR Code，引導全場掃碼
+        </div>
+        <a href="destiny-roulette.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#C8102E,#8B3DC8);color:#fff;font-size:12px;font-weight:800;letter-spacing:1px;padding:8px 18px;border-radius:20px;text-decoration:none;margin-bottom:12px;box-shadow:0 4px 14px rgba(200,16,46,0.3);">🎡 開啟轉盤遊戲系統</a>
+        <div class="qr-pair">
+          <div class="qr-box">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https%3A%2F%2Fdynasty-flyer.china-airlines.com%2Fmember%2Fregister&color=003087&bgcolor=ffffff&margin=8" alt="入場任務">
+            <p>① 入場任務<br>領抽獎券</p>
+          </div>
+          <div class="qr-box">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https%3A%2F%2Fyour-domain.com%2Fphoto-checkin&color=8B3DC8&bgcolor=ffffff&margin=8" alt="拍照打卡">
+            <p>② 拍照打卡<br>再加一張</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     S7: 每日抽獎
+============================= -->
+<div class="slide s7" data-slide="6">
+  <div class="slide-inner">
+    <div class="slide-heading" style="color:white;">
+      <div class="eyebrow" style="color:var(--gold-light);">DAILY LUCKY DRAW</div>
+      <h2 style="color:white;">每日 15:30 機票大抽獎</h2>
+      <p style="color:rgba(255,255,255,0.6);">大螢幕滾動號碼，觀眾對照 Email 現場對獎</p>
+    </div>
+    <table class="prize-table">
+      <thead>
+        <tr>
+          <th>獎項</th>
+          <th>獎品</th>
+          <th>每日數量</th>
+          <th>估計價值</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="prize-row">
+          <td><span class="prize-icon">✈️</span></td>
+          <td><div class="prize-name">頭獎｜國際線來回機票兌換券</div></td>
+          <td class="prize-qty">1 組（2 張）</td>
+          <td class="prize-value">最高獎</td>
+        </tr>
+        <tr class="prize-row">
+          <td><span class="prize-icon">🏨</span></td>
+          <td><div class="prize-name">貳獎｜飯店折扣券 / 機票折價券 NT$1,500</div></td>
+          <td class="prize-qty">2 名</td>
+          <td class="prize-value">NT$3,000</td>
+        </tr>
+        <tr class="prize-row">
+          <td><span class="prize-icon">🎁</span></td>
+          <td><div class="prize-name">參獎｜機票折價券 NT$1,000</div></td>
+          <td class="prize-qty">3 名</td>
+          <td class="prize-value">NT$3,000</td>
+        </tr>
+        <tr class="prize-row">
+          <td><span class="prize-icon">🛩️</span></td>
+          <td><div class="prize-name">肆獎｜華航模型飛機 / 機票折價券 NT$500</div></td>
+          <td class="prize-qty">5 名</td>
+          <td class="prize-value">NT$2,500</td>
+        </tr>
+        <tr class="prize-row">
+          <td><span class="prize-icon">🛋️</span></td>
+          <td><div class="prize-name">人氣獎｜華航聯名抱枕 / 聯名禮品</div></td>
+          <td class="prize-qty">8 名</td>
+          <td class="prize-value">禮品價值</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="display:flex;gap:16px;margin-top:16px;">
+      <div style="flex:1;background:rgba(255,255,255,0.07);border-radius:12px;padding:14px;font-size:12px;color:rgba(255,255,255,0.7);line-height:1.8;">
+        📱 顧客打開 Email，找到自己的號碼<br>
+        🖥️ 大螢幕系統滾動，全場「3、2、1」<br>
+        🎉 號碼停止，核對 Email 中的號碼<br>
+        ✅ 得獎者出示手機 Email 核驗領獎
+      </div>
+      <div style="flex:1;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:12px;padding:14px;">
+        <div style="color:var(--gold-light);font-size:13px;font-weight:800;margin-bottom:8px;">🔑 抽獎系統說明</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.65);line-height:1.8;">
+          • 使用客製 HTML 大螢幕抽獎系統<br>
+          • 號碼池匯入當日 Email 名單<br>
+          • 空白鍵 = 開始/停止滾動<br>
+          • 彩花爆炸動畫強化現場感
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     S8: 電子票系統
+============================= -->
+<div class="slide s8" data-slide="7">
+  <div class="slide-inner">
+    <div class="slide-heading">
+      <div class="eyebrow">DIGITAL TICKET SYSTEM</div>
+      <h2>電子抽獎券系統架構</h2>
+      <p>Email 為核心管道，兼顧行銷名單收集與長輩備用方案</p>
+    </div>
+    <div class="email-flow" style="margin-bottom:20px;">
+      <div class="ef-step">
+        <div class="ef-icon">📱</div>
+        <div class="ef-title">完成任務</div>
+        <div class="ef-desc">完成 A/B/C/D<br>任一或全部任務</div>
+      </div>
+      <div style="font-size:24px;color:rgba(0,48,135,0.3);padding:0 8px;">→</div>
+      <div class="ef-step">
+        <div class="ef-icon">📧</div>
+        <div class="ef-title">填寫 Email</div>
+        <div class="ef-desc">問卷可略過，直接填 Email 即可領票</div>
+      </div>
+      <div style="font-size:24px;color:rgba(0,48,135,0.3);padding:0 8px;">→</div>
+      <div class="ef-step">
+        <div class="ef-icon">⚡</div>
+        <div class="ef-title">自動寄出</div>
+        <div class="ef-desc">系統即時發送<br>精美 HTML 電子票</div>
+      </div>
+      <div style="font-size:24px;color:rgba(0,48,135,0.3);padding:0 8px;">→</div>
+      <div class="ef-step">
+        <div class="ef-icon">🎫</div>
+        <div class="ef-title">收到號碼</div>
+        <div class="ef-desc">每張票有唯一<br>5 位數字號碼</div>
+      </div>
+      <div style="font-size:24px;color:rgba(0,48,135,0.3);padding:0 8px;">→</div>
+      <div class="ef-step">
+        <div class="ef-icon">📊</div>
+        <div class="ef-title">名單留存</div>
+        <div class="ef-desc">所有 Email 存入<br>Google Sheet 行銷名單</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy-dark);margin-bottom:10px;">📋 電子票功能特色</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-sub);"><span style="color:var(--navy);font-weight:700;">✓</span>中華航空品牌色系精美設計</div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-sub);"><span style="color:var(--navy);font-weight:700;">✓</span>多張票收於同一封信</div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-sub);"><span style="color:var(--navy);font-weight:700;">✓</span>包含每日獎項資訊</div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-sub);"><span style="color:var(--navy);font-weight:700;">✓</span>手機易讀，對獎方便</div>
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text-sub);"><span style="color:var(--gold);font-weight:700;">★</span>Email 名單可供展後行銷再利用</div>
+        </div>
+        <div style="margin-top:14px;background:rgba(200,16,46,0.05);border:1px dashed rgba(200,16,46,0.2);border-radius:10px;padding:10px;font-size:12px;color:var(--text-sub);">
+          👴 <strong>長輩備用方案</strong>：準備少量實體票根，不使用手機的長輩可直接向工作人員領取
+        </div>
+      </div>
+      <div>
+        <div class="ticket-demo">
+          <div style="font-size:10px;color:#aaa;letter-spacing:2px;margin-bottom:8px;">LUCKY DRAW TICKET</div>
+          <div class="ticket-demo-num">#00342</div>
+          <div style="font-size:10px;color:#aaa;margin-top:6px;">2026 高雄旅展 × 中華航空</div>
+          <div style="margin-top:8px;font-size:11px;color:#888;">每日 15:30 舞台現場對獎</div>
+        </div>
+        <div style="margin-top:10px;background:var(--off-white);border-radius:10px;padding:10px;">
+          <div style="font-size:12px;font-weight:700;color:var(--navy-dark);margin-bottom:6px;">🛠️ 技術架構</div>
+          <div style="font-size:11px;color:var(--text-sub);line-height:1.8;">
+            Google Forms → Google Sheets<br>
+            → Apps Script 自動發信<br>
+            → HTML Email 精美模板<br>
+            → 大螢幕抽獎系統（已完成）
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     S9: KPI 分析
+============================= -->
+<div class="slide s9" data-slide="8">
+  <div class="slide-inner">
+    <div class="slide-heading">
+      <div class="eyebrow">ANALYTICS FORECAST</div>
+      <h2>預期成效分析</h2>
+      <p>基於高雄旅展歷年人流與業界平均轉換率估算</p>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card red">
+        <div class="kpi-icon">👥</div>
+        <div class="kpi-val">6,000+</div>
+        <div class="kpi-label">4天預估總觸及人次</div>
+        <div class="kpi-sub">每日約 1,500 人</div>
+      </div>
+      <div class="kpi-card gold">
+        <div class="kpi-icon">⭐</div>
+        <div class="kpi-val">300+</div>
+        <div class="kpi-label">華夏會員新增（主推）</div>
+        <div class="kpi-sub">轉換率 5%</div>
+      </div>
+      <div class="kpi-card navy">
+        <div class="kpi-icon">📧</div>
+        <div class="kpi-val">1,000+</div>
+        <div class="kpi-label">Email 名單收集</div>
+        <div class="kpi-sub">供後續行銷使用</div>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-icon">📲</div>
+        <div class="kpi-val">750+</div>
+        <div class="kpi-label">APP + LINE + YT 合計</div>
+        <div class="kpi-sub">各渠道累計新增</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy-dark);margin-bottom:10px;">📊 各渠道預估新增</div>
+        <div class="bar-chart">
+          <div class="bar-row">
+            <div class="bar-key">華夏會員</div>
+            <div class="bar-track"><div class="bar-fill" style="width:50%;background:linear-gradient(90deg,var(--gold),#D4A800);">300+</div></div>
+            <div class="bar-val" style="color:var(--gold);">主推</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-key">Email 名單</div>
+            <div class="bar-track"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,var(--red),var(--red-dark));">1,000+</div></div>
+            <div class="bar-val" style="color:var(--red);">行銷金礦</div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-key">LINE 好友</div>
+            <div class="bar-track"><div class="bar-fill" style="width:40%;background:linear-gradient(90deg,#06C755,#058A40);">400+</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-key">APP 下載</div>
+            <div class="bar-track"><div class="bar-fill" style="width:20%;background:linear-gradient(90deg,var(--navy),var(--navy-dark));">200+</div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-key">YT 訂閱</div>
+            <div class="bar-track"><div class="bar-fill" style="width:15%;background:linear-gradient(90deg,#FF0000,#CC0000);">150+</div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy-dark);margin-bottom:10px;">🔽 顧客旅程轉換漏斗</div>
+        <div class="funnel">
+          <div class="funnel-step" style="background:#F8F9FC;">
+            <div class="fs-num">6,000</div>
+            <div class="fs-label">路過人數</div>
+          </div>
+          <div class="funnel-step" style="background:#EEF2FF;">
+            <div class="fs-num">2,400</div>
+            <div class="fs-label">進攤人數</div>
+            <div class="fs-rate" style="color:var(--navy);">40%</div>
+          </div>
+          <div class="funnel-step" style="background:#F3EEFF;">
+            <div class="fs-num">1,200</div>
+            <div class="fs-label">掃碼參與</div>
+            <div class="fs-rate" style="color:var(--purple);">50%</div>
+          </div>
+          <div class="funnel-step" style="background:#FFFBEB;">
+            <div class="fs-num">1,000</div>
+            <div class="fs-label">留下 Email</div>
+            <div class="fs-rate" style="color:var(--gold);">83%</div>
+          </div>
+          <div class="funnel-step" style="background:#FFF5F5;">
+            <div class="fs-num">300+</div>
+            <div class="fs-label">完成轉換</div>
+            <div class="fs-rate" style="color:var(--red);">30%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     S10: 總結
+============================= -->
+<div class="slide s10" data-slide="9">
+  <div class="slide-inner">
+    <div class="slide-heading" style="color:white;">
+      <div class="eyebrow" style="color:var(--gold-light);">SUMMARY</div>
+      <h2 style="color:white;">活動總結與執行重點</h2>
+      <p style="color:rgba(255,255,255,0.6);">數位整合 × 現場體驗 × 後續行銷 三位一體</p>
+    </div>
+    <div class="summary-grid">
+      <div class="sum-card">
+        <div class="sum-icon">📱</div>
+        <div class="sum-title">數位任務系統</div>
+        <div class="sum-points">
+          <div class="sum-point">QR Code 引導進入任務網頁</div>
+          <div class="sum-point">華夏會員為主推，最多 +2 張票</div>
+          <div class="sum-point">Email 統一發送電子抽獎券</div>
+          <div class="sum-point">名單自動進入行銷資料庫</div>
+          <div class="sum-point">長輩備用實體票根方案</div>
+        </div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-icon">🎪</div>
+        <div class="sum-title">舞台三場活動</div>
+        <div class="sum-points">
+          <div class="sum-point">10:30 航點介紹 + Kahoot 競賽</div>
+          <div class="sum-point">13:30 命定航點大轉盤互動遊戲</div>
+          <div class="sum-point">15:30 每日機票大抽獎壓軸</div>
+          <div class="sum-point">四天相同流程，穩定執行</div>
+          <div class="sum-point">每場結尾都引導掃碼任務</div>
+        </div>
+      </div>
+      <div class="sum-card">
+        <div class="sum-icon">📊</div>
+        <div class="sum-title">預期效益</div>
+        <div class="sum-points">
+          <div class="sum-point">觸及 6,000+ 人次（4天）</div>
+          <div class="sum-point">新增華夏會員 300+ 位</div>
+          <div class="sum-point">收集 Email 名單 1,000+ 筆</div>
+          <div class="sum-point">LINE / APP / YT 合計 750+ 增長</div>
+          <div class="sum-point">抽獎製造話題與回訪動機</div>
+        </div>
+      </div>
+    </div>
+    <div class="sum-cta">
+      <h3>✈️ 高雄起飛，與中華航空一起飛向世界</h3>
+      <p>2026 年 5 月 15–18 日 · 高雄展覽館 · 中華航空攤位</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /slides-wrap -->
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const dotsContainer = document.getElementById('navDots');
+let current = 0;
+
+// 建立導航點
+slides.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.className = 'dot' + (i === 0 ? ' active' : '');
+  dot.title = ['封面','活動總覽','入場任務','舞台時程','Kahoot題庫','命定大轉盤','每日抽獎','電子票系統','KPI分析','活動總結'][i];
+  dot.onclick = () => goTo(i);
+  dotsContainer.appendChild(dot);
+});
+
+function goTo(index) {
+  if (index < 0 || index >= slides.length) return;
+  slides[current].classList.remove('active');
+  slides[current].classList.add('prev');
+  setTimeout(() => slides[current].classList.remove('prev'), 500);
+  current = index;
+  slides[current].classList.add('active');
+  // 更新導航點
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === current));
+  document.getElementById('slideCounter').textContent = `${current + 1} / ${slides.length}`;
+}
+
+function changeSlide(dir) { goTo(current + dir); }
+
+// 鍵盤
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+});
+
+// 觸控滑動
+let touchStart = null;
+document.addEventListener('touchstart', e => touchStart = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  if (!touchStart) return;
+  const diff = touchStart - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1);
+  touchStart = null;
+});
+</script>
+</body>
+</html>
