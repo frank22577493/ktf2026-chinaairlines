@@ -386,9 +386,32 @@
 </div>
 
 <script>
+// ── Protection: disable right-click & devtools shortcuts ──
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', function(e) {
+  if (e.key==='F12' || (e.ctrlKey&&e.shiftKey&&['I','J','C'].includes(e.key)) || (e.ctrlKey&&e.key==='U')) {
+    e.preventDefault(); e.stopPropagation(); return false;
+  }
+});
+
 let isRolling = false, rollInterval = null;
 let currentPrize = '✈️ 頭獎｜國際線來回機票兌換券';
 let numberPool = [], drawnNumbers = [], drawCount = 0;
+
+// ── Past winners store (localStorage) — 0.1% repeat protection ──
+let _pw = [];
+try { _pw = JSON.parse(localStorage.getItem('_ktfW') || '[]'); } catch(e) { _pw = []; }
+function _savePW() { try { localStorage.setItem('_ktfW', JSON.stringify(_pw)); } catch(e) {} }
+function _selectFinal(pool) {
+  const fresh   = pool.filter(n => !_pw.includes(n));
+  const repeats = pool.filter(n => _pw.includes(n));
+  if (fresh.length === 0) return pool[Math.floor(Math.random()*pool.length)];
+  // 0.1% chance to pick from previous winners, 99.9% from fresh pool
+  if (repeats.length > 0 && Math.random() < 0.001) {
+    return repeats[Math.floor(Math.random()*repeats.length)];
+  }
+  return fresh[Math.floor(Math.random()*fresh.length)];
+}
 
 function generatePool(s, e) {
   let p = [];
@@ -435,7 +458,7 @@ function startDraw() {
   document.getElementById('btnReset').classList.remove('show');
   rollInterval = setInterval(() => {
     const n = Math.floor(Math.random()*99999)+1;
-    document.getElementById('numberDisplay').textContent = '#' + String(n).padStart(5,'0');
+    document.getElementById('numberDisplay').textContent = 'KTF-' + String(n).padStart(5,'0');
   }, 55);
 }
 
@@ -444,13 +467,14 @@ function stopDraw() {
   isRolling = false;
   clearInterval(rollInterval);
   const available = numberPool.filter(n => !drawnNumbers.includes(n));
-  const final = available.length > 0
-    ? available[Math.floor(Math.random()*available.length)]
-    : String(Math.floor(Math.random()*99999)+1).padStart(5,'0');
+  const pool = available.length > 0 ? available : [String(Math.floor(Math.random()*99999)+1).padStart(5,'0')];
+  const final = _selectFinal(pool);
   drawnNumbers.push(final);
+  if (!_pw.includes(final)) _pw.push(final);
+  _savePW();
   drawCount++;
   const disp = document.getElementById('numberDisplay');
-  disp.textContent = '#' + final;
+  disp.textContent = 'KTF-' + final;
   disp.classList.remove('rolling');
   disp.classList.add('winner');
   document.getElementById('winnerMsg').classList.add('show');
@@ -476,7 +500,7 @@ function addHistory(number, prize) {
   const short = (prize.split('｜')[1] || prize).substring(0,10);
   const item = document.createElement('div');
   item.className = 'history-item';
-  item.innerHTML = `<span class="h-num">#${number}</span><span class="h-prize">${short}</span>`;
+  item.innerHTML = `<span class="h-num">KTF-${number}</span><span class="h-prize">${short}</span>`;
   list.insertBefore(item, list.firstChild);
 }
 
@@ -525,6 +549,7 @@ function applySettings() {
 document.addEventListener('keydown', e => {
   if (e.code === 'Space') { e.preventDefault(); isRolling ? stopDraw() : startDraw(); }
   if (e.code === 'Enter' && !isRolling) resetDraw();
+  // Block devtools (handled by protection listener above)
 });
 
 init();

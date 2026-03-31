@@ -343,22 +343,10 @@
     <span class="modal-emoji">🎉</span>
     <div class="modal-title">抽獎券已送出！</div>
     <div class="modal-sub" id="modalSub">電子抽獎券已寄送到您的信箱</div>
-    <div class="e-ticket">
-      <div class="et-top">
-        <div>
-          <div class="et-airline">CHINA AIRLINES</div>
-          <div class="et-brand">中華航空</div>
-        </div>
-        <div>
-          <div class="et-num-label">抽獎券號碼</div>
-          <div class="et-num" id="modalTicketNum">KTF-XXXXXX</div>
-        </div>
-      </div>
-      <hr class="et-div">
-      <div class="et-footer">
-        <div class="et-holder">持票人<strong id="modalName">旅客</strong></div>
-        <div class="et-badge" id="modalBadge">入場任務</div>
-      </div>
+    <div id="ticketContainer"></div>
+    <div style="background:linear-gradient(135deg,#fff8e8,#fff0c8);border:2px solid rgba(184,150,12,0.35);border-radius:14px;padding:12px 16px;margin-bottom:14px;font-size:12px;color:#8B6000;line-height:1.8;text-align:left;">
+      ⚠️ <strong>重要提醒：</strong>請立即截圖保存以上抽獎券號碼！<br>
+      📵 請勿將號碼外流或分享給他人，每張號碼限對獎一次。
     </div>
     <div class="modal-info">
       <div class="mi-tag">🗓️ 2026/05/15–18</div>
@@ -762,15 +750,48 @@ function checkSubmit() {
 function submitEmail() {
   const email = document.getElementById('emailInput').value.trim();
   const name  = document.getElementById('nameInput').value.trim() || '旅客';
-  const ticketNum = genTicketNum();
   const doneTasks = Object.values(tasks).filter(t => t.done).length;
+
+  // Generate one ticket number per ticket
+  const ticketNums = [];
+  for (let i = 0; i < pendingTickets; i++) ticketNums.push(genTicketNum());
+
+  // Build ticket cards HTML
+  const gradients = [
+    'linear-gradient(135deg,#5B3DC8,#C83D8B)',
+    'linear-gradient(135deg,#C8102E,#F08020)',
+    'linear-gradient(135deg,#003087,#3B7FD4)',
+    'linear-gradient(135deg,#06C755,#0095B0)',
+    'linear-gradient(135deg,#B8960C,#E8629A)',
+    'linear-gradient(135deg,#8B3DC8,#C8102E)',
+  ];
+  let ticketHTML = '';
+  ticketNums.forEach((num, i) => {
+    const grad = gradients[i % gradients.length];
+    ticketHTML += `
+    <div class="e-ticket" style="background:${grad};margin-bottom:10px;">
+      <div class="et-top">
+        <div>
+          <div class="et-airline">CHINA AIRLINES · 第 ${i+1} 張</div>
+          <div class="et-brand">中華航空</div>
+        </div>
+        <div>
+          <div class="et-num-label">抽獎券號碼</div>
+          <div class="et-num">${num}</div>
+        </div>
+      </div>
+      <hr class="et-div">
+      <div class="et-footer">
+        <div class="et-holder">持票人<strong>${name}</strong></div>
+        <div class="et-badge">完成 ${doneTasks} 項任務</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('ticketContainer').innerHTML = ticketHTML;
 
   // Modal
   document.getElementById('modalSub').innerHTML =
     `電子抽獎券已寄送到<br><strong style="color:var(--purple);">${email}</strong><br>共 <strong style="color:var(--red);">${pendingTickets} 張</strong>，記得 15:30 現場對獎！`;
-  document.getElementById('modalTicketNum').textContent = ticketNum;
-  document.getElementById('modalName').textContent = name;
-  document.getElementById('modalBadge').textContent = `完成 ${doneTasks} 項任務`;
   document.getElementById('modalBg').classList.add('show');
 
   // Reset pending

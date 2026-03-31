@@ -344,31 +344,34 @@
     <div class="card-desc">3 個小問題，讓我們更了解您！<br>（約 30 秒完成）</div>
 
     <div class="q-group">
-      <label class="q-label">Q1. 您今天是怎麼來到高雄旅展的？<span>*</span></label>
+      <label class="q-label">Q1. 您最常飛去哪個國家或城市？<span>*</span></label>
       <div class="q-options" id="q1">
-        <div class="q-option" onclick="selectOpt(this,'q1')">🚗 自行開車</div>
-        <div class="q-option" onclick="selectOpt(this,'q1')">🚇 大眾運輸</div>
-        <div class="q-option" onclick="selectOpt(this,'q1')">🚶 步行</div>
-        <div class="q-option" onclick="selectOpt(this,'q1')">🏨 飯店住宿</div>
+        <div class="q-option" onclick="selectOpt(this,'q1')">🗼 日本</div>
+        <div class="q-option" onclick="selectOpt(this,'q1')">🇰🇷 韓國</div>
+        <div class="q-option" onclick="selectOpt(this,'q1')">🌴 東南亞</div>
+        <div class="q-option" onclick="selectOpt(this,'q1')">🗽 歐美</div>
+        <div class="q-option" onclick="selectOpt(this,'q1')">🌏 其他</div>
       </div>
     </div>
 
     <div class="q-group">
-      <label class="q-label">Q2. 您最想飛去哪裡旅行？<span>*</span></label>
+      <label class="q-label">Q2. 您都如何挑選航班？<span>*</span></label>
       <div class="q-options" id="q2">
-        <div class="q-option" onclick="selectOpt(this,'q2')">🗼 日本</div>
-        <div class="q-option" onclick="selectOpt(this,'q2')">🇰🇷 韓國</div>
-        <div class="q-option" onclick="selectOpt(this,'q2')">🌴 東南亞</div>
-        <div class="q-option" onclick="selectOpt(this,'q2')">🗽 歐美</div>
+        <div class="q-option" onclick="selectOpt(this,'q2')">🕒 選時間方便的</div>
+        <div class="q-option" onclick="selectOpt(this,'q2')">💰 選票價最便宜的</div>
+        <div class="q-option" onclick="selectOpt(this,'q2')">💭 看心情選</div>
+        <div class="q-option" onclick="selectOpt(this,'q2')">✈️ 選喜歡的航空公司</div>
       </div>
     </div>
 
     <div class="q-group">
-      <label class="q-label">Q3. 您是否為華夏會員？<span>*</span></label>
+      <label class="q-label">Q3. 您最常搭乘哪家航空公司？<span>*</span></label>
       <div class="q-options" id="q3">
-        <div class="q-option" onclick="selectOpt(this,'q3')">✅ 是，已是會員</div>
-        <div class="q-option" onclick="selectOpt(this,'q3')">🔜 今天準備加入</div>
-        <div class="q-option" onclick="selectOpt(this,'q3')">❓ 還不是</div>
+        <div class="q-option" onclick="selectOpt(this,'q3')">✈️ 中華航空 CI</div>
+        <div class="q-option" onclick="selectOpt(this,'q3')">🐯 台灣虎航 IT</div>
+        <div class="q-option" onclick="selectOpt(this,'q3')">🟢 長榮航空 BR</div>
+        <div class="q-option" onclick="selectOpt(this,'q3')">🌟 星宇航空 JX</div>
+        <div class="q-option" onclick="selectOpt(this,'q3')">🌐 其他</div>
       </div>
     </div>
 
@@ -574,13 +577,13 @@
 
   function generateTicketNum() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let num = 'P-';
+    let num = 'KTF-';
     for (let i = 0; i < 6; i++) num += chars[Math.floor(Math.random() * chars.length)];
     return num;
   }
 
   function goToTasks() {
-    window.location.href = 'entry-task-system.html';
+    window.location.href = 'https://frank22577493.github.io/ktf2026-chinaairlines/';
   }
 
   function resetForm() {
