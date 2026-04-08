@@ -297,16 +297,13 @@
 </head>
 <body>
 
-<!-- 雲朵 -->
 <div class="cloud cloud-1"></div>
 <div class="cloud cloud-2"></div>
 <div class="cloud cloud-3"></div>
 <div class="cloud cloud-4"></div>
 
-<!-- 彩帶（由 JS 生成） -->
 <div id="ribbons"></div>
 
-<!-- 頂部 -->
 <div class="header">
   <div class="header-left">
     <div class="header-icon">🎡</div>
@@ -321,10 +318,8 @@
   </div>
 </div>
 
-<!-- 主內容 -->
 <div class="main">
 
-  <!-- 獎項選擇 -->
   <div class="prize-panel" id="prizePanel">
     <button class="prize-btn active" onclick="selectPrize(this,'✈️ 頭獎｜國際線來回機票兌換券')">✈️ 頭獎｜機票</button>
     <button class="prize-btn" onclick="selectPrize(this,'🏨 貳獎｜飯店折扣券 / NT$1,500 折價券')">🏨 貳獎｜NT$1,500</button>
@@ -333,22 +328,18 @@
     <button class="prize-btn" onclick="selectPrize(this,'🛋️ 人氣獎｜華航聯名抱枕 / 聯名禮品')">🛋️ 人氣獎｜抱枕</button>
   </div>
 
-  <!-- 當前獎項 -->
   <div class="prize-badge" id="prizeBadge">✈️ 頭獎｜國際線來回機票兌換券</div>
 
-  <!-- 號碼顯示卡 -->
   <div class="number-card">
     <div class="number-label">🎫 幸運抽獎號碼 LUCKY NUMBER</div>
     <div class="number-value" id="numberDisplay">？？？？？</div>
   </div>
 
-  <!-- 得獎訊息 -->
   <div class="winner-msg" id="winnerMsg">
     <div class="winner-title">🎉 恭喜得獎！CONGRATULATIONS！🎉</div>
     <div class="winner-prize-text" id="winnerPrize"></div>
   </div>
 
-  <!-- 控制按鈕 -->
   <div class="controls">
     <button class="btn btn-draw" id="btnDraw" onclick="startDraw()">🎰 開始抽獎</button>
     <button class="btn btn-stop" id="btnStop" onclick="stopDraw()">⚡ 停止抽獎</button>
@@ -359,20 +350,17 @@
 
 </div>
 
-<!-- 歷史紀錄 -->
 <div class="history">
   <h3>🏆 今日得獎紀錄</h3>
   <div id="historyList"><div style="font-size:12px;color:rgba(255,255,255,0.4);text-align:center;padding:10px 0;">尚未開獎</div></div>
 </div>
 
-<!-- 底部統計 -->
 <div class="stats-bar">
   <div class="stat-item"><div class="stat-num" id="totalCount">0</div><div class="stat-label">號碼總數</div></div>
   <div class="stat-item"><div class="stat-num" id="drawCount">0</div><div class="stat-label">已抽次數</div></div>
   <div class="stat-item"><div class="stat-num" id="todayDate">--</div><div class="stat-label">今日</div></div>
 </div>
 
-<!-- 管理員 -->
 <div class="admin-toggle" onclick="toggleAdmin()" title="管理員設定">⚙️</div>
 <div class="admin-panel" id="adminPanel">
   <h4>⚙️ 管理員設定</h4>
@@ -419,7 +407,6 @@ function generatePool(s, e) {
   return p;
 }
 
- // ⚠️ 請把引號內的網址換成您最新部署的 GAS 網址！
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbwy35vAxNgC_wKWjn5SV34pLtYBA8dk4_A7zYVW6nTovzW-UwqFkfT65uJaXo2BmOmR0A/exec';
 
 async function init() {
@@ -427,12 +414,10 @@ async function init() {
   document.getElementById('todayDate').textContent = '載入中...';
   
   try {
-    // 從 Google Sheet 抓取目前的抽獎券號碼
     const response = await fetch(GAS_URL);
     const data = await response.json();
     let pool = data.tickets || [];
 
-    // 如果表單裡的資料太少（小於 30 筆），自動產生預設假資料供 Demo 用
     if (pool.length < 30) {
       console.log('資料少於30筆，自動補足 Demo 預設資料...');
       const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -441,22 +426,18 @@ async function init() {
         for (let i = 0; i < 6; i++) {
           fakeNum += chars[Math.floor(Math.random() * chars.length)];
         }
-        // 避免重複
         if (!pool.includes(fakeNum)) pool.push(fakeNum);
       }
     }
-    
     numberPool = pool;
   } catch (error) {
     console.error('抓取資料失敗，使用純本地隨機資料：', error);
-    // 如果網路出錯，退回原本的備用機制
     numberPool = generatePool(1, 9999);
   }
 
   updateStats();
   generateRibbons();
   document.getElementById('todayDate').textContent = `${now.getMonth()+1}/${now.getDate()}`;
-}
 }
 
 function generateRibbons() {
