@@ -561,6 +561,17 @@
     ⬆️ 請先完成上方至少一項任務<br>再填寫 Email 領取電子抽獎券
   </div>
 
+<div style="margin:8px 16px 16px; background:#fff8e8; border:2px solid #C8102E; border-radius:18px; padding:16px; text-align:left;">
+    <div style="font-size:14px; font-weight:900; color:#C8102E; margin-bottom:8px;">🛡️ 系統防重複領取機制（提案展示說明）</div>
+    <div style="font-size:12px; color:#555; line-height:1.8;">
+      正式上線時，系統會自動比對後端資料庫：<br>
+      1. 訪客輸入 Email 後，系統會自動去 Google Sheet 查詢該 Email 的歷史紀錄。<br>
+      2. 若發現已領取過「任務 A」，本次送出將自動扣除，僅核發新任務的抽獎券。<br>
+      3. 確保同一 Email 每個任務<strong style="color:#C8102E;">絕對只能領取一次</strong>，徹底杜絕重複刷票問題！
+    </div>
+  </div>
+
+
   <!-- Email section (hidden until first task done) -->
   <div class="email-section" id="emailSection">
     <div class="email-hd">
@@ -684,6 +695,14 @@ function restoreState() {
 function confirmTask(id, tickets, label) {
   const t = tasks[id];
   if (t.done) return;
+
+  // 加入工作人員密碼審核機制
+  const pwd = prompt('🔒 請輸入現場工作人員核銷密碼：\n(測試請輸入 2026)');
+  if (pwd !== '2026') {
+    alert('❌ 密碼錯誤，無法核發抽獎券！');
+    return;
+  }
+
   t.done = true;
   t.pending = false;
 
@@ -702,7 +721,7 @@ function confirmTask(id, tickets, label) {
 
   if (Object.values(tasks).filter(t => t.done).length === 1) {
     const notice = document.getElementById('lockedNotice');
-    notice.style.display = 'none';
+    if (notice) notice.style.display = 'none';
     const es = document.getElementById('emailSection');
     es.classList.add('show');
     requestAnimationFrame(() => {
@@ -713,7 +732,6 @@ function confirmTask(id, tickets, label) {
     });
   }
 }
-
 function updateTicketBar() {
   document.getElementById('ticketCount').textContent = totalTickets;
   const pct = Math.min((totalTickets / 6) * 100, 100);
