@@ -6,29 +6,9 @@
 <title>中華航空 × 2026 高雄旅展｜現場抽獎系統</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-
-  body {
-    min-height: 100vh;
-    background: linear-gradient(160deg, #87CEEB 0%, #a8d4f0 20%, #c8b8f0 55%, #f0b8d8 80%, #ffd8e8 100%);
-    font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
-    color: #fff;
-    overflow: hidden;
-    user-select: none;
-  }
-
-  /* ===== 雲朵背景動畫 ===== */
-  .cloud {
-    position: fixed;
-    background: rgba(255,255,255,0.85);
-    border-radius: 50px;
-    animation: floatCloud linear infinite;
-  }
-  .cloud::before, .cloud::after {
-    content: '';
-    position: absolute;
-    background: rgba(255,255,255,0.85);
-    border-radius: 50%;
-  }
+  body { min-height: 100vh; background: linear-gradient(160deg, #87CEEB 0%, #a8d4f0 20%, #c8b8f0 55%, #f0b8d8 80%, #ffd8e8 100%); font-family: 'Arial', 'Microsoft JhengHei', sans-serif; color: #fff; overflow: hidden; user-select: none; }
+  .cloud { position: fixed; background: rgba(255,255,255,0.85); border-radius: 50px; animation: floatCloud linear infinite; }
+  .cloud::before, .cloud::after { content: ''; position: absolute; background: rgba(255,255,255,0.85); border-radius: 50%; }
   .cloud-1 { width:160px;height:50px;top:8%;left:-200px;animation-duration:30s;animation-delay:0s; }
   .cloud-1::before { width:80px;height:70px;top:-35px;left:20px; }
   .cloud-1::after { width:60px;height:55px;top:-25px;left:80px; }
@@ -41,258 +21,66 @@
   .cloud-4 { width:100px;height:32px;top:75%;left:-200px;animation-duration:33s;animation-delay:-5s; }
   .cloud-4::before { width:50px;height:46px;top:-23px;left:12px; }
   .cloud-4::after { width:38px;height:34px;top:-16px;left:55px; }
-
-  @keyframes floatCloud {
-    from { left: -250px; }
-    to { left: 110%; }
-  }
-
-  /* 彩帶粒子 */
-  .ribbon {
-    position: fixed;
-    width: 8px; height: 20px;
-    border-radius: 2px;
-    animation: fallRibbon linear infinite;
-    opacity: 0.7;
-  }
-  @keyframes fallRibbon {
-    0% { transform: translateY(-40px) rotate(0deg); opacity:0.7; }
-    100% { transform: translateY(110vh) rotate(720deg); opacity:0; }
-  }
-
-  /* ===== 頂部品牌列 ===== */
-  .header {
-    position: relative; z-index: 20;
-    background: linear-gradient(90deg, rgba(139,61,200,0.85), rgba(91,127,212,0.85), rgba(59,168,232,0.85));
-    backdrop-filter: blur(10px);
-    padding: 14px 40px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 2px solid rgba(255,255,255,0.3);
-    box-shadow: 0 4px 20px rgba(139,61,200,0.3);
-  }
+  @keyframes floatCloud { from { left: -250px; } to { left: 110%; } }
+  .ribbon { position: fixed; width: 8px; height: 20px; border-radius: 2px; animation: fallRibbon linear infinite; opacity: 0.7; }
+  @keyframes fallRibbon { 0% { transform: translateY(-40px) rotate(0deg); opacity:0.7; } 100% { transform: translateY(110vh) rotate(720deg); opacity:0; } }
+  .header { position: relative; z-index: 20; background: linear-gradient(90deg, rgba(139,61,200,0.85), rgba(91,127,212,0.85), rgba(59,168,232,0.85)); backdrop-filter: blur(10px); padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid rgba(255,255,255,0.3); box-shadow: 0 4px 20px rgba(139,61,200,0.3); }
   .header-left { display:flex;align-items:center;gap:16px; }
   .header-icon { font-size:32px; }
   .header-title { font-size:20px; font-weight:900; letter-spacing:2px; text-shadow:0 2px 8px rgba(0,0,0,0.2); }
   .header-sub { font-size:12px; opacity:0.85; letter-spacing:2px; margin-top:2px; }
   .header-right { text-align:right; font-size:13px; opacity:0.9; line-height:1.8; }
-
-  /* ===== 主內容 ===== */
-  .main {
-    position: relative; z-index: 10;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: calc(100vh - 62px);
-    padding: 16px;
-    gap: 16px;
-  }
-
-  /* 獎項選擇 */
-  .prize-panel {
-    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-  }
-  .prize-btn {
-    padding: 8px 22px;
-    border: 2px solid rgba(255,255,255,0.5);
-    border-radius: 30px;
-    background: rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.85);
-    font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: all 0.2s;
-    font-family: inherit; backdrop-filter: blur(8px);
-  }
+  .main { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: calc(100vh - 62px); padding: 16px; gap: 16px; }
+  .prize-panel { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .prize-btn { padding: 8px 22px; border: 2px solid rgba(255,255,255,0.5); border-radius: 30px; background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.85); font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; backdrop-filter: blur(8px); }
   .prize-btn:hover { background: rgba(255,255,255,0.35); color:#fff; transform:translateY(-2px); }
-  .prize-btn.active {
-    background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3));
-    color: #8B3DC8; border-color: #fff;
-    box-shadow: 0 6px 20px rgba(255,255,255,0.3);
-    font-weight: 800;
-  }
-
-  /* 當前獎項徽章 */
-  .prize-badge {
-    background: linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.2));
-    border: 2px solid rgba(255,255,255,0.6);
-    border-radius: 50px;
-    padding: 12px 48px;
-    font-size: 20px; font-weight: 800; letter-spacing: 2px;
-    color: #fff;
-    text-shadow: 0 2px 8px rgba(139,61,200,0.4);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 30px rgba(255,255,255,0.2);
-  }
-
-  /* 主號碼顯示 */
-  .number-card {
-    background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.25));
-    border: 3px solid rgba(255,255,255,0.7);
-    border-radius: 32px;
-    padding: 44px 100px;
-    text-align: center;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 20px 60px rgba(139,61,200,0.2), inset 0 2px 0 rgba(255,255,255,0.5);
-    min-width: 640px;
-  }
-  .number-label {
-    font-size: 15px; letter-spacing: 4px; color: rgba(255,255,255,0.8);
-    margin-bottom: 20px; font-weight: 600;
-  }
-  .number-value {
-    font-size: 110px; font-weight: 900;
-    font-family: 'Courier New', monospace;
-    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 4px 12px rgba(139,61,200,0.5));
-    letter-spacing: 10px; line-height: 1;
-    min-height: 120px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.1s;
-  }
-  .number-value.rolling {
-    animation: numRoll 0.07s infinite;
-  }
-  @keyframes numRoll {
-    0% { transform: scale(1.02); }
-    50% { transform: scale(0.98); }
-    100% { transform: scale(1.02); }
-  }
-  .number-value.winner {
-    animation: winnerGlow 0.6s ease-in-out infinite alternate;
-    background: linear-gradient(135deg, #FFD700, #FFA040, #FFD700);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 0 20px rgba(255,200,0,0.8));
-  }
-  @keyframes winnerGlow {
-    from { transform: scale(1); filter: drop-shadow(0 0 20px rgba(255,200,0,0.6)); }
-    to { transform: scale(1.06); filter: drop-shadow(0 0 40px rgba(255,200,0,1)); }
-  }
-
-  /* 得獎訊息 */
-  .winner-msg {
-    display: none; text-align: center;
-    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
+  .prize-btn.active { background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3)); color: #8B3DC8; border-color: #fff; box-shadow: 0 6px 20px rgba(255,255,255,0.3); font-weight: 800; }
+  .prize-badge { background: linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.2)); border: 2px solid rgba(255,255,255,0.6); border-radius: 50px; padding: 12px 48px; font-size: 20px; font-weight: 800; letter-spacing: 2px; color: #fff; text-shadow: 0 2px 8px rgba(139,61,200,0.4); backdrop-filter: blur(10px); box-shadow: 0 8px 30px rgba(255,255,255,0.2); }
+  .number-card { background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.25)); border: 3px solid rgba(255,255,255,0.7); border-radius: 32px; padding: 44px 100px; text-align: center; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(139,61,200,0.2), inset 0 2px 0 rgba(255,255,255,0.5); min-width: 640px; }
+  .number-label { font-size: 15px; letter-spacing: 4px; color: rgba(255,255,255,0.8); margin-bottom: 20px; font-weight: 600; }
+  .number-value { font-size: 110px; font-weight: 900; font-family: 'Courier New', monospace; background: linear-gradient(135deg, #fff, rgba(255,255,255,0.8)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 4px 12px rgba(139,61,200,0.5)); letter-spacing: 10px; line-height: 1; min-height: 120px; display: flex; align-items: center; justify-content: center; transition: all 0.1s; }
+  .number-value.rolling { animation: numRoll 0.07s infinite; }
+  @keyframes numRoll { 0% { transform: scale(1.02); } 50% { transform: scale(0.98); } 100% { transform: scale(1.02); } }
+  .number-value.winner { animation: winnerGlow 0.6s ease-in-out infinite alternate; background: linear-gradient(135deg, #FFD700, #FFA040, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 0 20px rgba(255,200,0,0.8)); }
+  @keyframes winnerGlow { from { transform: scale(1); filter: drop-shadow(0 0 20px rgba(255,200,0,0.6)); } to { transform: scale(1.06); filter: drop-shadow(0 0 40px rgba(255,200,0,1)); } }
+  .winner-msg { display: none; text-align: center; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
   .winner-msg.show { display: block; }
-  .winner-title {
-    font-size: 40px; font-weight: 900; letter-spacing: 3px;
-    background: linear-gradient(90deg, #FFD700, #FFA040, #FFD700);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 2px 8px rgba(255,200,0,0.5));
-    margin-bottom: 8px;
-  }
+  .winner-title { font-size: 40px; font-weight: 900; letter-spacing: 3px; background: linear-gradient(90deg, #FFD700, #FFA040, #FFD700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: drop-shadow(0 2px 8px rgba(255,200,0,0.5)); margin-bottom: 8px; }
   .winner-prize-text { font-size: 22px; color: #fff; opacity:0.95; letter-spacing:2px; }
-  @keyframes popIn {
-    from { opacity:0; transform:scale(0.5); }
-    to { opacity:1; transform:scale(1); }
-  }
-
-  /* 控制按鈕 */
+  .winner-identity { font-size: 16px; color: #fff; opacity:0.8; letter-spacing:1px; margin-top:4px; }
+  @keyframes popIn { from { opacity:0; transform:scale(0.5); } to { opacity:1; transform:scale(1); } }
   .controls { display:flex; gap:14px; align-items:center; flex-wrap:wrap; justify-content:center; }
-  .btn {
-    padding: 16px 44px;
-    font-size: 18px; font-weight: 800; letter-spacing: 2px;
-    border: none; border-radius: 50px;
-    cursor: pointer; transition: all 0.2s;
-    font-family: inherit;
-  }
-  .btn-draw {
-    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
-    color: #8B3DC8;
-    box-shadow: 0 8px 30px rgba(255,255,255,0.4), 0 4px 10px rgba(0,0,0,0.1);
-    min-width: 200px;
-  }
+  .btn { padding: 16px 44px; font-size: 18px; font-weight: 800; letter-spacing: 2px; border: none; border-radius: 50px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+  .btn-draw { background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7)); color: #8B3DC8; box-shadow: 0 8px 30px rgba(255,255,255,0.4), 0 4px 10px rgba(0,0,0,0.1); min-width: 200px; }
   .btn-draw:hover { transform:translateY(-4px); box-shadow:0 14px 40px rgba(255,255,255,0.5); }
   .btn-draw:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-
-  .btn-stop {
-    background: linear-gradient(135deg, #FFD700, #FFA040);
-    color: #5B2D00;
-    box-shadow: 0 8px 30px rgba(255,200,0,0.5);
-    min-width: 160px;
-    display: none;
-  }
+  .btn-stop { background: linear-gradient(135deg, #FFD700, #FFA040); color: #5B2D00; box-shadow: 0 8px 30px rgba(255,200,0,0.5); min-width: 160px; display: none; }
   .btn-stop:hover { transform:translateY(-4px); }
   .btn-stop.show { display:inline-flex;align-items:center;justify-content:center; }
-
-  .btn-reset {
-    background: rgba(255,255,255,0.25);
-    color: #fff;
-    border: 2px solid rgba(255,255,255,0.5);
-    font-size:14px; padding:12px 28px;
-    display: none;
-  }
+  .btn-reset { background: rgba(255,255,255,0.25); color: #fff; border: 2px solid rgba(255,255,255,0.5); font-size:14px; padding:12px 28px; display: none; }
   .btn-reset.show { display:block; }
   .btn-reset:hover { background:rgba(255,255,255,0.35); }
-
-  /* 歷史紀錄 */
-  .history {
-    position: fixed; right:24px; top:80px;
-    width: 210px; z-index:20;
-    background: rgba(255,255,255,0.25);
-    border: 2px solid rgba(255,255,255,0.4);
-    border-radius: 16px; padding:16px;
-    backdrop-filter: blur(16px);
-    box-shadow: 0 8px 30px rgba(139,61,200,0.15);
-  }
+  .history { position: fixed; right:24px; top:80px; width: 210px; z-index:20; background: rgba(255,255,255,0.25); border: 2px solid rgba(255,255,255,0.4); border-radius: 16px; padding:16px; backdrop-filter: blur(16px); box-shadow: 0 8px 30px rgba(139,61,200,0.15); }
   .history h3 { font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.7);margin-bottom:12px;text-transform:uppercase; }
-  .history-item { display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.15);font-size:13px; }
+  .history-item { display:flex;flex-direction:column;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.15);font-size:13px; }
+  .h-row1 { display:flex;justify-content:space-between;align-items:center; }
   .h-num { color:#FFD700;font-weight:800;font-family:'Courier New',monospace; }
   .h-prize { color:rgba(255,255,255,0.65);font-size:11px; }
-
-  /* 底部統計 */
-  .stats-bar {
-    position:fixed;bottom:0;left:0;right:0;
-    background:rgba(255,255,255,0.2);
-    border-top:2px solid rgba(255,255,255,0.3);
-    padding:10px 40px;
-    display:flex;justify-content:center;gap:70px;
-    backdrop-filter:blur(16px);z-index:20;
-  }
+  .h-row2 { font-size:10px; color:rgba(255,255,255,0.5); margin-top:2px; }
+  .stats-bar { position:fixed;bottom:0;left:0;right:0; background:rgba(255,255,255,0.2); border-top:2px solid rgba(255,255,255,0.3); padding:10px 40px; display:flex;justify-content:center;gap:70px; backdrop-filter:blur(16px);z-index:20; }
   .stat-item { text-align:center; }
   .stat-num { font-size:22px;font-weight:900;color:#fff;text-shadow:0 2px 8px rgba(139,61,200,0.4); }
   .stat-label { font-size:11px;color:rgba(255,255,255,0.7);letter-spacing:1px; }
-
-  /* 管理員 */
-  .admin-toggle {
-    position:fixed;bottom:58px;right:20px;
-    background:rgba(255,255,255,0.3);border:2px solid rgba(255,255,255,0.5);
-    border-radius:50%;width:44px;height:44px;
-    display:flex;align-items:center;justify-content:center;
-    cursor:pointer;font-size:18px;z-index:30;backdrop-filter:blur(10px);
-  }
-  .admin-panel {
-    position:fixed;bottom:115px;right:20px;
-    background:rgba(255,255,255,0.9);
-    border:2px solid rgba(139,61,200,0.3);
-    border-radius:16px;padding:20px;width:280px;
-    z-index:30;display:none;backdrop-filter:blur(20px);color:#333;
-  }
+  .admin-toggle { position:fixed;bottom:58px;right:20px; background:rgba(255,255,255,0.3);border:2px solid rgba(255,255,255,0.5); border-radius:50%;width:44px;height:44px; display:flex;align-items:center;justify-content:center; cursor:pointer;font-size:18px;z-index:30;backdrop-filter:blur(10px); }
+  .admin-panel { position:fixed;bottom:115px;right:20px; background:rgba(255,255,255,0.9); border:2px solid rgba(139,61,200,0.3); border-radius:16px;padding:20px;width:280px; z-index:30;display:none;backdrop-filter:blur(20px);color:#333; }
   .admin-panel.show { display:block; }
   .admin-panel h4 { font-size:13px;color:#8B3DC8;letter-spacing:1px;margin-bottom:14px;font-weight:800; }
-  .admin-panel input, .admin-panel textarea {
-    width:100%;background:#f0e8ff;border:1px solid #c8a8e8;
-    border-radius:10px;padding:10px 12px;color:#333;font-size:13px;margin-bottom:10px;
-    font-family:inherit;
-  }
+  .admin-panel input, .admin-panel textarea { width:100%;background:#f0e8ff;border:1px solid #c8a8e8; border-radius:10px;padding:10px 12px;color:#333;font-size:13px;margin-bottom:10px; font-family:inherit; }
   .admin-panel textarea { height:80px;resize:vertical; }
   .admin-panel label { font-size:12px;color:#888;display:block;margin-bottom:4px; }
-  .btn-admin {
-    background:linear-gradient(135deg,#8B3DC8,#5B7FD4);color:#fff;
-    border:none;width:100%;padding:10px;border-radius:10px;
-    font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;
-  }
-
-  /* 彩花爆炸 */
-  .confetti-piece {
-    position:fixed;pointer-events:none;z-index:100;
-    width:8px;height:8px;border-radius:2px;
-    animation:confettiFall 1.5s ease-out forwards;
-  }
-  @keyframes confettiFall {
-    0% { opacity:1;transform:translate(0,0) rotate(0deg) scale(1); }
-    100% { opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--tr)) scale(0.3); }
-  }
+  .btn-admin { background:linear-gradient(135deg,#8B3DC8,#5B7FD4);color:#fff; border:none;width:100%;padding:10px;border-radius:10px; font-size:14px;font-weight:700;cursor:pointer;font-family:inherit; }
+  .confetti-piece { position:fixed;pointer-events:none;z-index:100; width:8px;height:8px;border-radius:2px; animation:confettiFall 1.5s ease-out forwards; }
+  @keyframes confettiFall { 0% { opacity:1;transform:translate(0,0) rotate(0deg) scale(1); } 100% { opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--tr)) scale(0.3); } }
 </style>
 </head>
 <body>
@@ -338,6 +126,7 @@
   <div class="winner-msg" id="winnerMsg">
     <div class="winner-title">🎉 恭喜得獎！CONGRATULATIONS！🎉</div>
     <div class="winner-prize-text" id="winnerPrize"></div>
+    <div class="winner-identity" id="winnerIdentity"></div>
   </div>
 
   <div class="controls">
@@ -356,21 +145,9 @@
 </div>
 
 <div class="stats-bar">
-  <div class="stat-item"><div class="stat-num" id="totalCount">0</div><div class="stat-label">號碼總數</div></div>
+  <div class="stat-item"><div class="stat-num" id="totalCount">0</div><div class="stat-label">獎池總票數</div></div>
   <div class="stat-item"><div class="stat-num" id="drawCount">0</div><div class="stat-label">已抽次數</div></div>
   <div class="stat-item"><div class="stat-num" id="todayDate">--</div><div class="stat-label">今日</div></div>
-</div>
-
-<div class="admin-toggle" onclick="toggleAdmin()" title="管理員設定">⚙️</div>
-<div class="admin-panel" id="adminPanel">
-  <h4>⚙️ 管理員設定</h4>
-  <label>號碼範圍（起始）</label>
-  <input type="number" id="rangeStart" value="1">
-  <label>號碼範圍（結束）</label>
-  <input type="number" id="rangeEnd" value="9999">
-  <label>或手動輸入號碼池（每行一個）</label>
-  <textarea id="manualNumbers" placeholder="00001&#10;00342&#10;00567&#10;..."></textarea>
-  <button class="btn-admin" onclick="applySettings()">✅ 套用設定</button>
 </div>
 
 <script>
@@ -384,28 +161,8 @@ document.addEventListener('keydown', function(e) {
 
 let isRolling = false, rollInterval = null;
 let currentPrize = '✈️ 頭獎｜國際線來回機票兌換券';
-let numberPool = [], drawnNumbers = [], drawCount = 0;
-
-// ── Past winners store (localStorage) — 0.1% repeat protection ──
-let _pw = [];
-try { _pw = JSON.parse(localStorage.getItem('_ktfW') || '[]'); } catch(e) { _pw = []; }
-function _savePW() { try { localStorage.setItem('_ktfW', JSON.stringify(_pw)); } catch(e) {} }
-function _selectFinal(pool) {
-  const fresh   = pool.filter(n => !_pw.includes(n));
-  const repeats = pool.filter(n => _pw.includes(n));
-  if (fresh.length === 0) return pool[Math.floor(Math.random()*pool.length)];
-  // 0.1% chance to pick from previous winners, 99.9% from fresh pool
-  if (repeats.length > 0 && Math.random() < 0.001) {
-    return repeats[Math.floor(Math.random()*repeats.length)];
-  }
-  return fresh[Math.floor(Math.random()*fresh.length)];
-}
-
-function generatePool(s, e) {
-  let p = [];
-  for (let i = s; i <= e; i++) p.push(String(i).padStart(5,'0'));
-  return p;
-}
+let numberPool = []; // 陣列內容改為物件： { ticket, email, name }
+let drawCount = 0;
 
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbwy35vAxNgC_wKWjn5SV34pLtYBA8dk4_A7zYVW6nTovzW-UwqFkfT65uJaXo2BmOmR0A/exec';
 
@@ -423,16 +180,16 @@ async function init() {
       const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
       while (pool.length < 30) {
         let fakeNum = 'KTF-';
-        for (let i = 0; i < 6; i++) {
-          fakeNum += chars[Math.floor(Math.random() * chars.length)];
+        for (let i = 0; i < 6; i++) { fakeNum += chars[Math.floor(Math.random() * chars.length)]; }
+        // 假資料也包成物件形式
+        if (!pool.some(p => p.ticket === fakeNum)) {
+          pool.push({ ticket: fakeNum, email: 'demo' + Math.floor(Math.random()*100) + '@test.com', name: '展示用假資料' });
         }
-        if (!pool.includes(fakeNum)) pool.push(fakeNum);
       }
     }
     numberPool = pool;
   } catch (error) {
-    console.error('抓取資料失敗，使用純本地隨機資料：', error);
-    numberPool = generatePool(1, 9999);
+    console.error('抓取資料失敗，系統錯誤', error);
   }
 
   updateStats();
@@ -461,7 +218,7 @@ function selectPrize(btn, prize) {
 }
 
 function startDraw() {
-  if (isRolling) return;
+  if (isRolling || numberPool.length === 0) return;
   isRolling = true;
   document.getElementById('winnerMsg').classList.remove('show');
   document.getElementById('numberDisplay').classList.remove('winner');
@@ -469,9 +226,11 @@ function startDraw() {
   document.getElementById('btnDraw').disabled = true;
   document.getElementById('btnStop').classList.add('show');
   document.getElementById('btnReset').classList.remove('show');
+  
+  // 隨機滾動數字效果
   rollInterval = setInterval(() => {
-    const n = Math.floor(Math.random()*99999)+1;
-    document.getElementById('numberDisplay').textContent = 'KTF-' + String(n).padStart(5,'0');
+    const randomIndex = Math.floor(Math.random() * numberPool.length);
+    document.getElementById('numberDisplay').textContent = numberPool[randomIndex].ticket;
   }, 55);
 }
 
@@ -479,25 +238,46 @@ function stopDraw() {
   if (!isRolling) return;
   isRolling = false;
   clearInterval(rollInterval);
-  const available = numberPool.filter(n => !drawnNumbers.includes(n));
-  const pool = available.length > 0 ? available : [String(Math.floor(Math.random()*99999)+1).padStart(5,'0')];
-  const final = _selectFinal(pool);
-  drawnNumbers.push(final);
-  if (!_pw.includes(final)) _pw.push(final);
-  _savePW();
+  
+  // 正式抽出得獎者
+  const winnerIndex = Math.floor(Math.random() * numberPool.length);
+  const winnerObj = numberPool[winnerIndex];
+  
+  // 核心防弊機制：剔除該 Email 名下所有抽獎券，讓出名額
+  numberPool = numberPool.filter(item => item.email !== winnerObj.email);
   drawCount++;
+
+  // 畫面更新
   const disp = document.getElementById('numberDisplay');
-  disp.textContent = 'KTF-' + final;
+  disp.textContent = winnerObj.ticket;
   disp.classList.remove('rolling');
   disp.classList.add('winner');
+  
   document.getElementById('winnerMsg').classList.add('show');
   document.getElementById('winnerPrize').textContent = '恭喜獲得：' + currentPrize;
+  document.getElementById('winnerIdentity').textContent = `得獎者：${winnerObj.name} (${winnerObj.email.substring(0, 3)}***)`;
+  
   document.getElementById('btnStop').classList.remove('show');
   document.getElementById('btnDraw').disabled = false;
   document.getElementById('btnReset').classList.add('show');
-  addHistory(final, currentPrize);
+  
+  addHistory(winnerObj, currentPrize);
   updateStats();
   launchConfetti();
+
+  // 將得獎結果非同步傳送回 Google Apps Script 寫入 Excel
+  fetch(GAS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      action: 'recordWinner',
+      prize: currentPrize,
+      ticket: winnerObj.ticket,
+      email: winnerObj.email,
+      name: winnerObj.name
+    })
+  }).catch(() => {});
 }
 
 function resetDraw() {
@@ -507,13 +287,16 @@ function resetDraw() {
   document.getElementById('btnReset').classList.remove('show');
 }
 
-function addHistory(number, prize) {
+function addHistory(winnerObj, prize) {
   const list = document.getElementById('historyList');
   if (list.querySelector('div[style]')) list.innerHTML = '';
   const short = (prize.split('｜')[1] || prize).substring(0,10);
   const item = document.createElement('div');
   item.className = 'history-item';
-  item.innerHTML = `<span class="h-num">KTF-${number}</span><span class="h-prize">${short}</span>`;
+  item.innerHTML = `
+    <div class="h-row1"><span class="h-num">${winnerObj.ticket}</span><span class="h-prize">${short}</span></div>
+    <div class="h-row2">${winnerObj.name}</div>
+  `;
   list.insertBefore(item, list.firstChild);
 }
 
@@ -543,26 +326,9 @@ function launchConfetti() {
   }
 }
 
-function toggleAdmin() { document.getElementById('adminPanel').classList.toggle('show'); }
-
-function applySettings() {
-  const manual = document.getElementById('manualNumbers').value.trim();
-  if (manual) {
-    numberPool = manual.split('\n').map(n=>n.trim()).filter(n=>n);
-  } else {
-    const s = parseInt(document.getElementById('rangeStart').value);
-    const e = parseInt(document.getElementById('rangeEnd').value);
-    if (s>0 && e>=s) numberPool = generatePool(s, e);
-  }
-  drawnNumbers = []; drawCount = 0;
-  updateStats(); toggleAdmin(); resetDraw();
-  alert(`✅ 已載入 ${numberPool.length} 個號碼！`);
-}
-
 document.addEventListener('keydown', e => {
   if (e.code === 'Space') { e.preventDefault(); isRolling ? stopDraw() : startDraw(); }
   if (e.code === 'Enter' && !isRolling) resetDraw();
-  // Block devtools (handled by protection listener above)
 });
 
 init();
