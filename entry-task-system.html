@@ -760,9 +760,64 @@ function checkSubmit() {
 }
 
 // ── SUBMIT (新版對接寫法) ──
+// ── SUBMIT (支援購物車打包發送) ──
 function submitEmail() {
   const email = document.getElementById('emailInput').value.trim();
   const name  = document.getElementById('nameInput').value.trim() || '旅客';
+  
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwy35vAxNgC_wKWjn5SV34pLtYBA8dk4_A7zYVW6nTovzW-UwqFkfT65uJaXo2BmOmR0A/exec';
+
+  const taskKeys = {
+    A: 'dynasty-member',
+    B: 'app-download',
+    C: 'line-friend',
+    D: 'youtube-sub'
+  };
+
+  // 把所有已完成但「還沒寄信」的任務打包進購物車
+  const completedTypes = [];
+  Object.keys(tasks).forEach(id => {
+    const t = tasks[id];
+    if (t.done && !t.emailed) {
+      t.emailed = true; // 標記為已寄送
+      completedTypes.push(taskKeys[id]);
+    }
+  });
+
+  // 如果購物車裡有東西，就一次發給後端
+  if (completedTypes.length > 0) {
+    fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        email: email,
+        name: name,
+        taskTypes: completedTypes // 傳送陣列給後端
+      })
+    }).catch(() => {});
+  }
+
+  // 顯示寄出提示畫面
+  document.getElementById('ticketContainer').innerHTML = '';
+  document.getElementById('modalSub').innerHTML =
+    `系統已將您本次獲得的抽獎券合併寄至<br><strong style="color:var(--purple);">${email}</strong><br>請稍候查收！`;
+  document.getElementById('modalBg').classList.add('show');
+
+  // 清空待領取狀態
+  pendingTickets = 0;
+  saveState();
+  updateEmailSection();
+
+  // 清空表單
+  document.getElementById('emailInput').value = '';
+  document.getElementById('emailConfirm').value = '';
+  document.getElementById('nameInput').value = '';
+  document.getElementById('agreeBox').checked = false;
+  checkSubmit();
+
+  fireConfetti();
+}
   
   // ⚠️ 請把下面這行引號內的網址，換成您「最新部署的 Google Apps Script 網址」
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbwy35vAxNgC_wKWjn5SV34pLtYBA8dk4_A7zYVW6nTovzW-UwqFkfT65uJaXo2BmOmR0A/exec';
