@@ -5,24 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>✈️ 入場任務 × 中華航空 2026 高雄旅展</title>
 <style>
-  :root {
-    --red:    #C8102E;
-    --navy:   #003087;
-    --gold:   #B8960C;
-    --purple: #8B3DC8;
-    --pink:   #E8629A;
-    --green:  #1EB870;
-  }
+  :root { --red: #C8102E; --navy: #003087; --gold: #B8960C; --purple: #8B3DC8; --pink: #E8629A; --green: #1EB870; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-
-  body {
-    min-height:100vh;
-    background:linear-gradient(160deg,#c8e8ff 0%,#dcc8f5 40%,#f5c8e0 70%,#ffe8c8 100%);
-    font-family:'Helvetica Neue',Arial,'Microsoft JhengHei',sans-serif;
-    overflow-x:hidden;
-  }
-
-  /* ── CLOUDS ── */
+  body { min-height:100vh; background:linear-gradient(160deg,#c8e8ff 0%,#dcc8f5 40%,#f5c8e0 70%,#ffe8c8 100%); font-family:'Helvetica Neue',Arial,'Microsoft JhengHei',sans-serif; overflow-x:hidden; }
   .cloud{position:fixed;background:rgba(255,255,255,0.65);border-radius:50px;pointer-events:none;z-index:0;}
   .cloud::before,.cloud::after{content:'';position:absolute;background:rgba(255,255,255,0.65);border-radius:50%;}
   .c1{width:110px;height:36px;top:5%;left:-140px;animation:cf 22s linear infinite;}
@@ -35,47 +20,16 @@
   .c3::before{width:45px;height:45px;top:-22px;left:8px;}
   .c3::after{width:30px;height:30px;top:-14px;left:40px;}
   @keyframes cf{from{transform:translateX(0)}to{transform:translateX(calc(100vw + 280px))}}
-
-  /* ── CONFETTI ── */
   .cp{position:fixed;border-radius:2px;top:-20px;pointer-events:none;z-index:999;display:none;}
   @keyframes cfFall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(105vh) rotate(600deg);opacity:0}}
-
-  /* ── PAGE ── */
   .page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding-bottom:48px;}
-
-  /* ── HEADER ── */
-  .header{
-    background:linear-gradient(135deg,var(--navy) 0%,#1a2f72 50%,#3B1C8C 100%);
-    padding:36px 24px 28px; text-align:center;
-    border-radius:0 0 36px 36px;
-    box-shadow:0 8px 36px rgba(0,48,135,0.3);
-    position:relative; overflow:hidden;
-  }
-  .header::after{
-    content:'✈️'; position:absolute; bottom:-24px; right:-16px;
-    font-size:110px; opacity:0.07; transform:rotate(-15deg); pointer-events:none;
-  }
+  .header{background:linear-gradient(135deg,var(--navy) 0%,#1a2f72 50%,#3B1C8C 100%);padding:36px 24px 28px; text-align:center;border-radius:0 0 36px 36px;box-shadow:0 8px 36px rgba(0,48,135,0.3);position:relative; overflow:hidden;}
+  .header::after{content:'✈️'; position:absolute; bottom:-24px; right:-16px;font-size:110px; opacity:0.07; transform:rotate(-15deg); pointer-events:none;}
   .hbrand{font-size:11px;color:rgba(255,255,255,0.6);letter-spacing:4px;text-transform:uppercase;margin-bottom:10px;}
   .htitle{font-size:30px;font-weight:900;color:#fff;letter-spacing:3px;line-height:1.15;margin-bottom:8px;}
   .hsub{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.7;margin-bottom:16px;}
-  .hbadge{
-    display:inline-block;
-    background:linear-gradient(135deg,var(--gold),#F0C040);
-    color:#fff;font-size:12px;font-weight:800;letter-spacing:2px;
-    padding:6px 20px;border-radius:20px;
-    box-shadow:0 4px 14px rgba(184,150,12,0.4);
-  }
-
-  /* ── TICKET BAR ── */
-  .ticket-bar{
-    margin:18px 16px 0;
-    background:rgba(255,255,255,0.8);
-    border-radius:20px; padding:14px 20px;
-    display:flex;align-items:center;gap:14px;
-    backdrop-filter:blur(10px);
-    border:2px solid rgba(255,255,255,0.9);
-    box-shadow:0 4px 20px rgba(139,61,200,0.1);
-  }
+  .hbadge{display:inline-block;background:linear-gradient(135deg,var(--gold),#F0C040);color:#fff;font-size:12px;font-weight:800;letter-spacing:2px;padding:6px 20px;border-radius:20px;box-shadow:0 4px 14px rgba(184,150,12,0.4);}
+  .ticket-bar{margin:18px 16px 0;background:rgba(255,255,255,0.8);border-radius:20px; padding:14px 20px;display:flex;align-items:center;gap:14px;backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,0.9);box-shadow:0 4px 20px rgba(139,61,200,0.1);}
   .tb-icon{font-size:28px;flex-shrink:0;}
   .tb-info{flex:1;}
   .tb-label{font-size:11px;color:#aaa;letter-spacing:2px;}
@@ -83,249 +37,78 @@
   .tb-count span{font-size:13px;font-weight:600;color:#888;}
   .tb-progress{width:100%;height:6px;background:rgba(139,61,200,0.12);border-radius:6px;margin-top:6px;overflow:hidden;}
   .tb-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:6px;transition:width .5s ease;}
-
-  /* ── SECTION TITLE ── */
   .section-title{font-size:13px;font-weight:800;color:#777;letter-spacing:3px;text-transform:uppercase;padding:20px 20px 8px;}
-
-  /* ── TASK CARD ── */
-  .task-card{
-    margin:0 16px 14px;
-    background:rgba(255,255,255,0.82);
-    border-radius:24px;
-    border:2px solid rgba(255,255,255,0.9);
-    box-shadow:0 6px 24px rgba(139,61,200,0.08);
-    backdrop-filter:blur(12px); overflow:hidden;
-    transition:transform .2s ease,box-shadow .2s ease;
-  }
+  .task-card{margin:0 16px 14px;background:rgba(255,255,255,0.82);border-radius:24px;border:2px solid rgba(255,255,255,0.9);box-shadow:0 6px 24px rgba(139,61,200,0.08);backdrop-filter:blur(12px); overflow:hidden;transition:transform .2s ease,box-shadow .2s ease;}
   .task-card:active{transform:scale(0.98);}
-  .task-card.done{
-    border-color:rgba(30,184,112,0.4);
-    background:rgba(240,255,248,0.9);
-    box-shadow:0 4px 16px rgba(30,184,112,0.12);
-  }
+  .task-card.done{border-color:rgba(30,184,112,0.4);background:rgba(240,255,248,0.9);box-shadow:0 4px 16px rgba(30,184,112,0.12);}
   .task-inner{display:flex;align-items:stretch;}
   .task-bar{width:6px;flex-shrink:0;}
   .task-body{padding:18px 18px 18px 16px;flex:1;}
-
   .task-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;}
-  .task-icon-wrap{
-    width:48px;height:48px;border-radius:14px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:24px;flex-shrink:0;
-  }
+  .task-icon-wrap{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
   .task-meta{flex:1;}
-  .task-badge{
-    display:inline-block;font-size:10px;font-weight:800;letter-spacing:2px;
-    padding:2px 10px;border-radius:10px;margin-bottom:4px;
-  }
+  .task-badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:2px;padding:2px 10px;border-radius:10px;margin-bottom:4px;}
   .task-name{font-size:16px;font-weight:800;color:#222;line-height:1.2;}
-  .task-reward{
-    display:inline-flex;align-items:center;gap:4px;
-    font-size:11px;font-weight:700;color:#fff;
-    padding:3px 10px;border-radius:10px;margin-top:4px;
-  }
-
+  .task-reward{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#fff;padding:3px 10px;border-radius:10px;margin-top:4px;}
   .task-desc{font-size:12px;color:#888;line-height:1.7;margin-bottom:14px;}
-
-  /* Dual QR */
   .dual-qr{display:flex;gap:10px;margin-bottom:14px;}
   .dq-item{flex:1;text-align:center;}
   .dq-item img{border-radius:10px;display:block;margin:0 auto 4px;}
   .dq-item span{font-size:10px;color:#999;}
-
-  /* Single QR */
   .single-qr{display:flex;justify-content:center;margin-bottom:14px;}
   .single-qr img{border-radius:14px;}
-
-  /* ── ACTION ZONE ── */
-  /* State machine: idle → pending → done */
   .task-actions{display:flex;gap:8px;flex-direction:column;}
-
-  /* GO button */
-  .btn-go{
-    width:100%;padding:13px;border-radius:50px;
-    font-size:14px;font-weight:800;letter-spacing:1px;
-    border:none;cursor:pointer;color:#fff;
-    transition:all .25s ease;position:relative;overflow:hidden;
-  }
-  .btn-go::before{
-    content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
-    animation:shim 2.5s ease infinite;
-  }
+  .btn-go{width:100%;padding:13px;border-radius:50px;font-size:14px;font-weight:800;letter-spacing:1px;border:none;cursor:pointer;color:#fff;transition:all .25s ease;position:relative;overflow:hidden;}
+  .btn-go::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);animation:shim 2.5s ease infinite;}
   @keyframes shim{to{left:140%;}}
   .btn-go:hover{transform:translateY(-2px);filter:brightness(1.08);}
   .btn-go:active{transform:scale(.97);}
-
-  /* CONFIRM row (shown after go) */
-  .confirm-row{
-    display:none;
-    background:rgba(255,255,255,0.9);
-    border:2px solid rgba(30,184,112,0.3);
-    border-radius:18px;padding:12px 16px;
-    align-items:center;gap:10px;
-  }
+  .confirm-row{display:none;background:rgba(255,255,255,0.9);border:2px solid rgba(30,184,112,0.3);border-radius:18px;padding:12px 16px;align-items:center;gap:10px;}
   .confirm-row.show{display:flex;}
   .confirm-hint{font-size:12px;color:#888;flex:1;line-height:1.5;}
-  .btn-confirm{
-    padding:9px 18px;border-radius:50px;
-    font-size:13px;font-weight:800;letter-spacing:1px;
-    border:none;cursor:pointer;color:#fff;flex-shrink:0;
-    transition:all .25s ease;
-  }
+  .btn-confirm{padding:9px 18px;border-radius:50px;font-size:13px;font-weight:800;letter-spacing:1px;border:none;cursor:pointer;color:#fff;flex-shrink:0;transition:all .25s ease;}
   .btn-confirm:hover{transform:translateY(-1px);filter:brightness(1.08);}
-
-  /* DONE state */
-  .done-state{
-    display:none;
-    align-items:center;justify-content:center;gap:8px;
-    padding:12px 16px;border-radius:18px;
-    font-size:13px;font-weight:800;
-    color:var(--green);
-    background:rgba(30,184,112,0.08);
-    border:2px solid rgba(30,184,112,0.25);
-  }
+  .done-state{display:none;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:18px;font-size:13px;font-weight:800;color:var(--green);background:rgba(30,184,112,0.08);border:2px solid rgba(30,184,112,0.25);}
   .done-state.show{display:flex;}
-
-  /* ── EMAIL SECTION ── */
-  .email-section{
-    margin:8px 16px 0;
-    background:rgba(255,255,255,0.85);
-    border-radius:24px;
-    border:2px solid rgba(255,255,255,0.9);
-    box-shadow:0 8px 32px rgba(139,61,200,0.12);
-    backdrop-filter:blur(12px);
-    overflow:hidden;
-    opacity:0; transition:opacity .5s ease;
-    display:none;
-  }
+  .email-section{margin:8px 16px 0;background:rgba(255,255,255,0.85);border-radius:24px;border:2px solid rgba(255,255,255,0.9);box-shadow:0 8px 32px rgba(139,61,200,0.12);backdrop-filter:blur(12px);overflow:hidden;opacity:0; transition:opacity .5s ease;display:none;}
   .email-section.show{display:block;}
   .email-section.visible{opacity:1;}
-
-  .email-hd{
-    background:linear-gradient(135deg,var(--purple),var(--pink));
-    padding:20px 24px 16px;text-align:center;
-  }
+  .email-hd{background:linear-gradient(135deg,var(--purple),var(--pink));padding:20px 24px 16px;text-align:center;}
   .email-hd-icon{font-size:36px;margin-bottom:6px;}
   .email-hd-title{font-size:17px;font-weight:900;color:#fff;letter-spacing:2px;margin-bottom:4px;}
   .email-hd-sub{font-size:12px;color:rgba(255,255,255,0.8);}
-
   .email-body{padding:20px 24px;}
-
-  .ticket-summary{
-    background:linear-gradient(135deg,#fff8e8,#fff0f8);
-    border:2px solid rgba(184,150,12,0.25);
-    border-radius:16px;padding:14px 18px;
-    display:flex;align-items:center;gap:12px;margin-bottom:16px;
-  }
+  .ticket-summary{background:linear-gradient(135deg,#fff8e8,#fff0f8);border:2px solid rgba(184,150,12,0.25);border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:16px;}
   .ts-icon{font-size:32px;flex-shrink:0;}
   .ts-info{flex:1;}
   .ts-label{font-size:11px;color:#aaa;letter-spacing:2px;}
   .ts-count{font-size:28px;font-weight:900;color:var(--red);line-height:1;}
   .ts-count span{font-size:13px;font-weight:600;color:#888;}
-
   .form-group{margin-bottom:14px;}
   .form-label{font-size:12px;font-weight:800;color:#555;margin-bottom:6px;display:block;letter-spacing:1px;}
   .form-label em{color:var(--red);font-style:normal;}
-  .form-input{
-    width:100%;padding:13px 16px;
-    border:2px solid rgba(139,61,200,0.2);border-radius:14px;
-    font-size:15px;outline:none;transition:all .3s ease;
-    background:rgba(255,255,255,0.9);font-family:inherit;color:#333;
-  }
+  .form-input{width:100%;padding:13px 16px;border:2px solid rgba(139,61,200,0.2);border-radius:14px;font-size:15px;outline:none;transition:all .3s ease;background:rgba(255,255,255,0.9);font-family:inherit;color:#333;}
   .form-input:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(139,61,200,0.1);}
   .form-input::placeholder{color:#ccc;}
-
-  .agree-row{
-    display:flex;align-items:flex-start;gap:8px;
-    font-size:12px;color:#999;line-height:1.7;margin-bottom:18px;cursor:pointer;
-  }
+  .agree-row{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#999;line-height:1.7;margin-bottom:18px;cursor:pointer;}
   .agree-row input{margin-top:3px;accent-color:var(--purple);flex-shrink:0;}
-
-  .btn-submit{
-    width:100%;padding:16px;
-    background:linear-gradient(135deg,var(--purple),var(--pink));
-    color:#fff;font-size:16px;font-weight:900;letter-spacing:2px;
-    border:none;border-radius:50px;cursor:pointer;
-    box-shadow:0 8px 28px rgba(139,61,200,0.3);
-    transition:all .3s ease;position:relative;overflow:hidden;
-  }
-  .btn-submit::before{
-    content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;
-    background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
-    animation:shim 2s ease infinite;
-  }
+  .btn-submit{width:100%;padding:16px;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;font-size:16px;font-weight:900;letter-spacing:2px;border:none;border-radius:50px;cursor:pointer;box-shadow:0 8px 28px rgba(139,61,200,0.3);transition:all .3s ease;position:relative;overflow:hidden;}
+  .btn-submit::before{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);animation:shim 2s ease infinite;}
   .btn-submit:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(139,61,200,0.4);}
   .btn-submit:disabled{background:linear-gradient(135deg,#ccc,#ddd);box-shadow:none;cursor:not-allowed;transform:none;}
   .btn-submit:disabled::before{display:none;}
-
-  /* ── LOCKED NOTICE ── */
-  .locked-notice{
-    margin:8px 16px 0;
-    background:rgba(255,255,255,0.6);
-    border-radius:18px;padding:14px 18px;
-    font-size:12px;color:#bbb;text-align:center;line-height:1.8;
-    border:2px dashed rgba(139,61,200,0.2);
-  }
-
-  /* ── SUCCESS MODAL ── */
-  .modal-bg{
-    position:fixed;inset:0;background:rgba(0,0,0,0.5);
-    backdrop-filter:blur(6px);z-index:200;
-    display:none;align-items:center;justify-content:center;padding:20px;
-  }
+  .locked-notice{margin:8px 16px 0;background:rgba(255,255,255,0.6);border-radius:18px;padding:14px 18px;font-size:12px;color:#bbb;text-align:center;line-height:1.8;border:2px dashed rgba(139,61,200,0.2);}
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
   .modal-bg.show{display:flex;}
-  .modal{
-    background:linear-gradient(160deg,#fff,#f5eeff,#fff5fb);
-    border-radius:32px;padding:36px 28px;text-align:center;
-    max-width:380px;width:100%;
-    box-shadow:0 24px 80px rgba(0,0,0,0.2);
-    border:3px solid rgba(255,255,255,0.9);
-    animation:modalPop .45s cubic-bezier(.34,1.56,.64,1);
-  }
+  .modal{background:linear-gradient(160deg,#fff,#f5eeff,#fff5fb);border-radius:32px;padding:36px 28px;text-align:center;max-width:380px;width:100%;box-shadow:0 24px 80px rgba(0,0,0,0.2);border:3px solid rgba(255,255,255,0.9);animation:modalPop .45s cubic-bezier(.34,1.56,.64,1);}
   @keyframes modalPop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
   .modal-emoji{font-size:60px;margin-bottom:10px;display:block;}
   .modal-title{font-size:20px;font-weight:900;color:var(--navy);margin-bottom:6px;}
   .modal-sub{font-size:13px;color:#888;margin-bottom:18px;line-height:1.8;}
-
-  .e-ticket{
-    background:linear-gradient(135deg,#5B3DC8,#C83D8B);
-    border-radius:18px;padding:18px 20px;color:#fff;
-    margin-bottom:16px;position:relative;overflow:hidden;text-align:left;
-  }
-  .e-ticket::before{content:'✈️';position:absolute;right:-10px;top:-10px;font-size:70px;opacity:.1;}
-  .et-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
-  .et-airline{font-size:9px;letter-spacing:3px;opacity:.7;}
-  .et-brand{font-size:17px;font-weight:900;}
-  .et-num-label{font-size:9px;opacity:.7;text-align:right;}
-  .et-num{font-size:20px;font-weight:900;font-family:monospace;letter-spacing:3px;}
-  .et-div{border:none;border-top:2px dashed rgba(255,255,255,0.3);margin:10px 0;}
-  .et-footer{display:flex;justify-content:space-between;align-items:center;}
-  .et-holder{font-size:11px;opacity:.7;}
-  .et-holder strong{font-size:14px;font-weight:800;display:block;}
-  .et-badge{font-size:10px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:10px;letter-spacing:1px;}
-
-  .modal-info{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;}
-  .mi-tag{background:rgba(139,61,200,0.08);border:1px solid rgba(139,61,200,0.2);color:var(--purple);font-size:11px;font-weight:700;padding:5px 12px;border-radius:14px;}
-
-  .btn-modal-close{
-    width:100%;padding:13px;border-radius:50px;
-    background:linear-gradient(135deg,var(--purple),var(--pink));
-    color:#fff;font-size:14px;font-weight:800;letter-spacing:2px;
-    border:none;cursor:pointer;
-    box-shadow:0 6px 20px rgba(139,61,200,0.3);
-    transition:all .3s ease;
-  }
+  .btn-modal-close{width:100%;padding:13px;border-radius:50px;background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff;font-size:14px;font-weight:800;letter-spacing:2px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(139,61,200,0.3);transition:all .3s ease;}
   .btn-modal-close:hover{transform:translateY(-2px);}
-  .btn-more{
-    width:100%;margin-top:8px;padding:11px;border-radius:50px;
-    background:transparent;color:var(--purple);
-    font-size:13px;font-weight:700;letter-spacing:1px;
-    border:2px solid rgba(139,61,200,0.3);cursor:pointer;
-    transition:all .3s ease;
-  }
+  .btn-more{width:100%;margin-top:8px;padding:11px;border-radius:50px;background:transparent;color:var(--purple);font-size:13px;font-weight:700;letter-spacing:1px;border:2px solid rgba(139,61,200,0.3);cursor:pointer;transition:all .3s ease;}
   .btn-more:hover{background:rgba(139,61,200,0.06);}
-
   .hint{font-size:11px;color:#bbb;text-align:center;padding:14px 20px 4px;line-height:1.9;}
   .footer{text-align:center;padding:20px 16px 8px;font-size:11px;color:rgba(0,0,0,0.35);letter-spacing:1px;line-height:2;}
 </style>
@@ -337,30 +120,20 @@
 <div class="cloud c3"></div>
 <div id="confetti-container"></div>
 
-<!-- SUCCESS MODAL -->
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <span class="modal-emoji">🎉</span>
-    <div class="modal-title">抽獎券已送出！</div>
-    <div class="modal-sub" id="modalSub">電子抽獎券已寄送到您的信箱</div>
-    <div id="ticketContainer"></div>
+    <div class="modal-title">抽獎券處理中</div>
+    <div class="modal-sub" id="modalSub">系統已開始為您發送抽獎券至信箱</div>
     <div style="background:linear-gradient(135deg,#fff8e8,#fff0c8);border:2px solid rgba(184,150,12,0.35);border-radius:14px;padding:12px 16px;margin-bottom:14px;font-size:12px;color:#8B6000;line-height:1.8;text-align:left;">
-      ⚠️ <strong>重要提醒：</strong>請立即截圖保存以上抽獎券號碼！<br>
-      📵 請勿將號碼外流或分享給他人，每張號碼限對獎一次。
-    </div>
-    <div class="modal-info">
-      <div class="mi-tag">🗓️ 2026/05/15–18</div>
-      <div class="mi-tag">📍 高雄展覽館</div>
-      <div class="mi-tag">🕒 抽獎 15:30</div>
+      ⚠️ <strong>重要提醒：</strong>請妥善保存信件中的抽獎券號碼！每張號碼限對獎一次。
     </div>
     <button class="btn-modal-close" onclick="closeModal()">✅ 知道了，繼續！</button>
-    <button class="btn-more" onclick="closeModal()">繼續完成其他任務 +更多抽獎券</button>
+    <button class="btn-more" onclick="closeModal()">繼續完成其他任務</button>
   </div>
 </div>
 
 <div class="page">
-
-  <!-- Header -->
   <div class="header">
     <div class="hbrand">CHINA AIRLINES × KTF 2026 · 入場任務</div>
     <div class="htitle">飛行任務啟動！✈️</div>
@@ -368,7 +141,6 @@
     <div class="hbadge">🎫 每完成一項任務即可領抽獎券</div>
   </div>
 
-  <!-- Ticket bar -->
   <div class="ticket-bar">
     <div class="tb-icon">🎫</div>
     <div class="tb-info">
@@ -381,7 +153,6 @@
 
   <div class="section-title">📋 選擇任務完成</div>
 
-  <!-- ── TASK A: 華夏會員 ── -->
   <div class="task-card" id="cardA">
     <div class="task-inner">
       <div class="task-bar" style="background:linear-gradient(180deg,var(--gold),#F0C040);"></div>
@@ -394,26 +165,15 @@
             <div class="task-reward" style="background:linear-gradient(135deg,var(--red),#E83060);">🎫 +2 張抽獎券</div>
           </div>
         </div>
-        <div class="task-desc">
-          加入中華航空華夏常客飛行計劃，累積里程兌換機票！<br>掃描 QR Code 或點擊按鈕前往註冊
-        </div>
+        <div class="task-desc">加入中華航空華夏常客飛行計劃，累積里程兌換機票！<br>掃描 QR Code 或點擊按鈕前往註冊</div>
         <div class="single-qr">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fdynasty-flyer.china-airlines.com%2Fmember%2Fregister&color=003087&bgcolor=ffffff&margin=8" width="140" height="140" alt="華夏會員">
         </div>
         <div class="task-actions">
-          <a class="btn-go" id="btnGoA"
-            href="https://dynasty-flyer.china-airlines.com/member/register"
-            style="background:linear-gradient(135deg,#C87000,var(--gold));box-shadow:0 6px 20px rgba(184,150,12,0.35);display:block;text-decoration:none;text-align:center;"
-            onclick="setPending('A')">
-            🚀 前往註冊華夏會員
-          </a>
+          <a class="btn-go" id="btnGoA" href="https://dynasty-flyer.china-airlines.com/member/register" target="_blank" style="background:linear-gradient(135deg,#C87000,var(--gold));box-shadow:0 6px 20px rgba(184,150,12,0.35);display:block;text-decoration:none;text-align:center;" onclick="setPending('A')">🚀 前往註冊華夏會員</a>
           <div class="confirm-row" id="confirmRowA">
             <div class="confirm-hint">👆 已完成註冊了嗎？<br>回來點右邊按鈕確認！</div>
-            <button class="btn-confirm"
-              style="background:linear-gradient(135deg,var(--green),#16A060);"
-              onclick="confirmTask('A',2,'華夏會員 Dynasty Flyer')">
-              ✓ 完成了！
-            </button>
+            <button class="btn-confirm" style="background:linear-gradient(135deg,var(--green),#16A060);" onclick="confirmTask('A',2,'華夏會員 Dynasty Flyer')">✓ 完成了！</button>
           </div>
           <div class="done-state" id="doneA">✅ 完成！已獲得 2 張抽獎券</div>
         </div>
@@ -421,7 +181,6 @@
     </div>
   </div>
 
-  <!-- ── TASK B: APP ── -->
   <div class="task-card" id="cardB">
     <div class="task-inner">
       <div class="task-bar" style="background:linear-gradient(180deg,var(--navy),#5B7FD4);"></div>
@@ -434,41 +193,19 @@
             <div class="task-reward" style="background:linear-gradient(135deg,var(--navy),#5B7FD4);">🎫 +2 張抽獎券</div>
           </div>
         </div>
-        <div class="task-desc">
-          下載中華航空 APP，隨時查詢航班、辦理報到、累積里程！
-        </div>
+        <div class="task-desc">下載中華航空 APP，隨時查詢航班、辦理報到、累積里程！</div>
         <div class="dual-qr">
-          <div class="dq-item">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fapps.apple.com%2Ftw%2Fapp%2Fid1093021450&color=003087&bgcolor=f0f4ff&margin=6" width="120" height="120" alt="iOS">
-            <span>🍎 App Store</span>
-          </div>
-          <div class="dq-item">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.chinaairlines.mobile30&color=003087&bgcolor=f0f4ff&margin=6" width="120" height="120" alt="Android">
-            <span>🤖 Google Play</span>
-          </div>
+          <div class="dq-item"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fapps.apple.com%2Ftw%2Fapp%2Fid1093021450&color=003087&bgcolor=f0f4ff&margin=6" width="120" height="120" alt="iOS"><span>🍎 App Store</span></div>
+          <div class="dq-item"><img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.chinaairlines.mobile30&color=003087&bgcolor=f0f4ff&margin=6" width="120" height="120" alt="Android"><span>🤖 Google Play</span></div>
         </div>
         <div class="task-actions">
           <div style="display:flex;gap:8px;">
-            <a class="btn-go" id="btnGoB"
-              href="https://apps.apple.com/tw/app/id1093021450"
-              style="background:linear-gradient(135deg,var(--navy),#5B7FD4);box-shadow:0 6px 20px rgba(0,48,135,0.3);flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none;"
-              onclick="setPending('B')">
-              🍎 iOS
-            </a>
-            <a class="btn-go"
-              href="https://play.google.com/store/apps/details?id=com.chinaairlines.mobile30"
-              style="background:linear-gradient(135deg,#3B6FD0,#5B9FE4);box-shadow:0 6px 20px rgba(0,48,135,0.2);flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none;"
-              onclick="setPending('B')">
-              🤖 Android
-            </a>
+            <a class="btn-go" id="btnGoB" href="https://apps.apple.com/tw/app/id1093021450" target="_blank" style="background:linear-gradient(135deg,var(--navy),#5B7FD4);box-shadow:0 6px 20px rgba(0,48,135,0.3);flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none;" onclick="setPending('B')">🍎 iOS</a>
+            <a class="btn-go" href="https://play.google.com/store/apps/details?id=com.chinaairlines.mobile30" target="_blank" style="background:linear-gradient(135deg,#3B6FD0,#5B9FE4);box-shadow:0 6px 20px rgba(0,48,135,0.2);flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none;" onclick="setPending('B')">🤖 Android</a>
           </div>
           <div class="confirm-row" id="confirmRowB">
             <div class="confirm-hint">👆 APP 下載完成了嗎？<br>點右邊確認領取獎勵！</div>
-            <button class="btn-confirm"
-              style="background:linear-gradient(135deg,var(--green),#16A060);"
-              onclick="confirmTask('B',2,'下載華航 APP')">
-              ✓ 完成了！
-            </button>
+            <button class="btn-confirm" style="background:linear-gradient(135deg,var(--green),#16A060);" onclick="confirmTask('B',2,'下載華航 APP')">✓ 完成了！</button>
           </div>
           <div class="done-state" id="doneB">✅ 完成！已獲得 2 張抽獎券</div>
         </div>
@@ -476,7 +213,6 @@
     </div>
   </div>
 
-  <!-- ── TASK C: LINE ── -->
   <div class="task-card" id="cardC">
     <div class="task-inner">
       <div class="task-bar" style="background:linear-gradient(180deg,#06C755,#04A044);"></div>
@@ -489,26 +225,15 @@
             <div class="task-reward" style="background:linear-gradient(135deg,#06C755,#04A044);">🎫 +1 張抽獎券</div>
           </div>
         </div>
-        <div class="task-desc">
-          加入中華航空官方 LINE，搶先獲得航班優惠與最新活動資訊！
-        </div>
+        <div class="task-desc">加入中華航空官方 LINE，搶先獲得航班優惠與最新活動資訊！</div>
         <div class="single-qr">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fpage.line.me%2F207oojco&color=06C755&bgcolor=ffffff&margin=8" width="140" height="140" alt="LINE">
         </div>
         <div class="task-actions">
-          <a class="btn-go" id="btnGoC"
-            href="https://page.line.me/207oojco"
-            style="background:linear-gradient(135deg,#06C755,#04A044);box-shadow:0 6px 20px rgba(6,199,85,0.3);display:block;text-decoration:none;text-align:center;"
-            onclick="setPending('C')">
-            💬 加入 LINE 好友
-          </a>
+          <a class="btn-go" id="btnGoC" href="https://page.line.me/207oojco" target="_blank" style="background:linear-gradient(135deg,#06C755,#04A044);box-shadow:0 6px 20px rgba(6,199,85,0.3);display:block;text-decoration:none;text-align:center;" onclick="setPending('C')">💬 加入 LINE 好友</a>
           <div class="confirm-row" id="confirmRowC">
             <div class="confirm-hint">👆 已加入好友了嗎？<br>點右邊確認領取獎勵！</div>
-            <button class="btn-confirm"
-              style="background:linear-gradient(135deg,var(--green),#16A060);"
-              onclick="confirmTask('C',1,'加入 LINE 好友')">
-              ✓ 完成了！
-            </button>
+            <button class="btn-confirm" style="background:linear-gradient(135deg,var(--green),#16A060);" onclick="confirmTask('C',1,'加入 LINE 好友')">✓ 完成了！</button>
           </div>
           <div class="done-state" id="doneC">✅ 完成！已獲得 1 張抽獎券</div>
         </div>
@@ -516,7 +241,6 @@
     </div>
   </div>
 
-  <!-- ── TASK D: YouTube ── -->
   <div class="task-card" id="cardD">
     <div class="task-inner">
       <div class="task-bar" style="background:linear-gradient(180deg,var(--red),#E03060);"></div>
@@ -529,26 +253,15 @@
             <div class="task-reward" style="background:linear-gradient(135deg,var(--red),#E03060);">🎫 +1 張抽獎券</div>
           </div>
         </div>
-        <div class="task-desc">
-          訂閱中華航空官方 YouTube，觀看最新航線影片與機上體驗分享！
-        </div>
+        <div class="task-desc">訂閱中華航空官方 YouTube，觀看最新航線影片與機上體驗分享！</div>
         <div class="single-qr">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https%3A%2F%2Fwww.youtube.com%2F%40TheCHINAAIRLINES&color=C8102E&bgcolor=ffffff&margin=8" width="140" height="140" alt="YouTube">
         </div>
         <div class="task-actions">
-          <a class="btn-go" id="btnGoD"
-            href="https://www.youtube.com/@TheCHINAAIRLINES"
-            style="background:linear-gradient(135deg,var(--red),#E03060);box-shadow:0 6px 20px rgba(200,16,46,0.3);display:block;text-decoration:none;text-align:center;"
-            onclick="setPending('D')">
-            ▶️ 前往訂閱頻道
-          </a>
+          <a class="btn-go" id="btnGoD" href="https://www.youtube.com/@TheCHINAAIRLINES" target="_blank" style="background:linear-gradient(135deg,var(--red),#E03060);box-shadow:0 6px 20px rgba(200,16,46,0.3);display:block;text-decoration:none;text-align:center;" onclick="setPending('D')">▶️ 前往訂閱頻道</a>
           <div class="confirm-row" id="confirmRowD">
             <div class="confirm-hint">👆 已訂閱頻道了嗎？<br>點右邊確認領取獎勵！</div>
-            <button class="btn-confirm"
-              style="background:linear-gradient(135deg,var(--green),#16A060);"
-              onclick="confirmTask('D',1,'訂閱 YouTube 頻道')">
-              ✓ 完成了！
-            </button>
+            <button class="btn-confirm" style="background:linear-gradient(135deg,var(--green),#16A060);" onclick="confirmTask('D',1,'訂閱 YouTube 頻道')">✓ 完成了！</button>
           </div>
           <div class="done-state" id="doneD">✅ 完成！已獲得 1 張抽獎券</div>
         </div>
@@ -556,12 +269,9 @@
     </div>
   </div>
 
-  <!-- Locked notice -->
-  <div class="locked-notice" id="lockedNotice">
-    ⬆️ 請先完成上方至少一項任務<br>再填寫 Email 領取電子抽獎券
-  </div>
+  <div class="locked-notice" id="lockedNotice">⬆️ 請先完成上方至少一項任務<br>再填寫 Email 領取電子抽獎券</div>
 
-<div style="margin:8px 16px 16px; background:#fff8e8; border:2px solid #C8102E; border-radius:18px; padding:16px; text-align:left;">
+  <div style="margin:8px 16px 16px; background:#fff8e8; border:2px solid #C8102E; border-radius:18px; padding:16px; text-align:left;">
     <div style="font-size:14px; font-weight:900; color:#C8102E; margin-bottom:8px;">🛡️ 系統防重複領取機制（提案展示說明）</div>
     <div style="font-size:12px; color:#555; line-height:1.8;">
       正式上線時，系統會自動比對後端資料庫：<br>
@@ -571,13 +281,11 @@
     </div>
   </div>
 
-
-  <!-- Email section (hidden until first task done) -->
   <div class="email-section" id="emailSection">
     <div class="email-hd">
       <div class="email-hd-icon">📬</div>
       <div class="email-hd-title">填寫 Email 領取抽獎券</div>
-      <div class="email-hd-sub">電子抽獎券將寄送到您填寫的信箱</div>
+      <div class="email-hd-sub">電子抽獎券將合併寄送到您填寫的信箱</div>
     </div>
     <div class="email-body">
       <div class="ticket-summary">
@@ -614,23 +322,23 @@
     📍 高雄展覽館 中華航空攤位 · 展期 2026.05.15–05.18<br>
     🕒 每日 <strong>15:30</strong> 現場抽獎，歡迎準時蒞臨！
   </div>
+  
   <div class="footer">
     中華航空 × 2026 高雄旅行公會旅展 KTF<br><br>
     <button onclick="localStorage.removeItem('ktf2026'); location.reload();" style="padding:6px 16px; border-radius:20px; border:1px solid #aaa; background:rgba(255,255,255,0.5); color:#555; cursor:pointer; font-size:12px; transition:all 0.3s;">
       🔄 清除測試紀錄 (提案 Demo 專用)
     </button>
   </div>
-
 </div>
+
 <script>
-// ── STATE ──
 const tasks = {
   A: { done:false, tickets:2, label:'華夏會員 Dynasty Flyer', pending:false, emailed:false },
   B: { done:false, tickets:2, label:'下載華航 APP',          pending:false, emailed:false },
   C: { done:false, tickets:1, label:'加入 LINE 好友',         pending:false, emailed:false },
-  D: { done:false, tickets:1, label:'訂閱 YouTube 頻道',      pending:false, emailed:false },
+  D: { done:false, tickets:1, label:'訂閱 YouTube 頻道',      pending:false, emailed:false }
 };
-let totalTickets  = 0;
+let totalTickets = 0;
 let pendingTickets = 0;
 
 function setPending(id) {
@@ -644,10 +352,7 @@ function setPending(id) {
 
 function showPendingUI(id) {
   const btn = document.getElementById('btnGo' + id);
-  if (btn) {
-    btn.textContent = '↩️ 完成後回來點這裡';
-    btn.style.opacity = '0.6';
-  }
+  if (btn) { btn.textContent = '↩️ 完成後回來點這裡'; btn.style.opacity = '0.6'; }
   document.getElementById('confirmRow' + id).classList.add('show');
 }
 
@@ -668,14 +373,14 @@ function restoreState() {
     const raw = localStorage.getItem('ktf2026');
     if (!raw) return;
     const state = JSON.parse(raw);
-    totalTickets  = state._tickets || 0;
+    totalTickets = state._tickets || 0;
     pendingTickets = state._pending || 0;
     Object.keys(tasks).forEach(id => {
       if (!state[id]) return;
       if (state[id].done) {
         tasks[id].done = true;
         tasks[id].pending = false;
-        tasks[id].emailed = state[id].emailed || false; // 紀錄是否已經寄過信
+        tasks[id].emailed = state[id].emailed || false;
         document.getElementById('card' + id).classList.add('done');
         const btn = document.getElementById('btnGo' + id);
         if (btn) btn.style.display = 'none';
@@ -701,12 +406,8 @@ function confirmTask(id, tickets, label) {
   const t = tasks[id];
   if (t.done) return;
 
-  // 加入工作人員密碼審核機制
-  const pwd = prompt('🔒 請輸入現場工作人員核銷密碼：\n(測試請輸入 2026)');
-  if (pwd !== '2026') {
-    alert('❌ 密碼錯誤，無法核發抽獎券！');
-    return;
-  }
+  const pwd = prompt('🔒 請輸入現場工作人員核銷密碼：\\n(測試請輸入 2026)');
+  if (pwd !== '2026') { alert('❌ 密碼錯誤，無法核發抽獎券！'); return; }
 
   t.done = true;
   t.pending = false;
@@ -718,7 +419,7 @@ function confirmTask(id, tickets, label) {
   if (goBtn) goBtn.style.display = 'none';
   document.getElementById('done' + id).classList.add('show');
 
-  totalTickets  += tickets;
+  totalTickets += tickets;
   pendingTickets += tickets;
   saveState();
   updateTicketBar();
@@ -726,7 +427,7 @@ function confirmTask(id, tickets, label) {
 
   if (Object.values(tasks).filter(t => t.done).length === 1) {
     const notice = document.getElementById('lockedNotice');
-    if (notice) notice.style.display = 'none';
+    if(notice) notice.style.display = 'none';
     const es = document.getElementById('emailSection');
     es.classList.add('show');
     requestAnimationFrame(() => {
@@ -737,6 +438,7 @@ function confirmTask(id, tickets, label) {
     });
   }
 }
+
 function updateTicketBar() {
   document.getElementById('ticketCount').textContent = totalTickets;
   const pct = Math.min((totalTickets / 6) * 100, 100);
@@ -752,127 +454,53 @@ function updateEmailSection() {
 }
 
 function checkSubmit() {
-  const email   = document.getElementById('emailInput').value.trim();
+  const email = document.getElementById('emailInput').value.trim();
   const confirm = document.getElementById('emailConfirm').value.trim();
-  const agree   = document.getElementById('agreeBox').checked;
-  const valid   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email === confirm && agree && pendingTickets > 0;
+  const agree = document.getElementById('agreeBox').checked;
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email === confirm && agree && pendingTickets > 0;
   document.getElementById('submitBtn').disabled = !valid;
 }
 
-// ── SUBMIT (新版對接寫法) ──
-// ── SUBMIT (支援購物車打包發送) ──
 function submitEmail() {
   const email = document.getElementById('emailInput').value.trim();
   const name  = document.getElementById('nameInput').value.trim() || '旅客';
-  
   const GAS_URL = 'https://script.google.com/macros/s/AKfycbwy35vAxNgC_wKWjn5SV34pLtYBA8dk4_A7zYVW6nTovzW-UwqFkfT65uJaXo2BmOmR0A/exec';
+  const taskKeys = { A:'dynasty-member', B:'app-download', C:'line-friend', D:'youtube-sub' };
 
-  const taskKeys = {
-    A: 'dynasty-member',
-    B: 'app-download',
-    C: 'line-friend',
-    D: 'youtube-sub'
-  };
-
-  // 把所有已完成但「還沒寄信」的任務打包進購物車
   const completedTypes = [];
   Object.keys(tasks).forEach(id => {
     const t = tasks[id];
     if (t.done && !t.emailed) {
-      t.emailed = true; // 標記為已寄送
+      t.emailed = true;
       completedTypes.push(taskKeys[id]);
     }
   });
 
-  // 如果購物車裡有東西，就一次發給後端
   if (completedTypes.length > 0) {
     fetch(GAS_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({
-        email: email,
-        name: name,
-        taskTypes: completedTypes // 傳送陣列給後端
-      })
+      body: JSON.stringify({ email: email, name: name, taskTypes: completedTypes })
     }).catch(() => {});
   }
 
-  // 顯示寄出提示畫面
-  document.getElementById('ticketContainer').innerHTML = '';
-  document.getElementById('modalSub').innerHTML =
-    `系統已將您本次獲得的抽獎券合併寄至<br><strong style="color:var(--purple);">${email}</strong><br>請稍候查收！`;
+  document.getElementById('modalSub').innerHTML = `系統已將您本次獲得的抽獎券合併寄至<br><strong style="color:var(--purple);">${email}</strong><br>請稍候查收！`;
   document.getElementById('modalBg').classList.add('show');
 
-  // 清空待領取狀態
   pendingTickets = 0;
   saveState();
   updateEmailSection();
 
-  // 清空表單
   document.getElementById('emailInput').value = '';
   document.getElementById('emailConfirm').value = '';
   document.getElementById('nameInput').value = '';
   document.getElementById('agreeBox').checked = false;
   checkSubmit();
-
-  fireConfetti();
-}
-  
-  // ⚠️ 請把下面這行引號內的網址，換成您「最新部署的 Google Apps Script 網址」
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwy35vAxNgC_wKWjn5SV34pLtYBA8dk4_A7zYVW6nTovzW-UwqFkfT65uJaXo2BmOmR0A/exec';
-
-  // 準備對應新版後端的任務代碼
-  const taskKeys = {
-    A: 'dynasty-member',
-    B: 'app-download',
-    C: 'line-friend',
-    D: 'youtube-sub'
-  };
-
-  // 找出所有已完成、且還沒寄送過的任務，逐一通知櫃台寄信
-  Object.keys(tasks).forEach(id => {
-    const t = tasks[id];
-    if (t.done && !t.emailed) {
-      t.emailed = true; // 標記為已寄送
-      
-      fetch(GAS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-          email: email,
-          name: name,
-          taskType: taskKeys[id]
-        })
-      }).catch(() => {});
-    }
-  });
-
-  // 因為票券是由系統產生，所以畫面上不顯示假號碼，改為顯示寄出提示
-  document.getElementById('ticketContainer').innerHTML = '';
-  document.getElementById('modalSub').innerHTML =
-    `系統已開始為您發送抽獎券至<br><strong style="color:var(--purple);">${email}</strong><br>系統將依據您完成的任務分開發送信件，請稍候查收！`;
-  document.getElementById('modalBg').classList.add('show');
-
-  // 清空待領取狀態
-  pendingTickets = 0;
-  saveState();
-  updateEmailSection();
-
-  // 清空表單
-  document.getElementById('emailInput').value = '';
-  document.getElementById('emailConfirm').value = '';
-  document.getElementById('nameInput').value = '';
-  document.getElementById('agreeBox').checked = false;
-  checkSubmit();
-
   fireConfetti();
 }
 
-function closeModal() {
-  document.getElementById('modalBg').classList.remove('show');
-}
+function closeModal() { document.getElementById('modalBg').classList.remove('show'); }
 
 function fireConfetti() {
   const container = document.getElementById('confetti-container');
@@ -881,22 +509,13 @@ function fireConfetti() {
   for (let i=0; i<45; i++) {
     const p = document.createElement('div');
     p.className = 'cp';
-    p.style.cssText = `
-      left:${Math.random()*100}vw;
-      background:${colors[Math.floor(Math.random()*colors.length)]};
-      width:${7+Math.random()*7}px;height:${10+Math.random()*9}px;
-      border-radius:${Math.random()>.5?'50%':'2px'};
-      animation:cfFall ${1.4+Math.random()*2}s linear ${Math.random()*.5}s forwards;
-      display:block;transform:rotate(${Math.random()*360}deg);
-    `;
+    p.style.cssText = `left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};width:${7+Math.random()*7}px;height:${10+Math.random()*9}px;border-radius:${Math.random()>.5?'50%':'2px'};animation:cfFall ${1.4+Math.random()*2}s linear ${Math.random()*.5}s forwards;display:block;transform:rotate(${Math.random()*360}deg);`;
     container.appendChild(p);
     setTimeout(() => p.remove(), 3500);
   }
 }
 
-// ── INIT ──
 restoreState();
 </script>
-
 </body>
 </html>
