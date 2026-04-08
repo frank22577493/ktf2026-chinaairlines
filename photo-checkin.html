@@ -541,26 +541,26 @@
     document.getElementById(`s${n+1}`).classList.add('active');
   }
 
-  // ===== SUBMIT =====
+// ===== SUBMIT (新版：交給後端櫃台發號碼) =====
   function submitForm() {
     const email = document.getElementById('emailInput').value.trim();
     const name  = document.getElementById('nameInput').value.trim() || '旅客';
-    const ticketNum = generateTicketNum();
 
-    // Mark step 3 done
+    // 標記步驟三完成
     document.getElementById('s3').classList.remove('active');
     document.getElementById('s3').classList.add('done');
     document.getElementById('s3').textContent = '✓';
     document.getElementById('l3').classList.add('done');
     document.getElementById('s4').classList.add('active');
 
-    // Fill success card
-    document.getElementById('ticketNum').textContent = ticketNum;
-    document.getElementById('ticketHolder').textContent = name;
-    document.getElementById('successSub').innerHTML =
-      `電子抽獎券已寄送到<br><strong style="color:var(--purple);">${email}</strong><br>記得參加 15:30 的現場抽獎！`;
+    // 隱藏畫面上的電子票券區塊（因為現在改由 Email 收信對獎為主）
+    document.querySelector('.e-ticket').style.display = 'none';
 
-    // Show success
+    // 更新成功訊息
+    document.getElementById('successSub').innerHTML =
+      `系統已開始為您發送抽獎券至<br><strong style="color:var(--purple);">${email}</strong><br>請注意查收，並記得參加 15:30 的現場抽獎！`;
+
+    // 顯示成功畫面
     document.getElementById('step3').classList.remove('active-card');
     const s4 = document.getElementById('step4');
     s4.classList.add('active-card', 'show');
@@ -568,18 +568,21 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
     fireConfetti();
 
-    // POST to Google Apps Script
-    fetch('https://script.google.com/macros/s/AKfycbym5cXq1GGM-MAFoab-7NLLPUmLvRniz_MzDGZ4wgMzPNEJh0KXwVOHS--h-bPGRGPyDQ/exec', {
-      method: 'POST',
-      body: JSON.stringify({ email, name, ticketNum, type: 'photo-checkin', q1: qAnswers.q1, q2: qAnswers.q2, q3: qAnswers.q3 })
-    });
-  }
+    // ⚠️ 替換為最新部署的 Google Apps Script 網址
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbwy35vAxNgC_wKWjn5SV34pLtYBA8dk4_A7zYVW6nTovzW-UwqFkfT65uJaXo2BmOmR0A/exec';
 
-  function generateTicketNum() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let num = 'KTF-';
-    for (let i = 0; i < 6; i++) num += chars[Math.floor(Math.random() * chars.length)];
-    return num;
+    // 呼叫新版後端
+    fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        email: email, 
+        name: name,
+        taskType: 'photo-checkin',
+        questionnaire: { q1: qAnswers.q1, q2: qAnswers.q2, q3: qAnswers.q3 }
+      })
+    }).catch(() => {});
   }
 
   function goToTasks() {

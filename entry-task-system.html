@@ -606,27 +606,23 @@
   <div class="footer">中華航空 × 2026 高雄旅行公會旅展 KTF</div>
 
 </div>
-
 <script>
 // ── STATE ──
 const tasks = {
-  A: { done:false, tickets:2, label:'華夏會員 Dynasty Flyer', pending:false },
-  B: { done:false, tickets:2, label:'下載華航 APP',          pending:false },
-  C: { done:false, tickets:1, label:'加入 LINE 好友',         pending:false },
-  D: { done:false, tickets:1, label:'訂閱 YouTube 頻道',      pending:false },
+  A: { done:false, tickets:2, label:'華夏會員 Dynasty Flyer', pending:false, emailed:false },
+  B: { done:false, tickets:2, label:'下載華航 APP',          pending:false, emailed:false },
+  C: { done:false, tickets:1, label:'加入 LINE 好友',         pending:false, emailed:false },
+  D: { done:false, tickets:1, label:'訂閱 YouTube 頻道',      pending:false, emailed:false },
 };
-let totalTickets  = 0;  // cumulative
-let pendingTickets = 0; // waiting to be claimed via email
+let totalTickets  = 0;
+let pendingTickets = 0;
 
-// ── STEP 1: SET PENDING ──
-// Shows confirm row immediately + saves state so back-button restores it
 function setPending(id) {
   const t = tasks[id];
   if (t.done) return;
   t.pending = true;
   saveState();
   showPendingUI(id);
-  // Return true so <a href> navigation proceeds normally
   return true;
 }
 
@@ -639,12 +635,11 @@ function showPendingUI(id) {
   document.getElementById('confirmRow' + id).classList.add('show');
 }
 
-// ── localStorage: SAVE / RESTORE state across page navigation ──
 function saveState() {
   try {
     const state = {};
     Object.keys(tasks).forEach(id => {
-      state[id] = { done: tasks[id].done, pending: tasks[id].pending };
+      state[id] = { done: tasks[id].done, pending: tasks[id].pending, emailed: tasks[id].emailed };
     });
     state._tickets = totalTickets;
     state._pending = pendingTickets;
@@ -664,6 +659,7 @@ function restoreState() {
       if (state[id].done) {
         tasks[id].done = true;
         tasks[id].pending = false;
+        tasks[id].emailed = state[id].emailed || false; // 紀錄是否已經寄過信
         document.getElementById('card' + id).classList.add('done');
         const btn = document.getElementById('btnGo' + id);
         if (btn) btn.style.display = 'none';
@@ -685,14 +681,12 @@ function restoreState() {
   } catch(e) {}
 }
 
-// ── STEP 2: CONFIRM ──
 function confirmTask(id, tickets, label) {
   const t = tasks[id];
   if (t.done) return;
   t.done = true;
   t.pending = false;
 
-  // UI: mark card done
   document.getElementById('card' + id).classList.add('done');
   const confirmRow = document.getElementById('confirmRow' + id);
   confirmRow.classList.remove('show');
@@ -700,14 +694,12 @@ function confirmTask(id, tickets, label) {
   if (goBtn) goBtn.style.display = 'none';
   document.getElementById('done' + id).classList.add('show');
 
-  // Counters
   totalTickets  += tickets;
   pendingTickets += tickets;
   saveState();
   updateTicketBar();
   updateEmailSection();
 
-  // Show email section on first task
   if (Object.values(tasks).filter(t => t.done).length === 1) {
     const notice = document.getElementById('lockedNotice');
     notice.style.display = 'none';
@@ -722,7 +714,6 @@ function confirmTask(id, tickets, label) {
   }
 }
 
-// ── TICKET BAR ──
 function updateTicketBar() {
   document.getElementById('ticketCount').textContent = totalTickets;
   const pct = Math.min((totalTickets / 6) * 100, 100);
@@ -731,7 +722,6 @@ function updateTicketBar() {
   document.getElementById('progressEmoji').textContent = emojis[Math.min(totalTickets, 6)];
 }
 
-// ── EMAIL SECTION ──
 function updateEmailSection() {
   document.getElementById('pendingCount').innerHTML = `${pendingTickets} <span>張抽獎券</span>`;
   document.getElementById('submitNum').textContent = pendingTickets;
@@ -746,60 +736,53 @@ function checkSubmit() {
   document.getElementById('submitBtn').disabled = !valid;
 }
 
-// ── SUBMIT ──
+// ── SUBMIT (新版對接寫法) ──
 function submitEmail() {
   const email = document.getElementById('emailInput').value.trim();
   const name  = document.getElementById('nameInput').value.trim() || '旅客';
-  const doneTasks = Object.values(tasks).filter(t => t.done).length;
+  
+  // ⚠️ 請把下面這行引號內的網址，換成您「最新部署的 Google Apps Script 網址」
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbwy35vAxNgC_wKWjn5SV34pLtYBA8dk4_A7zYVW6nTovzW-UwqFkfT65uJaXo2BmOmR0A/exec';
 
-  // Generate one ticket number per ticket
-  const ticketNums = [];
-  for (let i = 0; i < pendingTickets; i++) ticketNums.push(genTicketNum());
+  // 準備對應新版後端的任務代碼
+  const taskKeys = {
+    A: 'dynasty-member',
+    B: 'app-download',
+    C: 'line-friend',
+    D: 'youtube-sub'
+  };
 
-  // Build ticket cards HTML
-  const gradients = [
-    'linear-gradient(135deg,#5B3DC8,#C83D8B)',
-    'linear-gradient(135deg,#C8102E,#F08020)',
-    'linear-gradient(135deg,#003087,#3B7FD4)',
-    'linear-gradient(135deg,#06C755,#0095B0)',
-    'linear-gradient(135deg,#B8960C,#E8629A)',
-    'linear-gradient(135deg,#8B3DC8,#C8102E)',
-  ];
-  let ticketHTML = '';
-  ticketNums.forEach((num, i) => {
-    const grad = gradients[i % gradients.length];
-    ticketHTML += `
-    <div class="e-ticket" style="background:${grad};margin-bottom:10px;">
-      <div class="et-top">
-        <div>
-          <div class="et-airline">CHINA AIRLINES · 第 ${i+1} 張</div>
-          <div class="et-brand">中華航空</div>
-        </div>
-        <div>
-          <div class="et-num-label">抽獎券號碼</div>
-          <div class="et-num">${num}</div>
-        </div>
-      </div>
-      <hr class="et-div">
-      <div class="et-footer">
-        <div class="et-holder">持票人<strong>${name}</strong></div>
-        <div class="et-badge">完成 ${doneTasks} 項任務</div>
-      </div>
-    </div>`;
+  // 找出所有已完成、且還沒寄送過的任務，逐一通知櫃台寄信
+  Object.keys(tasks).forEach(id => {
+    const t = tasks[id];
+    if (t.done && !t.emailed) {
+      t.emailed = true; // 標記為已寄送
+      
+      fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({
+          email: email,
+          name: name,
+          taskType: taskKeys[id]
+        })
+      }).catch(() => {});
+    }
   });
-  document.getElementById('ticketContainer').innerHTML = ticketHTML;
 
-  // Modal
+  // 因為票券是由系統產生，所以畫面上不顯示假號碼，改為顯示寄出提示
+  document.getElementById('ticketContainer').innerHTML = '';
   document.getElementById('modalSub').innerHTML =
-    `電子抽獎券已寄送到<br><strong style="color:var(--purple);">${email}</strong><br>共 <strong style="color:var(--red);">${pendingTickets} 張</strong>，記得 15:30 現場對獎！`;
+    `系統已開始為您發送抽獎券至<br><strong style="color:var(--purple);">${email}</strong><br>系統將依據您完成的任務分開發送信件，請稍候查收！`;
   document.getElementById('modalBg').classList.add('show');
 
-  // Reset pending
+  // 清空待領取狀態
   pendingTickets = 0;
   saveState();
   updateEmailSection();
 
-  // Clear form
+  // 清空表單
   document.getElementById('emailInput').value = '';
   document.getElementById('emailConfirm').value = '';
   document.getElementById('nameInput').value = '';
@@ -807,26 +790,12 @@ function submitEmail() {
   checkSubmit();
 
   fireConfetti();
-
-  // POST to Google Apps Script
-  fetch('https://script.google.com/macros/s/AKfycbym5cXq1GGM-MAFoab-7NLLPUmLvRniz_MzDGZ4wgMzPNEJh0KXwVOHS--h-bPGRGPyDQ/exec', {
-    method: 'POST',
-    body: JSON.stringify({ email, name, tickets: pendingTickets })
-  });
-}
-
-function genTicketNum() {
-  const c = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let n = 'KTF-';
-  for (let i=0; i<6; i++) n += c[Math.floor(Math.random()*c.length)];
-  return n;
 }
 
 function closeModal() {
   document.getElementById('modalBg').classList.remove('show');
 }
 
-// ── CONFETTI ──
 function fireConfetti() {
   const container = document.getElementById('confetti-container');
   container.innerHTML = '';
@@ -847,8 +816,9 @@ function fireConfetti() {
   }
 }
 
-// ── INIT: restore state on page load ──
+// ── INIT ──
 restoreState();
 </script>
+
 </body>
 </html>
