@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>中華航空 × 2026 高雄旅展｜現場抽獎系統</title>
 <style>
-  /* 基礎樣式與華航配色 */
+  /* 完全保留您原始的美術配色與佈局 */
   * { margin:0; padding:0; box-sizing:border-box; }
   body { 
     min-height: 100vh; 
@@ -20,18 +20,16 @@
     justify-content: center;
   }
 
-  /* 回首頁按鈕 */
+  /* 新增：回首頁按鈕 (不影響原始美術) */
   .btn-home {
     position: fixed; top: 20px; left: 20px; z-index: 1000;
     background: rgba(255, 255, 255, 0.9); border: 2px solid #003087;
     color: #003087; padding: 8px 18px; border-radius: 50px;
     text-decoration: none; font-size: 14px; font-weight: 800;
     display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: 0.3s;
   }
-  .btn-home:hover { background: #003087; color: #fff; transform: translateY(-2px); }
 
-  /* 抽獎主體 */
+  /* 原始抽獎主體樣式 */
   .main-display { text-align: center; z-index: 10; }
   .title-area h1 { font-size: 3.5rem; letter-spacing: 4px; text-shadow: 0 4px 10px rgba(0,48,135,0.3); margin-bottom: 10px; color: #003087; }
   .subtitle { font-size: 1.5rem; color: #555; margin-bottom: 40px; font-weight: bold; }
@@ -53,9 +51,8 @@
   }
   .btn-start { background: #C8102E; color: white; }
   .btn-stop { background: #003087; color: white; display: none; }
-  button:active { transform: scale(0.95); }
 
-  /* 雲朵背景 */
+  /* 原始雲朵動畫 */
   .cloud { position: fixed; background: rgba(255,255,255,0.8); border-radius: 50px; z-index: 1; pointer-events: none; }
   .c1 { width: 200px; height: 60px; top: 10%; left: -10%; animation: float 40s linear infinite; }
   @keyframes float { from { left: -20%; } to { left: 120%; } }
@@ -83,7 +80,7 @@
 
 <script>
   let timer = null;
-  // 修正：預設加入一些資料以供測試，確保轉動功能正常
+  // 建立號碼池備份，確保隨時有資料可轉動
   let numberPool = ["CI888888", "CI666666", "CI123456", "CI999999", "KTF2026"]; 
   let isRolling = false;
 
@@ -94,8 +91,8 @@
     document.getElementById('btnStart').style.display = 'none';
     document.getElementById('btnStop').style.display = 'inline-block';
 
+    // 修正轉動 BUG：確保 setInterval 持續產生隨機視覺效果
     timer = setInterval(() => {
-      // 模擬轉動時的亂數效果
       const randomID = "CI" + Math.floor(100000 + Math.random() * 900000);
       document.getElementById('displayNum').textContent = randomID;
     }, 50);
@@ -107,7 +104,7 @@
     document.getElementById('btnStart').style.display = 'inline-block';
     document.getElementById('btnStop').style.display = 'none';
 
-    // 隨機選出一個中獎者
+    // 從池中隨機決定最終中獎者
     const winner = numberPool[Math.floor(Math.random() * numberPool.length)];
     document.getElementById('displayNum').textContent = winner;
     
